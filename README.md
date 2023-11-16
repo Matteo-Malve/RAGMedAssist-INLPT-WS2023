@@ -8,7 +8,7 @@ This project is part of the *NLP with Transformers* class of Heidelberg Universi
 - Anthony Owuzo Akpenyi; ✉️ [anthony.akpenyi@stud.uni-heidelberg.de](mailto:anthony.akpenyi@stud.uni-heidelberg.de)
 - Matteo Malvestiti; ✉️ [matteo.malvestiti@stud.uni-heidelberg.de](mailto:matteo.malvestiti@stud.uni-heidelberg.de)
 - Sandra Friebolin; ✉️ [sandra_friebolin@proton.me](mailto:sandra_friebolin@proton.me)
-- Yusuf Sancar Berbery; ✉️ [yusuf.berber@stud.uni-heidelberg.de](mailto:yusuf.berber@stud.uni-heidelberg.de)
+- Yusuf Sancar Berber; ✉️ [yusuf.berber@stud.uni-heidelberg.de](mailto:yusuf.berber@stud.uni-heidelberg.de)
 
 ***
 ## Table of contents
