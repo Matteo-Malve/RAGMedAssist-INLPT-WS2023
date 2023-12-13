@@ -55,12 +55,30 @@ Medical data is easier to meet the project's expectations in spite of larger dat
 - Data Collection
     - Determine relevant metadata
 - Data Storage
-    - Choose appropriate databases for data and vectors (e.g. [Pinecone](https://www.pinecone.io/))
+    - Choose appropriate databases for data (e.g. OpenSearch to store the actual text of the abstracts)
+    - and for vectors (e.g. [Pinecone](https://www.pinecone.io/), optimized for similarity search)
+    - Linking data and embeddings: via some unique identifier (UID) for each abstract consistent in both systems (in OS, include the UID as a field in each document as primary key for each abstract, when storing the embeddings in Pinecone, use the same UID as the key for each embedding)
 - Document Search
+    - Possible framework: LangChain
+        - Open-source framework to simplify development of applications that use LLMs
+        - Wrappers for implementations of the standard components of LLM-based applications (vector stores, embedding models, ...)
+        - Provides functionality to simplify result chaining and memory, reducing code complexity for building advanced GenAI pipelines
     - Which embedding model?
-        - Embedding Model: Fine-tuned BERT models (e.g. [BioBERT Paper](https://arxiv.org/abs/1901.08746): used data from PubMed, amounting to 4.5 billion words, but 4-5 years old)
-        - Similarity Measure: Cosine similarity
-        - Search Algorithm: Top-n, nucleus sampling
+        - Embedding Model: Fine-tuned BERT models (e.g. [BioBERT Paper](https://arxiv.org/abs/1901.08746): used data from PubMed = specifically trained on biomedical literature, making it suitable, amounting to 4.5 billion words, but 4-5 years old)
+    - Similarity Measure: Cosine similarity
+    - Search Algorithm: Top-n, nucleus sampling
 
+
+## System Integration for RAG (Retrieval Augmented Generation)
+### Query Processing and Retrieval
+- User Query: The user inputs a query (a question or a topic they need information about)
+- Query Embedding: Use BioBERT to convert this query into an embedding.
+- Retrieval from Pinecone: Use the query embedding to retrieve the most relevant document embeddings from Pinecone, which returns a list of UIDs.
+- Fetching from OpenSearch: Use the UIDs obtained from Pinecone to retrieve the corresponding abstracts from OpenSearch.
+
+### Answer Generation
+- Input to GPT-3.5: Feed the retrieved abstracts (or relevant excerpts) into GPT-3.5 along with the user query.
+- Generate Answer: GPT-3.5 generates an answer based on the content of the abstracts and the context provided by the query.
+- Error Handling: Implement robust error handling for cases where an abstract might not be found or the model fails to generate a relevant answer.
 
 
