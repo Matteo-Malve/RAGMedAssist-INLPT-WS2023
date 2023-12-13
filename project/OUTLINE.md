@@ -74,9 +74,23 @@ Medical data is easier to meet the project's expectations in spite of larger dat
 ## System Integration for RAG (Retrieval Augmented Generation)
 💡 [Helpful tutorial from LangChain website for RAG](https://python.langchain.com/docs/use_cases/question_answering/)
 
-<img src="images/rag_with_langchain.png" width="40%" height="40%">
+<img src="images/rag_with_langchain.png" width="50%" height="50%">
 
 Source: [Youtube tutorial for RAG using LangChain](https://www.youtube.com/watch?v=J_tCD_J6w3s)
+
+**LangChain Components**
+
+| Component        | Function                                             |
+|------------------|------------------------------------------------------|
+| Document Loaders | Load and manipulate documents                        |
+| Vector Stores    | Store and query unstructured data through vectors    |
+| Prompt Templates | Build templates to optimize LLM queries              |
+| LLMs             | Interfaces for LLMs                                  |
+| Chains           | Combine LLMs and prompt templates to build workflows |
+| Memory           | State management of chains/agents to preserve context|
+| Agents           | Use LLMs to choose which activities to perform       |
+| Tools            | Used by agents to perform a specific task (Google Search, DB lookups, etc.) |
+
 
 
 ### Query Processing and Retrieval
@@ -87,7 +101,7 @@ Source: [Youtube tutorial for RAG using LangChain](https://www.youtube.com/watch
 
 ### Answer Generation
 - Input to GPT-3.5: Feed the retrieved abstracts (or relevant excerpts) into GPT-3.5 along with the user query.
-- Generate Answer: GPT-3.5 generates an answer based on the content of the abstracts and the context provided by the query.
+- Generate Answer: GPT-3.5 generates an answer based on the content of the abstracts and the context provided by the query / produces an answer using a prompt that includes the question and the retrieved data?
 - Error Handling: Implement robust error handling for cases where an abstract might not be found or the model fails to generate a relevant answer.
 
 
