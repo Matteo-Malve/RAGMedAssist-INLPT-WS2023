@@ -63,6 +63,8 @@ Medical data is easier to meet the project's expectations in spite of larger dat
         - Open-source framework to simplify development of applications that use LLMs
         - Wrappers for implementations of the standard components of LLM-based applications (vector stores, embedding models, ...)
         - Provides functionality to simplify result chaining and memory, reducing code complexity for building advanced GenAI pipelines
+        <img src="parec-backend/app/data/visualizations/data_point_example.png" width="90%" height="90%">
+
     - Which embedding model?
         - Embedding Model: Fine-tuned BERT models (e.g. [BioBERT Paper](https://arxiv.org/abs/1901.08746): used data from PubMed = specifically trained on biomedical literature, making it suitable, amounting to 4.5 billion words, but 4-5 years old)
     - Similarity Measure: Cosine similarity
@@ -70,6 +72,13 @@ Medical data is easier to meet the project's expectations in spite of larger dat
 
 
 ## System Integration for RAG (Retrieval Augmented Generation)
+💡 [Helpful tutorial from LangChain website for RAG](https://python.langchain.com/docs/use_cases/question_answering/)
+
+<img src="images/rag_with_langchain.png" width="40%" height="40%">
+
+Source: [Youtube tutorial for RAG using LangChain](https://www.youtube.com/watch?v=J_tCD_J6w3s)
+
+
 ### Query Processing and Retrieval
 - User Query: The user inputs a query (a question or a topic they need information about)
 - Query Embedding: Use BioBERT to convert this query into an embedding.
