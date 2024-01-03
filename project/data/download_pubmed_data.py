@@ -1,3 +1,5 @@
+"""This code is based on the initial code written by Yusuf Sancar Berber."""
+
 from Bio import Entrez
 import pandas as pd
 from tqdm import tqdm
