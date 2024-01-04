@@ -50,27 +50,29 @@ class OpenSearchHandler:
         return pd.DataFrame(data)
 
 
-# Sample DataFrame for demonstration
-data = {
-    "id": [1, 2, 3, 4, 5],
-    "title": ["Article One", "Article Two", "Article Three", "Article Four", "Article Five"],
-    "author": ["John Doe", "Jane Smith", "Alice Johnson", "Bob Brown", "Charlie Davis"],
-    "year": [2020, 2019, 2018, 2017, 2016],
-    "abstract": [
-        "This is the abstract of the first article.",
-        "Abstract of the second article goes here.",
-        "Third article's abstract.",
-        "Here is the fourth article's abstract.",
-        "The fifth article has this abstract."
-    ]
+df_part1 = pd.read_csv("project/data/processed_data_part1.csv")
+df_part2 = pd.read_csv("project/data/processed_data_part2.csv")
+
+
+os_handler = OpenSearchHandler(index_name="pubmed_data")
+
+delete_query = {
+    "query": {
+        "match_all": {}
+    }
 }
-# Convert the dictionary to a DataFrame
-df = pd.DataFrame(data)
+# Activate to empty the index for new test
+#os_handler.client.delete_by_query("pubmed_data",delete_query)
 
-os_handler = OpenSearchHandler(index_name="hey")
+# Activate to automatically generate index
 os_handler.create_index()
-os_handler.bulk_upload(df)
 
+os_handler.bulk_upload(df_part1)
+#os_handler.bulk_upload(df_part2)
+
+
+
+'''
 query = {
     "query": {
         "match_all": {}
@@ -80,3 +82,4 @@ query = {
 
 response = os_handler.search(query)
 os_handler.response_to_dataframe(response)
+'''
