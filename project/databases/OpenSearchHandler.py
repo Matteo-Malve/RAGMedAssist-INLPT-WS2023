@@ -1,5 +1,6 @@
 # pip install opensearch-py
 
+import opensearchpy
 from opensearchpy import OpenSearch, helpers
 import pandas as pd
 
@@ -49,6 +50,7 @@ class OpenSearchHandler:
         # Create a DataFrame
         return pd.DataFrame(data)
 
+''' Example to verify correct loading
 
 df_part1 = pd.read_csv("project/data/processed_data_part1.csv")
 df_part2 = pd.read_csv("project/data/processed_data_part2.csv")
@@ -70,6 +72,26 @@ delete_query = {
 os_handler.bulk_upload(df_part1)
 os_handler.bulk_upload(df_part2)
 
+# Convert the dictionary to a DataFrame
+df = pd.DataFrame(data)
+'''
+# Let's import our refined .csv file as a pd.DataFrame
+
+df = pd.read_csv("project/data/processed_data_2.csv")
+df = df[["PMID","Title","Abstract","Authors"]]
+
+delete_query={
+    "query": {
+        "match_all":{}
+    }
+}
+
+os_handler = OpenSearchHandler(index_name="processed_data_2")
+os_handler.client.delete_by_query("processed_data_2", delete_query)
+
+#os_handler.create_index()
+os_handler.bulk_upload(df)
+
 
 
 '''
@@ -79,7 +101,6 @@ query = {
     },
     "size": 50
 }
-
 response = os_handler.search(query)
 os_handler.response_to_dataframe(response)
 '''
