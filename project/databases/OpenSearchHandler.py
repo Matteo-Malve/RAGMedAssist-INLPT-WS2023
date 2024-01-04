@@ -65,10 +65,10 @@ delete_query = {
 #os_handler.client.delete_by_query("pubmed_data",delete_query)
 
 # Activate to automatically generate index
-os_handler.create_index()
+#os_handler.create_index()
 
 os_handler.bulk_upload(df_part1)
-#os_handler.bulk_upload(df_part2)
+os_handler.bulk_upload(df_part2)
 
 
 
