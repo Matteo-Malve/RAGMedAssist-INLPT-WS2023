@@ -153,8 +153,8 @@ models_to_evaluate = [
     #     'file_name': 'retriever_accuracy_ember-v1.png'
     # },
     {
-        'model_name': 'all-MiniLM-L6-v2',
-        'tokenizer': AutoTokenizer.from_pretrained("all-MiniLM-L6-v2"),
+        'model_name': 'sentence-transformers/all-MiniLM-L6-v2',
+        'tokenizer': AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2"),
         'model': SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2"),
         'plot_title': 'Retriever Model Accuracy with all-MiniLM-L6-v2',
         'file_name': 'retriever_accuracy_all-MiniLM-L6-v2.png'
