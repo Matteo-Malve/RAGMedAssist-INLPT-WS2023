@@ -150,7 +150,7 @@ models_to_evaluate = [
     #     'tokenizer': AutoTokenizer.from_pretrained("llmrails/ember-v1"),
     #     'model': SentenceTransformer("llmrails/ember-v1"),
     #     'plot_title': 'Retriever Model Accuracy with llmrails/ember-v1',
-    #     'file_name': 'retriever_accuracy_llmrails/ember-v1.png'
+    #     'file_name': 'retriever_accuracy_ember-v1.png'
     # },
     {
         'model_name': 'all-MiniLM-L6-v2',
