@@ -116,8 +116,9 @@ def evaluate_and_plot(model_name, tokenizer, model, plot_title, file_name):
 
 
 # List of models to evaluate
-models_to_evaluate = [
+models_to_evaluate = [    
     # {
+          # #required too much memory, was too large to be executed on Colab
     #     'model_name': 'Muennighoff/SGPT-125M-weightedmean-nli-bitfit',
     #     'tokenizer': AutoTokenizer.from_pretrained("Muennighoff/SGPT-125M-weightedmean-nli-bitfit"),
     #     'model': SentenceTransformer("Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit"),
@@ -125,6 +126,7 @@ models_to_evaluate = [
     #     'file_name': 'retriever_accuracy_sgpt_msmarco.png'
     # },
     # {
+          # #extremely bad results
     #     'model_name': 'dmis-lab/biobert-base-cased-v1.1',
     #     'tokenizer': AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1"),
     #     'model': AutoModel.from_pretrained("dmis-lab/biobert-base-cased-v1.1"),
@@ -132,6 +134,7 @@ models_to_evaluate = [
     #     'file_name': 'retriever_accuracy_biobert.png'
     # },
     # {
+          # #92% accuracy at k=3
     #     'model_name': 'intfloat/e5-base-v2',
     #     'tokenizer': AutoTokenizer.from_pretrained("intfloat/e5-base-v2"),
     #     'model': SentenceTransformer("intfloat/e5-base-v2"),
@@ -139,42 +142,43 @@ models_to_evaluate = [
     #     'file_name': 'retriever_accuracy_e5-base-v2.png'
     # },
     # {
+    #       best results so far: 98% accuracy at k=3
     #     'model_name': 'BAAI/bge-base-en-v1.5',
     #     'tokenizer': AutoTokenizer.from_pretrained("BAAI/bge-base-en-v1.5"),
     #     'model': SentenceTransformer("BAAI/bge-base-en-v1.5"),
     #     'plot_title': 'Retriever Model Accuracy with bge-base-en-v1.5',
     #     'file_name': 'retriever_accuracy_bge-base-en-v1.5.png'
     # },
+    {
+        #second best so far: 96% accuracy at k=3
+        'model_name': 'llmrails/ember-v1',
+        'tokenizer': AutoTokenizer.from_pretrained("llmrails/ember-v1"),
+        'model': SentenceTransformer("llmrails/ember-v1"),
+        'plot_title': 'Retriever Model Accuracy with llmrails/ember-v1',
+        'file_name': 'retriever_accuracy_ember-v1.png'
+    },
     # {
-    #     'model_name': 'llmrails/ember-v1',
-    #     'tokenizer': AutoTokenizer.from_pretrained("llmrails/ember-v1"),
-    #     'model': SentenceTransformer("llmrails/ember-v1"),
-    #     'plot_title': 'Retriever Model Accuracy with llmrails/ember-v1',
-    #     'file_name': 'retriever_accuracy_ember-v1.png'
+    #     'model_name': 'sentence-transformers/all-MiniLM-L6-v2',
+    #     'tokenizer': AutoTokenizer.from_pretrained("all-MiniLM-L6-v2"),
+    #     'model': SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2"),
+    #     'plot_title': 'Retriever Model Accuracy with all-MiniLM-L6-v2',
+    #     'file_name': 'retriever_accuracy_all-MiniLM-L6-v2.png'
     # },
-    {
-        'model_name': 'sentence-transformers/all-MiniLM-L6-v2',
-        'tokenizer': AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2"),
-        'model': SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2"),
-        'plot_title': 'Retriever Model Accuracy with all-MiniLM-L6-v2',
-        'file_name': 'retriever_accuracy_all-MiniLM-L6-v2.png'
-    },
-    {
-        'model_name': 'jamesgpt1/sf_model_e5',
-        'tokenizer': AutoTokenizer.from_pretrained("jamesgpt1/sf_model_e5"),
-        'model': SentenceTransformer("jamesgpt1/sf_model_e5"),
-        'plot_title': 'Retriever Model Accuracy with sf_model_e5',
-        'file_name': 'retriever_accuracy_sf_model_e5.png'
-    },
-    {
-        'model_name': 'thenlper/gte-base',
-        'tokenizer': AutoTokenizer.from_pretrained("thenlper/gte-base"),
-        'model': SentenceTransformer("thenlper/gte-base"),
-        'plot_title': 'Retriever Model Accuracy with gte-base',
-        'file_name': 'retriever_accuracy_gte-base.png'
-    },    
-    
-    
+    # {
+    #     'model_name': 'jamesgpt1/sf_model_e5',
+    #     'tokenizer': AutoTokenizer.from_pretrained("jamesgpt1/sf_model_e5"),
+    #     'model': SentenceTransformer("jamesgpt1/sf_model_e5"),
+    #     'plot_title': 'Retriever Model Accuracy with sf_model_e5',
+    #     'file_name': 'retriever_accuracy_sf_model_e5.png'
+    # },
+    # {
+    #     'model_name': 'thenlper/gte-base',
+    #     'tokenizer': AutoTokenizer.from_pretrained("thenlper/gte-base"),
+    #     'model': SentenceTransformer("thenlper/gte-base"),
+    #     'plot_title': 'Retriever Model Accuracy with gte-base',
+    #     'file_name': 'retriever_accuracy_gte-base.png'
+    # },
+
 ]
 
 
