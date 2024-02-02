@@ -20,7 +20,6 @@ f1_paths = [
 ]
 
 
-
 model_names = [
     #'dmis-lab_biobert-base-cased-v1.1',
     #'all-MiniLM-L6-v2',
