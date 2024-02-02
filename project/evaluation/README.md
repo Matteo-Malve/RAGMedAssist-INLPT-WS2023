@@ -1,4 +1,6 @@
-# Accuracy
+# 📈 1. Quantitative Evaluation
+
+## Accuracy
 
 The following are the accuracy scores for different values of top k considered results. The top three performing models for k=3 are *thenlper_gte-base*, *BAAI_bge-base-en-v1.5* and *jamesgpt1_sf_model_e5*.
 
@@ -31,7 +33,7 @@ The plots are arranged in descending order based on the performance of the model
 </p>
 
 
-# F1
+## F1
 
 We decided to only further evaluate the 5 top performing models. (results for the other 3 are in the making) F1 score is a harmonic mean of precision and recall, and it ranges from 0 to 1, where 1 is the best possible score, indicating perfect precision and recall, and 0 is the worst.
 
@@ -59,7 +61,8 @@ The plots are again arranged in descending order based on the performance of the
   <img src="./quantitative_evaluation/images/retriever_f1_intfloat_e5-base-v2.png" width="300" /> 
 </p>
 
-# MRR
+
+## MRR
 
 For MRR, the consideration of varying k is not applicable because the metric is singularly focused on how well a system ranks the first piece of relevant information. Whether that relevant item appears at rank 1, 2, or any other position, MRR captures this by averaging the reciprocal ranks of the first relevant item across all queries.
 
@@ -75,7 +78,7 @@ For MRR, the consideration of varying k is not applicable because the metric is 
 💡 MRR interpretation: on average, the first relevant or correct answer tends to be very close to the top position in the search results
 
 
-# nDCG
+## nDCG
 
 Our nDCG evaluation was limited to k=1,2,3 to mirror the operational constraints of our later system, which only processes the top three documents. It provides insight into how well our retrieval system ranks relevant documents at the top of its search results.
 
@@ -89,3 +92,8 @@ Our nDCG evaluation was limited to k=1,2,3 to mirror the operational constraints
 
 
 💡 nDCG interpretation: gradual increase in nDCG scores from k=1 to k=3 illustrates that while the very first document might not always be the most relevant, the system generally ranks highly relevant documents within the top 3 positions
+
+
+***
+
+# 🧐 2. Qualitative Evalution
