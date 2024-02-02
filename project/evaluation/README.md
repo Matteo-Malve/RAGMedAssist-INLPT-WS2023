@@ -26,10 +26,13 @@ The plots are arranged in descending order based on the performance of the model
 
 <p float="left">
   
-  <img src="./quantitative_evaluation/images/retriever_accuracy_llmrails_ember-v1.png" width="250" /> 
-  <img src="./quantitative_evaluation/images/retriever_accuracy_e5-base-v2.png" width="250" />
-  <img src="./quantitative_evaluation/images/retriever_accuracy_all-MiniLM-L6-v2.png" width="250" /> 
-  <img src="./quantitative_evaluation/images/retriever_accuracy_biobert.png" width="250" />
+  <img src="./quantitative_evaluation/images/retriever_accuracy_llmrails_ember-v1.png" width="300" /> 
+  <img src="./quantitative_evaluation/images/retriever_accuracy_e5-base-v2.png" width="300" />
+</p>
+
+<p float="left">
+  <img src="./quantitative_evaluation/images/retriever_accuracy_all-MiniLM-L6-v2.png" width="300" /> 
+  <img src="./quantitative_evaluation/images/retriever_accuracy_biobert.png" width="300" />
 </p>
 
 
