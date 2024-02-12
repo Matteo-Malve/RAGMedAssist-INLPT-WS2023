@@ -2,10 +2,11 @@
 
 ## Accuracy
 
-The following are the accuracy scores for different values of top k considered results. The top three performing models for k=3 are *thenlper_gte-base*, *BAAI_bge-base-en-v1.5* and *jamesgpt1_sf_model_e5*.
+The following are the accuracy scores for different values of top k considered results. The top three performing models for k=3 are *thenlper_gte-base*, *BAAI_bge-base-en-v1.5* and *jamesgpt1_sf_model_e5*. Keyword search using BM25 was used as a baseline for comparison against our semantic search methods.
 
 |                                  |   k=1 |   k=2 |   k=3 |   k=4 |   k=5 |   k=6 |   k=7 |   k=8 |   k=9 |   k=10 |   k=11 |   k=12 |   k=13 |   k=14 |   k=15 |   k=16 |   k=17 |   k=18 |   k=19 |   k=20 |
 |:---------------------------------|------:|------:|------:|------:|------:|------:|------:|------:|------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
+| BM25              | 0.635  | 0.707 | 0.731  | 0.754 | 0.772 | 0.802 | 0.808 | 0.826  | 0.832  |  0.844  |  0.85  |  0.856 |  0.862 |  0.862 |  0.862 |  0.862 |  0.862 |  0.862 |  0.868 |  0.868 |
 | dmis-lab_biobert-base-cased-v1.1 | 0.084 | 0.114 | 0.168 | 0.192 | 0.198 | 0.204 | 0.216 | 0.24  | 0.251 |  0.257 |  0.275 |  0.287 |  0.287 |  0.287 |  0.293 |  0.299 |  0.299 |  0.299 |  0.317 |  0.323 |
 | all-MiniLM-L6-v2                 | 0.683 | 0.838 | 0.856 | 0.88  | 0.898 | 0.928 | 0.934 | 0.94  | 0.94  |  0.946 |  0.952 |  0.958 |  0.964 |  0.964 |  0.97  |  0.976 |  0.976 |  0.976 |  0.976 |  0.976 |
 | **BAAI_bge-base-en-v1.5**            | 0.85  | 0.94  | **0.964** | 0.976 | 0.982 | 0.982 | 0.982 | 0.982 | 0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.988 |  0.988 |  0.988 |  0.988 |  0.988 |  0.988 |  0.988 |
@@ -13,7 +14,6 @@ The following are the accuracy scores for different values of top k considered r
 | **jamesgpt1_sf_model_e5**            | 0.856 | 0.922 | **0.964** | 0.97  | 0.97  | 0.982 | 0.982 | 0.982 | 0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |
 | **thenlper_gte-base**                | 0.91  | 0.946 | **0.976** | 0.976 | 0.982 | 0.994 | 0.994 | 0.994 | 0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |
 | intfloat_e5-base-v2              | 0.79  | 0.904 | 0.94  | 0.958 | 0.958 | 0.964 | 0.964 | 0.97  | 0.97  |  0.97  |  0.97  |  0.976 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.988 |
-
 
 
 The plots are arranged in descending order based on the performance of the models, displaying the 3 best-performing models first.
@@ -28,10 +28,13 @@ The plots are arranged in descending order based on the performance of the model
   
   <img src="./quantitative_evaluation/images/retriever_accuracy_llmrails_ember-v1.png" width="300" /> 
   <img src="./quantitative_evaluation/images/retriever_accuracy_e5-base-v2.png" width="300" />
+  <img src="./quantitative_evaluation/images/retriever_accuracy_all-MiniLM-L6-v2.png" width="300" /> 
 </p>
 
+
 <p float="left">
-  <img src="./quantitative_evaluation/images/retriever_accuracy_all-MiniLM-L6-v2.png" width="300" /> 
+  <img src="./quantitative_evaluation/images/retriever_accuracy_all-MiniLM-L6-v2.png" width="300" />
+  <img src="./quantitative_evaluation/images/keyword_search_bm25_accuracies.png" width="300" />
   <img src="./quantitative_evaluation/images/retriever_accuracy_biobert.png" width="300" />
 </p>
 
@@ -42,11 +45,13 @@ We decided to only further evaluate the 5 top performing models. (results for th
 
 |                       |   k=1 |   k=2 |   k=3 |   k=4 |   k=5 |   k=6 |   k=7 |   k=8 |   k=9 |   k=10 |
 |:----------------------|------:|------:|------:|------:|------:|------:|------:|------:|------:|-------:|
+| BM25   | 0.635  | 0.471 | 0.365 | 0.302 | 0.257 | 0.229 | 0.202 | 0.184 | 0.166 |  0.154 |
 | BAAI_bge-base-en-v1.5 | 0.85  | 0.643 | 0.5   | 0.4   | 0.333 | 0.286 | 0.25  | 0.222 | 0.2   |  0.182 |
 | **llmrails_ember-v1**     | 0.85  | 0.639 | **0.503** | 0.402 | 0.335 | 0.287 | 0.251 | 0.224 | 0.201 |  0.183 |
 | **jamesgpt1_sf_model_e5** | 0.856 | 0.635 | **0.506** | 0.407 | 0.339 | 0.294 | 0.257 | 0.229 | 0.206 |  0.187 |
 | **thenlper_gte-base**     | 0.91  | 0.651 | **0.512** | 0.41  | 0.345 | 0.299 | 0.262 | 0.233 | 0.21  |  0.191 |
 | intfloat_e5-base-v2   | 0.79  | 0.619 | 0.485 | 0.388 | 0.323 | 0.277 | 0.243 | 0.216 | 0.194 |  0.176 |
+
 
 💡 F1 score interpretation: the system's ability to balance relevance (precision) with completeness (recall) diminishes as more results are considered, a common characteristic of retrieval systems, highlighting the importance of focusing on the quality of the top-ranked documents.
 
@@ -62,6 +67,7 @@ The plots are again arranged in descending order based on the performance of the
 <p float="left">
   <img src="./quantitative_evaluation/images/retriever_f1_BAAI_bge-base-en-v1.5.png" width="300" />
   <img src="./quantitative_evaluation/images/retriever_f1_intfloat_e5-base-v2.png" width="300" /> 
+  <img src="./quantitative_evaluation/images/keyword_search_bm25_F1.png" width="300" /> 
 </p>
 
 
@@ -71,6 +77,7 @@ For MRR, the consideration of varying k is not applicable because the metric is 
 
 |                       |     |
 |:----------------------|------:|
+| BM25   | 0.7 |
 | **BAAI_bge-base-en-v1.5** | **0.906** |
 | llmrails_ember-v1     | 0.9   |
 | **jamesgpt1_sf_model_e5** | **0.905** |
@@ -87,7 +94,8 @@ Our nDCG evaluation was limited to k=1,2,3 to mirror the operational constraints
 
 |                       |   k=1 |   k=2 |   k=3 |
 |:----------------------|------:|------:|------:|
-| BAAI_bge-base-en-v1.5 | 0.536 | 0.593 | 0.609 |
+| BM25 | 0.4 | 0.436 | 0.447 |
+| BAAI_bge-base-e n-v1.5 | 0.536 | 0.593 | 0.609 |
 | **llmrails_ember-v1**     | 0.536 | 0.59  | **0.611** |
 | **jamesgpt1_sf_model_e5**     | 0.54 | 0.588  | **0.614** |
 | **thenlper_gte-base**     | 0.574 | 0.607  | **0.628** |
