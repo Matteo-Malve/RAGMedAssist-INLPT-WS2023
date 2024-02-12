@@ -108,3 +108,42 @@ Our nDCG evaluation was limited to k=1,2,3 to mirror the operational constraints
 ***
 
 # 🧐 2. Qualitative Evalution
+
+## Correct retrieval
+
+From a previous project on the Pubmed Dataset found online, we found a long list of ~300 generated queries. We selected the eight most different from one another in cosine distance plus the shortest and the longest. Using FAISS as retriever, we embed the ten queries with every model and retrieve the top-3 most similar chunks in cosine distance.
+
+We checked for every model and for each query if the correct abstract was among the top-3 retrieved chunks.
+
+<img src="./qualitative_evaluation/images/correct_retrieval.jpg" width="800" />
+
+Note: SGPT was to big to run on Colab and was therefore discarded
+
+💡 Correct-retrieval interpretation: We also discard biobert and MiniLM for their evident inaccuracy. Together with the measures obtained in the previous quantitative analysis, we decide to proceed with the evalaution of only three final candidates:
+- BAAI/bge-base-en-v1.5
+- jamesgpt1/sf_model_e5
+- thenlper/gte-base
+
+## Manual grading of different retrievals
+
+For the three models most of the retrieved chunks are the same. These were not taken into consideration in this part of the analysis, as they don't consist in any differential.
+
+Of the remaining (different) chunks, disregarding the order in which they came up, the three of us grade how pertinent and relevant they are, with marks from 1 (bad) to 3 (good). We average our scorings.
+This grading are supported by written comments.
+
+The attention here mostly goes to the $3^{rd}$ chunk retrieved
+
+
+💡 Different-retrievals interpretation: while in all the quantitative measures thenlper was the dominating model, here we see how it sometimes looses grounds to BAAI and jamesgpt. Indeed, the focus here is on the single chunks (while in the quantitative analysis results were averaged on the entire abstract) and the rating is based on pure human perception. This is really relevant as the chunks will be then passed via Langchain to the chatbot as context.
+
+Results:
+
+
+## Manual grading of the order of retrivagitls
+
+As stated also before, the retrieved chunks overlap significantly among the three models.
+Before we din't take the ordering into consideration. Here we manually choose for each query which model has on human perception the most effective top-3 ordering of retrievals.
+
+The attention here mainly goes to the $1^{st}$ and $2^{nd}$ chunks retrieved.
+
+💡 Order-of-retrievals interpretation: Some models understand better the 
