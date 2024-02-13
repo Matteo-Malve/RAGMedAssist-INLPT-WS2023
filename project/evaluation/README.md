@@ -131,7 +131,7 @@ For the three models most of the retrieved chunks are the same. These were not t
 Of the remaining (different) chunks, disregarding the order in which they came up, the three of us grade how pertinent and relevant they are, with marks from 1 (bad) to 3 (good). We average our scorings.
 This grading are supported by written comments.
 
-The attention here mostly goes to the $3^{rd}$ chunk retrieved
+The attention here mostly goes to the $3^{rd}$ chunk retrieved.
 
 
 💡 Different-retrievals interpretation: while in all the quantitative measures thenlper was the dominating model, here we see how it sometimes looses grounds to BAAI and jamesgpt. Indeed, the focus here is on the single chunks (while in the quantitative analysis results were averaged on the entire abstract) and the rating is based on pure human perception. This is really relevant as the chunks will be then passed via Langchain to the chatbot as context.
@@ -139,11 +139,28 @@ The attention here mostly goes to the $3^{rd}$ chunk retrieved
 Results:
 
 
-## Manual grading of the order of retrivagitls
+## Manual grading of the order of retrivals
 
 As stated also before, the retrieved chunks overlap significantly among the three models.
 Before we din't take the ordering into consideration. Here we manually choose for each query which model has on human perception the most effective top-3 ordering of retrievals.
 
 The attention here mainly goes to the $1^{st}$ and $2^{nd}$ chunks retrieved.
 
-💡 Order-of-retrievals interpretation: Some models understand better the 
+💡 Order-of-retrievals interpretation:
+
+
+# 🏆 3. Results
+
+<img src="./qualitative_evaluation/images/evaluation_results.png" width="1000" />
+
+The weighting of the results was conceived as follows:
+- In different retrievals, for every entry we average the scores the three of us gave, then we sum these contributions.
+- In Ordering of retrieval, we sum for every model how many times it was chosen as the best from any of us.
+
+We evidently give a big weight to our handmade qualitative evaluation, since we value our human perception as much as machine results.
+
+- All the quantitative scores, which are all fractions (vary from 0 to 1), get fed to the inverse of the hyperbolic tangent, which has an effect of increasing the weight of values very close to 1, in order to give those high scores even more distance from the competitors.
+- These new scores get multiplied together to obtain a unique rating and is then multiplied by 10 to make it comparable with the results of the qulitative analysis
+- The values in bold text blue, get summed to obtain the final score.
+
+🥇 thenlper/gte-base will be our first choice.
