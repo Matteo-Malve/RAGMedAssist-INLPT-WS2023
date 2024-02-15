@@ -85,7 +85,7 @@ Several data cleaning and pre-processing strategies were considered and applied 
 - outline where, when, and how it was gathered 
 - show insightful metrics
     - length (max, min, average) ✅
-    - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time)
+    - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time) ✅
     - most common authors
     - make a topic analysis to see the most common topics (from titles? and abstracts?)
     - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how accessible the information is to general audiences, crucial for RAG
@@ -110,11 +110,18 @@ This information not only aids in establishing the credibility and context of th
 
 We extracted the data [explain/how/when where it was gathered ...]
 
-After pre-processing our data, we analyzed different aspects to gain important insights into the data. For instance, the shortest abstract is now 93 characters, while the longest contains 60664 characters. The average length is 1504.78 characters. The histogram below visualizes the distribution of abstracts according to their length.
+Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset. We discovered that abstract lengths show a wide range, with the shortest being 93 characters and the longest reaching 60,664 characters. The average abstract length stands at 1,504.78 characters. The histogram presented below illustrates the distribution of abstract lengths, highlighting how frequently each length occurs.
 
-<p float="center">
+<p align="center">
   <img src="./docs/images/distribution_abstract_length_log_scale.png" width="700" />
 </p>
+
+Turning our attention to the publication frequency on the topic of "intelligence," we noted a growing interest over time. The barplot below visualizes this upward trend, clearly showing a year-over-year increase in the number of publications, which signals a growing engagement with the topic.
+
+<p align="center">
+  <img src="./docs/images/distribution_publications_over_time.png" width="700" />
+</p>
+
 
 ## 4.2 Evaluation Method
 - explain & define used/own metrics 
