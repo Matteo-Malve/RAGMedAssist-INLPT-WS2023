@@ -104,7 +104,9 @@ The documents in the dataset follow a structured format typical of biomedical li
 
 The metadata selected for our project encompasses the authors, title, date, and DOI of each document, as illustrated in this data point example:
 
-![Figure 1: Description of the figure](./docs/datapoint_example.png)
+<p align="center">
+  <img src="./docs/images/datapoint_example.png" width="700" />
+</p>
 
 This information not only aids in establishing the credibility and context of the research but also enables our system to link directly to the source in the answers it generates - an additional functionality of our system. The abstracts, serving as the core of our dataset, will be utilized by our retrieval system to identify and present the most pertinent document in response to user queries, thereby forming the basis for generating informed and accurate answers.
 
