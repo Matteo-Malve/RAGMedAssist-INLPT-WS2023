@@ -39,7 +39,6 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 
 
 # 2. Related Work
-
 - put our work into context of current research
 - including papers read for research/that used same techniques but applied to different problems
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
@@ -47,7 +46,6 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 
 
 # 3. Approach
-
 - conceptual details of our system (about its functionality, its components, data processing pipelines, algorithms, key methods)
 - 💡 be specific about methods (include equations, show figures...)
 - 💡 emphasize creative/novel parts, but also properly cite existing methods
@@ -73,6 +71,24 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
     - most common authors
     - make a topic analysis to see the most common topics (from titles? and abstracts?)
     - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how accessible the information is to general audiences, crucial for RAG
+
+The dataset comprises abstracts and associated metadata from medical articles sourced from [PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=intelligence+%5BTitle%2Fabstract%5D&filter=simsearch1.fha&filter=years.2013-2023&sort=date), a free search engine for life sciences and biomedical literature, managed by the U.S. National Library of Medicine at the National Institutes of Health. To manage time and computational constraints, our focus is limited to abstracts published between 2013 and 2023 featuring the keyword "intelligence", totaling 58,854 documents.
+
+The documents in the dataset follow a structured format typical of biomedical literature. Each document contains several key elements that have designated abbreviations:
+
+- **PMID (PubMed Identifier):** A unique number assigned to each PubMed record, used for easy reference and retrieval.
+- **Title (TI):** The title of the article.
+- **Abstract (AB):** A brief summary of the research, methods, results, and conclusions. It's a crucial part of the document as it provides the essence of the research without the need to read the full article.
+- **Authors (FAU and AU):** Lists the full names (FAU) and initials (AU) of the authors, along with their affiliations (AD), providing information about who conducted the research and their institutional backgrounds.
+- **Date of Publication (DP):** Indicates when the article was published, which is important for understanding the timeliness and relevance of the research.
+- **DOI (Digital Object Identifier - LID):** A unique alphanumeric string assigned to the document, providing a permanent link to its location on the internet.
+- **Additional Information:** Includes various bibliographic details like journal name (JT), issue (IP), volume (VI), language of the article (LA), grant and funding information (GR), and publication type (PT). However, we do not plan to use these as metadata for our application.
+
+The metadata selected for our project encompasses the authors, title, date, and DOI of each document, as illustrated in this data point example:
+
+![Figure 1: Description of the figure](./docs/datapoint_example.png)
+
+This information not only aids in establishing the credibility and context of the research but also enables our system to link directly to the source in the answers it generates - an additional functionality of our system. The abstracts, serving as the core of our dataset, will be utilized by our retrieval system to identify and present the most pertinent document in response to user queries, thereby forming the basis for generating informed and accurate answers.
 
 ## 4.2 Evaluation Method
 - explain & define used/own metrics 
