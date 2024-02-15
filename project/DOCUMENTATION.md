@@ -81,10 +81,10 @@ Several data cleaning and pre-processing strategies were considered and applied 
 # 4. Experimental Setup and Results
 
 ## 4.1 Data
-- describe the data
+- describe the data ✅
 - outline where, when, and how it was gathered 
 - show insightful metrics
-    - length (max, min, average)
+    - length (max, min, average) ✅
     - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time)
     - most common authors
     - make a topic analysis to see the most common topics (from titles? and abstracts?)
@@ -107,6 +107,14 @@ The metadata selected for our project encompasses the authors, title, date, and 
 ![Figure 1: Description of the figure](./docs/datapoint_example.png)
 
 This information not only aids in establishing the credibility and context of the research but also enables our system to link directly to the source in the answers it generates - an additional functionality of our system. The abstracts, serving as the core of our dataset, will be utilized by our retrieval system to identify and present the most pertinent document in response to user queries, thereby forming the basis for generating informed and accurate answers.
+
+We extracted the data [explain/how/when where it was gathered ...]
+
+After pre-processing our data, we analyzed different aspects to gain important insights into the data. For instance, the shortest abstract is now 93 characters, while the longest contains 60664 characters. The average length is 1504.78 characters. The histogram below visualizes the distribution of abstracts according to their length.
+
+<p float="center">
+  <img src="./docs/images/distribution_abstract_length_log_scale.png" width="700" />
+</p>
 
 ## 4.2 Evaluation Method
 - explain & define used/own metrics 
