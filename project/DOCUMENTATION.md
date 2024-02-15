@@ -138,6 +138,12 @@ The visual analysis of publications per author reveals a common trend: the major
 </p>
 
 
+For analyzing common topics appearing in our dataset based on titles of publications, Latent Dirichlet Allocation (LDA) is a commonly used and simple method. It is a generative statistical model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar [add citation]. [... interpretation?]
+
+<p align="center">
+  <img src="./docs/images/topics_LDA.png" width="700"/>
+</p>
+
 
 
 ## 4.2 Evaluation Method
