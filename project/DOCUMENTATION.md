@@ -86,7 +86,7 @@ Several data cleaning and pre-processing strategies were considered and applied 
 - show insightful metrics
     - length (max, min, average) ✅
     - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time) ✅
-    - most common authors
+    - most common authors ✅
     - make a topic analysis to see the most common topics (from titles? and abstracts?)
     - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how accessible the information is to general audiences, crucial for RAG
 
@@ -121,6 +121,21 @@ Turning our attention to the publication frequency on the topic of "intelligence
 <p align="center">
   <img src="./docs/images/distribution_publications_over_time.png" width="700" />
 </p>
+
+The visual analysis of publications per author reveals a common trend: the majority of authors contribute fewer than 2 publications on average, highlighting a broad base of singular contributions within the field. Notably, the most prolific author has made an impressive 94 contributions.
+
+<p align="center">
+  <img src="./docs/images/distribution_authors_frequency_contribution.png" width="700" />
+</p>
+
+[Ian J Deary](https://www.research.ed.ac.uk/en/persons/ian-deary-2) stands out as the leading author, reflecting his extensive involvement in intelligence and cognitive aging research. The following visualization ranks the top 10 authors by their number of publications. Notably, 'Unknown' appears as the fourth-highest entry, signaling some unidentified authors within the dataset.
+
+
+<p align="center">
+  <img src="./docs/images/distribution_authors_most_frequent.png" width="700" />
+</p>
+
+
 
 
 ## 4.2 Evaluation Method
