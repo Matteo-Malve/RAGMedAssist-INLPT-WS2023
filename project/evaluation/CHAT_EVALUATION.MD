@@ -40,6 +40,7 @@
     - find out which use case works best (causal/factual/yes-no question ... professionals/students)
     - evaluate using eval set with ground truth QAs
     - generate set using ChatGPT
+    - use BLEU/ROUGE/BERTScore as in assignment
 
 
 
