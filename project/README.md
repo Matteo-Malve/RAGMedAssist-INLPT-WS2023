@@ -4,7 +4,7 @@
 |:--------------------|:-------------|:-----------------|:-------------------|
 | Matteo Malvestiti | 4731243| Matteo-Malve | matteo.malvestiti@stud.uni-heidelberg.de|
 | Sandra Friebolin | 3175035 | friebolin | sandra_friebolin@proton.me |
-| Yusuf Berber | ...... | yberber | yusuf.berber@stud.uni-heidelberg.de |
+| Yusuf Berber | 4736316 | yberber | yusuf.berber@stud.uni-heidelberg.de |
 
 ### Advisor
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
