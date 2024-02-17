@@ -178,12 +178,12 @@ class MedicalChatbot:
     def clean_chat_history(self):
         self.chat_history = []
 
-    def set_prompt_template(self, prompt_template):
+    def set_prompt_template(self, prompt_template, print_template=True):
         self.prompt = prompt_template
         self.init_qa_chain()
-        print("New prompt template set successfully")
-        print("New promt template reads: ")
-        display(Markdown(f"<p>{self.prompt}</p>"))
+        display(Markdown("New prompt template set successfully."))
+        if print_template:
+            display(Markdown(f"New prompt template reads: <p>{self.prompt}</p>"))
 
     def generate_response_and_measure_time(self,query, display_sources=False):
 
@@ -192,10 +192,22 @@ class MedicalChatbot:
         execution_time = time.time() - start_time  # Calculate execution time
 
         # Print the execution time rounded to 2 decimal places
-        print(f"The execution time on {self.device} using {self.llm_model_name} is {round(execution_time, 2)} seconds.\n")
+        display(Markdown(f"The execution time on {self.device} using {self.llm_model_name} is {round(execution_time, 2)} seconds.\n"))
 
         # Display the query and result
-        display(Markdown(f"<b>{result['query']}</b>"))
-        display(Markdown(f"<p>{result['result']}</p>"))
+        display(Markdown(f"<span style='color:blue'><b>{result['query']}</b></span>"))
+        display(Markdown(f"<span style='color:blue'><p>{result['result']}</p></span>"))
         if display_sources:
             display(Markdown(f"<p>{result['source_documents']}</p>"))
+
+    def test_prompts(self,promts_list,query,display_sources=False):
+        self.init_prompt_template()
+        display(Markdown(f"<span style='color:red'>Default template:</span>"))
+        display(Markdown(f"<p>{self.prompt}</p>"))
+        self.generate_response_and_measure_time(query)
+        counter=1
+        for prompt in promts_list:
+            display(Markdown(f"<span style='color:red'><b>Testing prompt: {counter}</b></span>"))
+            self.set_prompt_template(prompt, print_template=False)
+            self.generate_response_and_measure_time(query)
+            counter+=1
