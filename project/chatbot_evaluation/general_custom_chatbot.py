@@ -17,6 +17,10 @@ from langchain import hub
 from langchain.vectorstores import Pinecone
 from langchain.prompts import PromptTemplate
 
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())
+HF_AUTH="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"
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -105,11 +109,15 @@ class MedicalChatbot:
             self.llm_model_name, torch_dtype=torch.float16,
             trust_remote_code=True,
             device_map="auto",
-            quantization_config=quantization_config
+            quantization_config=quantization_config,
+            token=HF_AUTH
             )
 
         else:
-            self.model = AutoModelForCausalLM.from_pretrained(self.llm_model_name, torch_dtype="auto",  trust_remote_code=True)
+            self.model = AutoModelForCausalLM.from_pretrained(self.llm_model_name, 
+                                                              torch_dtype="auto",  
+                                                              trust_remote_code=True,
+                                                              token="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")
 
 
 
