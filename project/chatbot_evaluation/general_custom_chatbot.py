@@ -205,9 +205,8 @@ class MedicalChatbot:
         display(Markdown(f"<span style='color:red'>Default template:</span>"))
         display(Markdown(f"<p>{self.prompt}</p>"))
         self.generate_response_and_measure_time(query)
-        counter=1
         for prompt in promts_list:
-            display(Markdown(f"<span style='color:red'><b>Testing prompt: {counter}</b></span>"))
-            self.set_prompt_template(prompt, print_template=False)
+            tag=prompt.get("tag")
+            display(Markdown(f"<span style='color:red'><b>Testing prompt: {tag}</b></span>"))
+            self.set_prompt_template(prompt["prompt"], print_template=False)
             self.generate_response_and_measure_time(query)
-            counter+=1
