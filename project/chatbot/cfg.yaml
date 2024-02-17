@@ -1,0 +1,34 @@
+retrievers:
+  - bm25 :
+      topk: 4
+      path: "chunked_docs.pkl"
+  - faiss :
+      faiss_index_path: "faiss_indices/"
+      topk: 4
+  # - pinecone :
+  #     index_name: "pubmed"
+  #     search_type: "similarity"
+  #     topk: 4
+
+
+ensemble:
+  weights:
+    - 0.4
+    - 0.6
+
+
+llm_model: 
+  name: "mistralai/Mistral-7B-Instruct-v0.1"
+  temperature: 0.001
+  top_p: 0.95
+  repetition_penalty: 1.15
+
+
+embedding_model: "thenlper/gte-base"
+
+prompt_template : 
+  """You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
+  Question: {question}
+  Context: {context}
+  Answer:
+  """
