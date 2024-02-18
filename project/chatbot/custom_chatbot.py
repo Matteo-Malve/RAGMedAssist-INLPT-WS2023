@@ -208,10 +208,32 @@ if __name__ == "__main__":
         cfg = yaml.safe_load(file)
 
 
-    queries = [
+    qa_evalset_queries = [
+        "Does tick-borne encephalitis carry a high risk of incomplete recovery in children?",
+        "Is language dysfunction associated with age of onset of benign epilepsy with centrotemporal spikes in children?",
         "Is occupational outcome in bipolar disorder predicted by premorbid functioning and intelligence?",
+        "Does the CACNA1C risk allele selectively impact on executive function in bipolar type I disorder?",
+        "Does emotional intelligence predict breaking bad news skills in pediatric interns?",
+        "Cognitive recovery after severe traumatic brain injury in children/adolescents and adults: similar positive outcome but different underlying pathways?",
+        "Is bilateral hearing loss associated with decreased nonverbal intelligence in US children aged 6 to 16 years?",
+        "Is the association between intelligence and lifespan mostly genetic?",
         "What are the effects of α1-antitrypsin (AAT) treatment on chronic fatigue syndrome (CFS) based on a case study involving a 49-year-old woman?",
-        "What are your favorite comedies?"]
+        "Are cerebral white matter fractional anisotropy and tract volume as measured by MR imaging associated with impaired cognitive and motor function in pediatric posterior fossa tumor survivors?"
+    ]
+    chatgpt_queries = [
+        "Can learning a second language improve cognitive skills and intelligence?",
+        "Is there a link between early life stress and its long-term impact on cognitive development and intelligence?",
+        "Can a healthy diet during childhood improve intelligence and academic performance?",
+        "How do environmental factors during childhood affect intelligence outcomes in adulthood?",
+        "How does sleep quality impact learning abilities and intelligence in students?"
+    ]
+    unrelated_topic_queries = [
+        "What are your favorite comedies?",
+        "Which football team do you think will win the world cup this year?"
+    ]
+    queries = [qa_evalset_queries, chatgpt_queries, unrelated_topic_queries]
+
+    query_list_names = ["Queries from QA-Evaluationset", "Queries from ChatGPT-4", "Unrelated Topic Quries"]
 
     chatbot = MedicalChatbot(cfg)
 
@@ -219,20 +241,23 @@ if __name__ == "__main__":
     with open("chatbot_results.md", "w") as md_file:
         md_file.write(f"# Testing of Differnt Weights for Hybrid Search\n")
         md_file.write(f"**BM25 Keyword Search: {cfg['ensemble']['weights'][0]}, {cfg['embedding_model']} Vector Search: {cfg['ensemble']['weights'][0]}**\n")
+        md_file.write(f"LLM parameters: temp={cfg["llm_model"]["temperature"]}, topp={cfg["llm_model"]["top_p"]}, rep_penalty={cfg["llm_model"]["repetition_penalty"]}\n\n")
         prompt = chatbot.get_prompt()
         md_file.write(f"## Custom Prompt Template:\n```python\n{prompt}\n```\n\n")
 
-        for query in queries:
-            start_time = time.time()  # Start timing
-            result = chatbot.generate_response(query)
-            execution_time = time.time() - start_time  # Calculate execution time
+        for name, query_list in zip(query_list_names, queries):
+            md_file.write(f"###{name}\n")
+            for query in query_list:
+                start_time = time.time()  # Start timing
+                result = chatbot.generate_response(query)
+                execution_time = time.time() - start_time  # Calculate execution time
 
-            # Write the query, execution time, and result to the Markdown file
-            md_file.write(f"## Query:\n*{query}*\n\n")
-            md_file.write(f"**Execution Time:**\n{round(execution_time, 2)} seconds on {chatbot.device} using {cfg['llm_model']['name']}.\n\n")
-            md_file.write(f"### Response:\n{result['result']}\n\n")
-            # Add a horizontal rule for separation between entries
-            md_file.write("---\n\n")
+                # Write the query, execution time, and result to the Markdown file
+                md_file.write(f"## Query:\n*{query}*\n\n")
+                md_file.write(f"**Execution Time:**\n{round(execution_time, 2)} seconds on {chatbot.device} using {cfg['llm_model']['name']}.\n\n")
+                md_file.write(f"### Response:\n{result['result']}\n\n")
+                # Add a horizontal rule for separation between entries
+                md_file.write("---\n\n")
 
     print("Results have been saved to chatbot_results.md")
 
