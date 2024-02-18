@@ -240,7 +240,7 @@ if __name__ == "__main__":
     #Open a Markdown file for writing the results
     with open("chatbot_results.md", "w") as md_file:
         md_file.write(f"# Testing of Differnt Weights for Hybrid Search\n")
-        md_file.write(f"**BM25 Keyword Search: {cfg['ensemble']['weights'][0]}, {cfg['embedding_model']} Vector Search: {cfg['ensemble']['weights'][0]}**\n")
+        md_file.write(f"**BM25 Keyword Search: {cfg['ensemble']['weights'][0]}, {cfg['embedding_model']} Vector Search: {cfg['ensemble']['weights'][1]}**\n")
         md_file.write(f"LLM parameters: temp={cfg['llm_model']['temperature']}, topp={cfg['llm_model']['top_p']}, rep_penalty={cfg['llm_model']['repetition_penalty']}\n\n")
         prompt = chatbot.get_prompt()
         md_file.write(f"## Custom Prompt Template:\n```python\n{prompt}\n```\n\n")
