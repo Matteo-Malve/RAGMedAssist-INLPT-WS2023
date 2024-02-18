@@ -194,9 +194,7 @@ class MedicalChatbot:
                     [INST] Question: {question} 
                     Context: {context} 
                     Answer: [/INST]"""
-        prompt = PromptTemplate.from_template(template)
-        print(prompt)
-        return prompt
+        return PromptTemplate.from_template(template)
         #return hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
         
     def clean_chat_history(self):
@@ -219,13 +217,18 @@ if __name__ == "__main__":
 
     #Open a Markdown file for writing the results
     with open("chatbot_results.md", "w") as md_file:
-        for i, query in enumerate(queries):
+        md_file.write(f"# Testing of Differnt Weights for Hybrid Search\n")
+        md_file.write(f"**BM25 Keyword Search: {cfg['ensemble']['weights'][0]}, {cfg['embedding_model']} Vector Search: {cfg['ensemble']['weights'][0]}**\n")
+        prompt = chatbot.get_prompt()
+        md_file.write(f"## Custom Prompt Template:\n```python\n{prompt}\n```\n\n")
+
+        for query in queries:
             start_time = time.time()  # Start timing
             result = chatbot.generate_response(query)
             execution_time = time.time() - start_time  # Calculate execution time
 
             # Write the query, execution time, and result to the Markdown file
-            md_file.write(f"## Query {i}:\n*{query}*\n\n")
+            md_file.write(f"## Query:\n*{query}*\n\n")
             md_file.write(f"**Execution Time:**\n{round(execution_time, 2)} seconds on {chatbot.device} using {cfg['llm_model']['name']}.\n\n")
             md_file.write(f"### Response:\n{result['result']}\n\n")
             # Add a horizontal rule for separation between entries
