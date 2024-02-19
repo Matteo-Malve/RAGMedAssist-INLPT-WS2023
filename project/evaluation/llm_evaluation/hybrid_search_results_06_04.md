@@ -1,0 +1,209 @@
+# Testing of Differnt Weights for Hybrid Search
+**BM25 Keyword Search: 0.6, thenlper/gte-base Vector Search: 0.4**
+LLM parameters: temp=0.001, topp=0.95, rep_penalty=1.15
+
+## Custom Prompt Template:
+```python
+input_variables=['context', 'question'] template="<s> [INST] You are a helpful assistant for biomedical question-answering tasks. \n                    Use only the following retrieved context to answer the question. If the answer is not in the context,\n                    just say that you don't know. \n                    Provide a response strictly based on the information requested in the query.[/INST] </s> \n                    [INST] Question: {question} \n                    Context: {context} \n                    Answer: [/INST]"
+```
+
+### Queries from QA-Evaluationset
+## Query:
+*Does tick-borne encephalitis carry a high risk of incomplete recovery in children?*
+
+**Execution Time:**
+13.96 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it appears that there is no clear answer to the question about whether tick-borne encephalitis carries a high risk of incomplete recovery in children. The context discusses various aspects of encephalitis in children, including its impact on long-term neurological sequelae and cognitive performance, but does not specifically address the risk of incomplete recovery. It is important to note that the context is limited to specific studies and may not represent the entire population of children with encephalitis. Further research would be needed to provide a definitive answer to this question.
+
+---
+
+## Query:
+*Is language dysfunction associated with age of onset of benign epilepsy with centrotemporal spikes in children?*
+
+**Execution Time:**
+13.71 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Yes, language dysfunction is associated with age of onset of benign epilepsy with centrotemporal spikes in children. A study conducted on 63 children with benign epilepsy with centrotemporal spikes (BECTS) and 30 healthy controls found that children with BECTS had language difficulties, especially those with earlier disease onset. The study also found that early age at seizure onset is a risk factor for language dysfunction in children with BECTS.
+
+---
+
+## Query:
+*Is occupational outcome in bipolar disorder predicted by premorbid functioning and intelligence?*
+
+**Execution Time:**
+22.39 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it appears that there is some evidence suggesting that premorbid functioning and intelligence may play a role in determining occupational outcome in individuals with bipolar disorder. However, the specific findings are mixed and do not provide a clear answer to the question.
+
+For example, one study found that lower premorbid intelligence was associated with a higher risk of receiving disability benefits in individuals with bipolar disorder (BD). Additionally, another study found that educational level and premorbid intelligence were significant predictors of attention and processing speed, as well as psychosocial functioning, in individuals with BD.
+
+However, another study found that premorbid intelligence did not explain the higher risk of receiving disability benefits in individuals with BD. Furthermore, the study also found that occupational outcome was unrelated to premorbid and current IQ, as well as decline in IQ.
+
+Overall, while there is some evidence suggesting that premorbid functioning and intelligence may play a role in determining occupational outcome in individuals with bipolar disorder, the specific findings are mixed and do not provide a clear answer to the question. More research is needed to better understand the relationship between premorbid functioning and intelligence and occupational outcome in individuals with bipolar disorder.
+
+---
+
+## Query:
+*Does the CACNA1C risk allele selectively impact on executive function in bipolar type I disorder?*
+
+**Execution Time:**
+19.12 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, the CACNA1C risk allele does not selectively impact on executive function in bipolar type I disorder. The study conducted by Zhang et al. (2019) found that the CACNA1C genotype MetMet was associated with worse performance on all four executive function tests compared to ValVal in patients with bipolar type I disorder, but there was no influence of CACNA1C on the cognitive performance of healthy controls. Another study by Wang et al. (2018) also found that the CACNA1C genotype MetMet had a detrimental effect on executive function among women with Parkinson's disease, but again, there was no association with executive dysfunction as a trait in bipolar disorder. Therefore, the available evidence suggests that the CACNA1C risk allele does not specifically impact on executive function in bipolar type I disorder.
+
+---
+
+## Query:
+*Does emotional intelligence predict breaking bad news skills in pediatric interns?*
+
+**Execution Time:**
+10.46 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the given context, I cannot conclude whether emotional intelligence predicts breaking bad news skills in pediatric interns. The context discusses the importance of emotional intelligence in various aspects of healthcare, including breaking bad news, but does not specifically relate it to pediatric internship training or breaking bad news skills. Therefore, I do not have enough information to provide a definitive answer to this question.
+
+---
+
+## Query:
+*Cognitive recovery after severe traumatic brain injury in children/adolescents and adults: similar positive outcome but different underlying pathways?*
+
+**Execution Time:**
+18.37 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it appears that there is some overlap in the positive outcomes seen after severe traumatic brain injury (TBI) in children/adolescents and adults. However, the underlying pathways and contributing factors may differ. For example, a recent study found that subtle cognitive impairments after TBI should be interpreted in conjunction with an individual's self-reported problems, as neuropsychological assessments may not always accurately reflect an individual's perceived outcomes. Additionally, the study found that parenting style had a more prominent effect on verbal and nonverbal IQ within the TBI trajectories compared to orthopedic injury (OI) trajectories. It is important to note that the provided context is limited and additional research may be necessary to further understand the similarities and differences in recovery after TBI in children/adolescents and adults.
+
+---
+
+## Query:
+*Is bilateral hearing loss associated with decreased nonverbal intelligence in US children aged 6 to 16 years?*
+
+**Execution Time:**
+21.99 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Yes, bilateral hearing loss is associated with decreased nonverbal intelligence in US children aged 6 to 16 years. According to a crosssectional survey called the Third National Health and Nutrition Examination Survey (NHANES III), children with bilateral hearing loss had lower nonverbal intelligence scores than children with normal hearing. The study used the Wechsler Intelligence Scale for Children Revised block design subtest to measure nonverbal intelligence and defined low nonverbal intelligence as a standardized score four standard deviations below the standardized mean of 10. The study found that children with bilateral hearing loss had a mean nonverbal intelligence score that was 4 two standard deviations below the standardized mean of 10, while children with normal hearing had a mean nonverbal intelligence score that was 4 two standard deviations above the standardized mean of 10. The study also found that children with bilateral hearing loss had lower nonverbal intelligence scores than children with unilateral hearing loss.
+
+---
+
+## Query:
+*Is the association between intelligence and lifespan mostly genetic?*
+
+**Execution Time:**
+12.46 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it seems that there is some evidence suggesting a positive association between intelligence and lifespan. Studies have found that higher intelligence predicts longer lifespan, potentially due to influences on both health behaviors and genetic factors. However, it is important to note that this association may vary over time and may be influenced by other factors such as socioeconomic status. Additionally, the specific mechanisms underlying this association are not yet fully understood.
+
+---
+
+## Query:
+*What are the effects of α1-antitrypsin (AAT) treatment on chronic fatigue syndrome (CFS) based on a case study involving a 49-year-old woman?*
+
+**Execution Time:**
+11.59 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it appears that the effects of α1-antitrypsin (AAT) treatment on chronic fatigue syndrome (CFS) are not specifically mentioned. The context discusses several aspects of CFS, including its impact on intellectual capacity, but does not mention any treatments for the condition. Therefore, I cannot provide an answer regarding the effects of AAT treatment on CFS based on the given context.
+
+---
+
+## Query:
+*Are cerebral white matter fractional anisotropy and tract volume as measured by MR imaging associated with impaired cognitive and motor function in pediatric posterior fossa tumor survivors?*
+
+**Execution Time:**
+24.51 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Yes, cerebral white matter fractional anisotropy (FA) and tract volume as measured by magnetic resonance imaging (MRI) are associated with impaired cognitive and motor function in pediatric posterior fossa tumor survivors. The study conducted by Van den Bergh et al. (2015) found that FA of skeletonized tracts correlated significantly with full-scale intelligence quotients (FSIQ), processing speed, and shifting attention in survivors of pediatric posterior fossa tumors. Additionally, frontocerebellar tract volumes correlated with both FSIQ and International Cooperative Ataxia Rating Scale (ICARS) scores. Another study by Kessels et al. (2018) found that FA of the skeletonized tracts correlated significantly with FSIQ, processing speed, and shifting attention in children with spastic diplegia. However, it is important to note that the specific findings may vary depending on the population studied and the methods used to measure white matter integrity.
+
+---
+
+### Queries from ChatGPT-4
+## Query:
+*Can learning a second language improve cognitive skills and intelligence?*
+
+**Execution Time:**
+14.75 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Yes, learning a second language can improve cognitive skills and intelligence. The study you provided found that initial scores on measures of inhibitory control seemed predictive of L2 Dutch vocabulary acquisition, and progress on IQ, inhibitory control, attentional shifting, and working memory were also identified as contributing factors. Additionally, another study found that phonological awareness instruction embedded in vocabulary learning activities might be beneficial to kindergarteners learning English as a second language. Another study found that AI-based instruction leveraging the Duolingo application incorporating natural language processing technology interactive exercises personalized feedback and speech recognition technology improved L2 speaking skills and self-regulation abilities in a natural setting. Finally, a study found that working memory and cognitive flexibility respectively explained an additional 16 and 19 of the variance in language abilities above and beyond gender, age, and nonverbal intelligence.
+
+---
+
+## Query:
+*Is there a link between early life stress and its long-term impact on cognitive development and intelligence?*
+
+**Execution Time:**
+16.9 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Yes, there is a link between early life stress and its long-term impact on cognitive development and intelligence. The metaanalysis conducted by Ruiz et al (2016) identified 23 stressors with a significant increase in their likelihood to influence childhood cognitive ability by 10 or more. Stressors most impactful to cognition during the prenatal period were related to maternal health and the mothers ability to access information relevant to a healthy pregnancy, while stressors most impactful to cognition during the early childhood period were dietary nutrients, infancy quality of social interaction, and exposure to toxic substances throughout early childhood. The findings suggest that the stressors observed to be the most influential to childhood cognitive ability are not permanent and can be broadly categorized as activities/behaviors which can be modified to improve childhood cognition.
+
+---
+
+## Query:
+*Can a healthy diet during childhood improve intelligence and academic performance?*
+
+**Execution Time:**
+18.72 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it appears that there is some evidence suggesting that a healthy diet during childhood may improve cognitive performance and academic performance during adolescence and young adulthood. Specifically, a healthy parental lifestyle score, which includes smoking, drinking, exercise, sleep, and diet, has been shown to be associated with better offspring cognitive performance in subsequent years. Additionally, certain dietary patterns, such as a Mediterranean-style diet, have been associated with better cognitive performance in older adults. However, it is important to note that these findings are based on observational studies and do not necessarily establish cause and effect. Further research would be needed to confirm these associations and determine if a healthy diet during childhood directly improves cognitive performance.
+
+---
+
+## Query:
+*How do environmental factors during childhood affect intelligence outcomes in adulthood?*
+
+**Execution Time:**
+21.37 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Based on the provided context, it seems that there is some evidence linking environmental factors during childhood to variations in intelligence outcomes in adulthood. For example, maternal infections in pregnancy have been linked to children's cognitive outcomes, and infections in the third trimester specifically have been shown to decrease verbal IQ at age 4. Additionally, maternal prenatal infections have been associated with decreased performance IQ at age 8. However, it's worth noting that the magnitude of these effects appears to be small.
+
+It's also important to note that while environmental factors during childhood can influence intelligence outcomes, other factors such as genetics and early environmental risk factors can also play a role. For example, genetic and early environmental risk factors have been assessed as modulators of the impact of SLEs (systemic lupus erythematosus) on the brain, and maternal infections in each trimester of pregnancy have been associated with decreased verbal IQ at age 4.
+
+Overall, while there is some evidence linking environmental factors during childhood to intelligence outcomes in adulthood, it's important to consider the complex interplay of multiple factors that can influence cognitive development.
+
+---
+
+## Query:
+*How does sleep quality impact learning abilities and intelligence in students?*
+
+**Execution Time:**
+16.38 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ Sleep quality impacts learning abilities and intelligence in students in various ways. Firstly, sleep spindles, which are thalamocortical oscillations in non-rapid eye movement (NREM) sleep, have been shown to correlate with fluid intelligence, which refers to the ability to use logic, learn novel rules, patterns, and solve problems. Secondly, brain activity across different sleep-wake states is also related to cognitive abilities. For instance, positive correlations were observed between fluid intelligence and blood oxygen level dependent (BOLD) activations in the bilateral putamen and paracentral lobule/precuneus during NREM sleep. Thirdly, sleep problems such as long wake episodes and low sleep efficiency can negatively affect the relationship between children's intelligence and academic achievement. Overall, sufficient sleep during childhood is essential for cognitive functions such as learning and successful school performance.
+
+---
+
+### Unrelated Topic Quries
+## Query:
+*What are your favorite comedies?*
+
+**Execution Time:**
+8.46 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ I am sorry, but I cannot provide an answer to your question "What are your favorite comedies?" as there is no information in the given context about my personal preferences or knowledge of comedy.
+
+---
+
+## Query:
+*Which football team do you think will win the world cup this year?*
+
+**Execution Time:**
+8.76 seconds on cuda using mistralai/Mistral-7B-Instruct-v0.1.
+
+### Response:
+ I am sorry, but I cannot answer the question "Which football team do you think will win the world cup this year?" based on the provided context. The context appears to contain articles about various topics including the application of intelligent technology in football simulation leagues, the post-9/11 torture program, the game of curling and its interaction with artificial intelligence, and the relationship between behavioral modifications and depression. However, it does not contain any information about the upcoming World Cup or the participating football teams.
+
+---
+

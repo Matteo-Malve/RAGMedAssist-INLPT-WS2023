@@ -185,11 +185,10 @@ class MedicalChatbot:
             chain_type_kwargs={"prompt": prompt},
         )
 
-
     def get_prompt(self):
         template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks. 
-                    Use only the following retrieved context to answer the question. If the answer is not in the context or 
-                    if you don't know the answer, just say that you don't know. 
+                    Use only the following retrieved context to answer the question. If the answer is not in the context,
+                    just say that you don't know. 
                     Provide a response strictly based on the information requested in the query.[/INST] </s> 
                     [INST] Question: {question} 
                     Context: {context} 
@@ -207,7 +206,7 @@ if __name__ == "__main__":
     with open("cfg.yaml", "r") as file:
         cfg = yaml.safe_load(file)
 
-
+    # Define different testing queries
     qa_evalset_queries = [
         "Does tick-borne encephalitis carry a high risk of incomplete recovery in children?",
         "Is language dysfunction associated with age of onset of benign epilepsy with centrotemporal spikes in children?",
@@ -235,10 +234,14 @@ if __name__ == "__main__":
 
     query_list_names = ["Queries from QA-Evaluationset", "Queries from ChatGPT-4", "Unrelated Topic Quries"]
 
+    # Call chatbot
     chatbot = MedicalChatbot(cfg)
 
+    # Initialize list to store query-response pairs
+    query_response_pairs = []
+
     #Open a Markdown file for writing the results
-    with open("chatbot_results.md", "w") as md_file:
+    with open("hybrid_search_results_1_0.md", "w") as md_file:
         md_file.write(f"# Testing of Differnt Weights for Hybrid Search\n")
         md_file.write(f"**BM25 Keyword Search: {cfg['ensemble']['weights'][0]}, {cfg['embedding_model']} Vector Search: {cfg['ensemble']['weights'][1]}**\n")
         md_file.write(f"LLM parameters: temp={cfg['llm_model']['temperature']}, topp={cfg['llm_model']['top_p']}, rep_penalty={cfg['llm_model']['repetition_penalty']}\n\n")
@@ -246,11 +249,14 @@ if __name__ == "__main__":
         md_file.write(f"## Custom Prompt Template:\n```python\n{prompt}\n```\n\n")
 
         for name, query_list in zip(query_list_names, queries):
-            md_file.write(f"###{name}\n")
+            md_file.write(f"### {name}\n")
             for query in query_list:
                 start_time = time.time()  # Start timing
                 result = chatbot.generate_response(query)
                 execution_time = time.time() - start_time  # Calculate execution time
+
+                # Store query-response pair in list
+                query_response_pairs.append([query, result['result']])
 
                 # Write the query, execution time, and result to the Markdown file
                 md_file.write(f"## Query:\n*{query}*\n\n")
@@ -259,7 +265,14 @@ if __name__ == "__main__":
                 # Add a horizontal rule for separation between entries
                 md_file.write("---\n\n")
 
-    print("Results have been saved to chatbot_results.md")
+
+    # Save query-response pairs in .txt file for easier extraction
+    with open("query_response_pairs_hybrid_search_1_0.txt", "w") as txt_file:
+        # Convert list of pairs to a string representation
+        txt_content = str(query_response_pairs)
+        txt_file.write(txt_content)
+
+    print("Results have been saved.")
 
 
 
