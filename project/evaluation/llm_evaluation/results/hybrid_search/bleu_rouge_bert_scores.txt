@@ -53,3 +53,58 @@ BLEU Score: {'bleu': 0.025756923215257757, 'precisions': [0.14285714285714285, 0
 ROUGE Score: {'rouge1': 0.1892494651294961, 'rouge2': 0.038782625849461225, 'rougeL': 0.13264817012055813, 'rougeLsum': 0.13194894430347698}
 BERTScore Averaged: {'precision': 0.8311048746109009, 'recall': 0.8524631129370795, 'f1': 0.8415602180692885}
 
+Results for hybrid search weights: 0.0, 1.0
+BLEU Score: {'bleu': 0.022972323956362704, 'precisions': [0.13470533208606175, 0.018867924528301886, 0.011417697431018078, 0.009596928982725527], 'brevity_penalty': 1.0, 'length_ratio': 2.563549160671463, 'translation_length': 1069, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.17492209908957812, 'rouge2': 0.031147018236700755, 'rougeL': 0.12900053478617823, 'rougeLsum': 0.1277965660866342}
+BERTScore Averaged: {'precision': 0.8304332693417867, 'recall': 0.8548348082436455, 'f1': 0.8423760334650675}
+
+Results for hybrid search weights: 0.1, 0.9
+BLEU Score: {'bleu': 0.022516192094652554, 'precisions': [0.1319838056680162, 0.02202283849918434, 0.010682004930156122, 0.008278145695364239], 'brevity_penalty': 1.0, 'length_ratio': 2.961630695443645, 'translation_length': 1235, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.18916890923079832, 'rouge2': 0.040340247236798965, 'rougeL': 0.12048615294874129, 'rougeLsum': 0.11998667812756797}
+BERTScore Averaged: {'precision': 0.8263057735231187, 'recall': 0.8553797337743971, 'f1': 0.8405046396785312}
+
+Results for hybrid search weights: 0.2, 0.8
+BLEU Score: {'bleu': 0.022516192094652554, 'precisions': [0.1319838056680162, 0.02202283849918434, 0.010682004930156122, 0.008278145695364239], 'brevity_penalty': 1.0, 'length_ratio': 2.961630695443645, 'translation_length': 1235, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.18916890923079832, 'rouge2': 0.040340247236798965, 'rougeL': 0.12048615294874129, 'rougeLsum': 0.11998667812756797}
+BERTScore Averaged: {'precision': 0.8263057735231187, 'recall': 0.8553797337743971, 'f1': 0.8405046396785312}
+
+Results for hybrid search weights: 0.3, 0.7
+BLEU Score: {'bleu': 0.022516192094652554, 'precisions': [0.1319838056680162, 0.02202283849918434, 0.010682004930156122, 0.008278145695364239], 'brevity_penalty': 1.0, 'length_ratio': 2.961630695443645, 'translation_length': 1235, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.18916890923079832, 'rouge2': 0.040340247236798965, 'rougeL': 0.12048615294874129, 'rougeLsum': 0.11998667812756797}
+BERTScore Averaged: {'precision': 0.8263057735231187, 'recall': 0.8553797337743971, 'f1': 0.8405046396785312}
+
+Results for hybrid search weights: 0.4, 0.6
+BLEU Score: {'bleu': 0.022516192094652554, 'precisions': [0.1319838056680162, 0.02202283849918434, 0.010682004930156122, 0.008278145695364239], 'brevity_penalty': 1.0, 'length_ratio': 2.961630695443645, 'translation_length': 1235, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.18916890923079832, 'rouge2': 0.040340247236798965, 'rougeL': 0.12048615294874129, 'rougeLsum': 0.11998667812756797}
+BERTScore Averaged: {'precision': 0.8263057735231187, 'recall': 0.8553797337743971, 'f1': 0.8405046396785312}
+
+Results for hybrid search weights: 0.5, 0.5
+BLEU Score: {'bleu': 0.03665172057841658, 'precisions': [0.15009940357852883, 0.031093279839518557, 0.022267206477732792, 0.017364657814096015], 'brevity_penalty': 1.0, 'length_ratio': 2.4124700239808154, 'translation_length': 1006, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.18840066911506703, 'rouge2': 0.04136596521318468, 'rougeL': 0.13135755362075396, 'rougeLsum': 0.1297469329980672}
+BERTScore Averaged: {'precision': 0.83085564772288, 'recall': 0.8586031662093269, 'f1': 0.8443439073032803}
+
+Results for hybrid search weights: 0.6, 0.4
+BLEU Score: {'bleu': 0.015932457893359193, 'precisions': [0.11854360711261643, 0.016211604095563138, 0.007738607050730868, 0.004332755632582322], 'brevity_penalty': 1.0, 'length_ratio': 2.8321342925659474, 'translation_length': 1181, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.16574799295768022, 'rouge2': 0.022033423146337435, 'rougeL': 0.10382547102379738, 'rougeLsum': 0.10500099290639017}
+BERTScore Averaged: {'precision': 0.8255880408816867, 'recall': 0.8523439500066969, 'f1': 0.8386505312389798}
+
+Results for hybrid search weights: 0.7, 0.3
+BLEU Score: {'bleu': 0.015932457893359193, 'precisions': [0.11854360711261643, 0.016211604095563138, 0.007738607050730868, 0.004332755632582322], 'brevity_penalty': 1.0, 'length_ratio': 2.8321342925659474, 'translation_length': 1181, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.16574799295768022, 'rouge2': 0.022033423146337435, 'rougeL': 0.10382547102379738, 'rougeLsum': 0.10500099290639017}
+BERTScore Averaged: {'precision': 0.8255880408816867, 'recall': 0.8523439500066969, 'f1': 0.8386505312389798}
+
+Results for hybrid search weights: 0.8, 0.2
+BLEU Score: {'bleu': 0.01602141999474573, 'precisions': [0.12209802235597593, 0.01559792027729636, 0.007860262008733625, 0.0044014084507042256], 'brevity_penalty': 1.0, 'length_ratio': 2.788968824940048, 'translation_length': 1163, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.16960446736600826, 'rouge2': 0.02216068961237226, 'rougeL': 0.10546557867040979, 'rougeLsum': 0.10658458303113698}
+BERTScore Averaged: {'precision': 0.8259405030144585, 'recall': 0.8524108794000413, 'f1': 0.8388631211386787}
+
+Results for hybrid search weights: 0.9, 0.1
+BLEU Score: {'bleu': 0.015932457893359193, 'precisions': [0.11854360711261643, 0.016211604095563138, 0.007738607050730868, 0.004332755632582322], 'brevity_penalty': 1.0, 'length_ratio': 2.8321342925659474, 'translation_length': 1181, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.16574799295768022, 'rouge2': 0.022033423146337435, 'rougeL': 0.10382547102379738, 'rougeLsum': 0.10500099290639017}
+BERTScore Averaged: {'precision': 0.8255880408816867, 'recall': 0.8523439500066969, 'f1': 0.8386505312389798}
+
+Results for hybrid search weights: 1.0, 0.0
+BLEU Score: {'bleu': 0.025756923215257757, 'precisions': [0.14285714285714285, 0.024342745861733205, 0.012770137524557957, 0.009910802775024777], 'brevity_penalty': 1.0, 'length_ratio': 2.484412470023981, 'translation_length': 1036, 'reference_length': 417}
+ROUGE Score: {'rouge1': 0.19224908668241197, 'rouge2': 0.038935329297313664, 'rougeL': 0.13038247832341382, 'rougeLsum': 0.13027663301126985}
+BERTScore Averaged: {'precision': 0.8311048746109009, 'recall': 0.8524631129370795, 'f1': 0.8415602180692885}
+
