@@ -155,6 +155,10 @@ For analyzing common topics appearing in our dataset based on titles of publicat
 #### II. Qualitative Evaluation
 ### 4.2.2 Evaluation of Chatmodel
 
+<p align="center">
+  <img src="./docs/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
+</p>
+
 ## 4.3 Experimental Details
 - explain configurable parameters of our methods
 - explain specific usage 
