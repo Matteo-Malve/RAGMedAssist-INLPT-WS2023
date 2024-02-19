@@ -1,5 +1,3 @@
-# pip install pydantic==1.10 --quiet
-# donwload pydantic 1.10, otherwise it might not work
 
 from typing import List
 from langchain.chains import LLMChain
