@@ -10,7 +10,7 @@ from sentence_transformers import SentenceTransformer
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter, TokenTextSplitter, CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from transformers import BitsAndBytesConfig, AutoModelForCausalLM, AutoTokenizer, GenerationConfig, pipeline
+from transformers import AutoConfig, BitsAndBytesConfig, AutoModelForCausalLM, AutoTokenizer, GenerationConfig, pipeline
 from langchain import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain import hub
@@ -32,7 +32,7 @@ def import_necessary_modules():
     import time
     import pinecone
     from IPython.display import Markdown, display
-    from transformers import AutoTokenizer, AutoModel
+    from transformers import AutoConfig, AutoTokenizer, AutoModel
     from sentence_transformers import SentenceTransformer
     from langchain_community.embeddings import HuggingFaceEmbeddings
     from langchain.text_splitter import RecursiveCharacterTextSplitter, TokenTextSplitter, CharacterTextSplitter
@@ -98,6 +98,10 @@ class MedicalChatbot:
         return self.retriever.invoke(query)
 
     def init_model(self):
+        model_config = AutoConfig.from_pretrained(
+            self.llm_model_name,
+            use_auth_token="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"
+        )
         if self.device == "cuda":
             quantization_config = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -106,17 +110,21 @@ class MedicalChatbot:
                 bnb_4bit_use_double_quant=True
             )
             self.model=AutoModelForCausalLM.from_pretrained(
-            self.llm_model_name, torch_dtype=torch.float16,
+            self.llm_model_name, 
+            torch_dtype=torch.float16,
             trust_remote_code=True,
+            config=model_config,
             device_map="auto",
             quantization_config=quantization_config,
-            token=HF_AUTH
+            token="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"
             )
 
         else:
             self.model = AutoModelForCausalLM.from_pretrained(self.llm_model_name, 
-                                                              torch_dtype="auto",  
+                                                              torch_dtype="auto",
+                                                              config=model_config,  
                                                               trust_remote_code=True,
+                                                              device_map="auto",
                                                               token="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")
 
 
