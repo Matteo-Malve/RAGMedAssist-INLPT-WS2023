@@ -16,6 +16,8 @@ from langchain.chains import RetrievalQA
 from langchain import hub
 from langchain.vectorstores import Pinecone
 from langchain.prompts import PromptTemplate
+from langchain_community.llms import GPT4All
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
@@ -43,12 +45,15 @@ def import_necessary_modules():
     from langchain import hub
     from langchain.vectorstores import Pinecone
     from langchain.prompts import PromptTemplate
+    from langchain_community.llms import GPT4All
+    from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
 import warnings
 warnings.filterwarnings('ignore')
     
 class MedicalChatbot:
     def __init__(self, 
-                 embedding_model_name='thenlper/gte-base', 
+                 embedding_model_name='thenlper/gte-base',
                  llm_model_name="mistralai/Mistral-7B-Instruct-v0.1", 
                  retriever_name="pinecone",
                  init_all=False):
@@ -60,11 +65,6 @@ class MedicalChatbot:
         if init_all:
             self.init_all()
         self.chat_history = []
-
-    def generate_response(self, user_query):
-        response = self.qa_chain({"query": user_query})
-        self.chat_history.append(response)
-        return response
 
     def init_embedding_model(self):
         model_kwargs = {'device': self.device}
@@ -97,11 +97,13 @@ class MedicalChatbot:
     def get_relevant_documents_for_query(self, query):
         return self.retriever.invoke(query)
 
-    def init_model(self):
-        model_config = AutoConfig.from_pretrained(
-            self.llm_model_name,
-            use_auth_token="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"
+    def load_local_gpt4all_model(self):
+        self.llm = GPT4All(
+            model=self.llm_model_name,
+            max_tokens=2048,
         )
+
+    def init_model(self):
         if self.device == "cuda":
             quantization_config = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -110,23 +112,14 @@ class MedicalChatbot:
                 bnb_4bit_use_double_quant=True
             )
             self.model=AutoModelForCausalLM.from_pretrained(
-            self.llm_model_name, 
-            torch_dtype=torch.float16,
+            self.llm_model_name, torch_dtype=torch.float16,
             trust_remote_code=True,
-            config=model_config,
             device_map="auto",
-            quantization_config=quantization_config,
-            token="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"
+            quantization_config=quantization_config
             )
 
         else:
-            self.model = AutoModelForCausalLM.from_pretrained(self.llm_model_name, 
-                                                              torch_dtype="auto",
-                                                              config=model_config,  
-                                                              trust_remote_code=True,
-                                                              device_map="auto",
-                                                              token="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")
-
+            self.model = AutoModelForCausalLM.from_pretrained(self.llm_model_name, torch_dtype="auto",  trust_remote_code=True)
 
 
     def init_tokenizer(self):
@@ -148,6 +141,7 @@ class MedicalChatbot:
             return_full_text=True,
             device=None if self.device=="cuda" else self.device ,
             generation_config=generation_config,
+            framework="pt",
     )
 
     def init_llm(self):
@@ -158,19 +152,17 @@ class MedicalChatbot:
 
     def init_prompt_template(self):
 
-        # template = """Use the following pieces of context to answer the question at the end.
-        # If you don't know the answer, just say that you don't know, don't try to make up an answer.
-        # Use three sentences maximum and keep the answer as concise as possible.
-        # Always say "thanks for asking!" at the end of the answer.
-        #
-        # {context}
-        #
-        # Question: {question}
-        #
-        # Helpful Answer:"""
-        # self.custom_rag_prompt = PromptTemplate.from_template(template)
-
-        self.prompt  = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
+        prompt_template = \
+        """
+        Context information is below.
+        {context}
+        Given the context information and not prior knowledge, answer the query.
+        Query: {question}
+        Use maximum three sentences.
+        Answer:
+        """
+        self.prompt=PromptTemplate.from_template(prompt_template)
+        #self.prompt  = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
 
     def init_qa_chain(self):
         self.qa_chain = RetrievalQA.from_chain_type(
@@ -184,12 +176,44 @@ class MedicalChatbot:
     def init_all(self):
         self.init_embedding_model()
         self.load_db_retriever()
-        self.init_tokenizer()
-        self.init_model()
-        self.init_pipeline()
-        self.init_llm()
+        if "GPT4ALL" in self.llm_model_name.upper():
+            self.load_local_gpt4all_model()
+        else:
+            self.init_tokenizer()
+            self.init_model()
+            self.init_pipeline()
+            self.init_llm()
         self.init_prompt_template()
         self.init_qa_chain()
+
+    def retrieve_doi_urls(self,response):
+        response_documents = response['source_documents']
+        base_url = "https://doi.org/"
+        doi_urls=[]
+        for document in response_documents:
+            doi = document.metadata.get('DOI')
+            if doi:
+                doi_urls.append(base_url + doi)
+        return doi_urls
+                
+
+    def generate_response(self, user_query):
+        response = self.qa_chain({"query": user_query})
+        self.chat_history.append(response)
+        return response
+    
+    def answer_the_user(self, user_query):
+        response = self.generate_response(user_query)
+        display(Markdown(f"<span style='color:blue'><b>{response['query']}</b></span>"))
+        display(Markdown(f"<p>{response['result']}</p>"))
+        doi_urls = self.retrieve_doi_urls(response)
+        if doi_urls:
+            display(Markdown(f"<p>For more information, please refer to the following links:</p>"))
+            for url in doi_urls:
+                display(Markdown(f"<p><a href='{url}' target='_blank'>{url}</a></p>"))
+
+
+    
 
     def clean_chat_history(self):
         self.chat_history = []
