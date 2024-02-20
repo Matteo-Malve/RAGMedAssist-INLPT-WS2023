@@ -51,10 +51,6 @@ from langchain.chains import TransformChain
 from langchain.chains import SequentialChain
 import logging
 
-import os
-if "chatbot" not in os.getcwd():
-    os.chdir("project/chatbot/")
-
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
@@ -107,7 +103,7 @@ class MedicalChatbot:
         return response
 
     def generate_response_with_multi_query(self, user_query):
-        response = self.mq_rag_chain({"question": user_query})
+        response = self.multi_query_qa_chain({"question": user_query})
         self.chat_history.append(response)
         return response
 
