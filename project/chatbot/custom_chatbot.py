@@ -10,7 +10,6 @@ import time
 import warnings
 import yaml
 
-
 import pandas as pd
 import pinecone
 import torch
@@ -25,7 +24,6 @@ from transformers import (
     pipeline,
 )
 
-
 from langchain import HuggingFacePipeline, hub
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
@@ -35,38 +33,92 @@ from langchain.text_splitter import (
     RecursiveCharacterTextSplitter,
     TokenTextSplitter,
 )
-#from langchain.vectorstores import Pinecone
+# from langchain.vectorstores import Pinecone
 from langchain_community.vectorstores import Pinecone
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.prompts import PromptTemplate
+from langchain_community.llms import GPT4All
+from langchain.chains import ConversationalRetrievalChain
+from langchain.retrievers.multi_query import MultiQueryRetriever
+from typing import List
+from langchain.chains import LLMChain
+from pydantic.v1 import BaseModel, Field
+from langchain.prompts import PromptTemplate
+from langchain.output_parsers import PydanticOutputParser
+from langchain.retrievers.multi_query import MultiQueryRetriever
+from langchain.chains import TransformChain
+from langchain.chains import SequentialChain
+import logging
+
+import os
+if "chatbot" not in os.getcwd():
+    os.chdir("project/chatbot/")
+
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
 
-print(torch.cuda.is_available()) 
+print(f"cuda is available: {torch.cuda.is_available()}")
+print(f"mps is available: {torch.backends.mps.is_available()}")
 
 # Automatically find and load the .env file
 load_dotenv(find_dotenv())
 
+# Please put this key in .env, this line will be deleted in the future
+os.environ["PINECONE_API_KEY"]="1218c885-67e3-492f-b1ab-215405569e97"
+
 
 class MedicalChatbot:
     def __init__(self, cfg):
-        self.device = torch.device(
-            "cuda"
-            if torch.cuda.is_available()
+        self.ensemble_retriever = None
+        self.llm = None
+        self.device = torch.device("cuda" if torch.cuda.is_available()
             else "mps" if torch.backends.mps.is_built() else "cpu"
         )
         self.chat_history = []
         self.cfg = cfg
-        self.qa_chain = self.init_qa_chain()
+
+        if[self.cfg["use_qa_chain"] and type(self.cfg["use_qa_chain"]) == bool]:
+            self.qa_chain = self.init_qa_chain()
+
+        if[self.cfg["use_conversational_qa_chain"] and type(self.cfg["use_conversational_qa_chain"]) == bool]:
+            self.conversational_qa_chain = self.init_conversational_qa_chain()
+            self.conversational_chat_history = []
+
+        if[self.cfg["use_multi_query_qa_chain"] and type(self.cfg["use_multi_query_qa_chain"]) == bool]:
+            self.multi_query_qa_chain = self.init_multi_query_qa_chain()
+
+
+    def generate_response_by_type(self, user_query, type='basic'):
+        if type == 'basic':
+            return self.generate_response(user_query)
+        elif type == 'multi_query':
+            return self.generate_response_with_multi_query(user_query)
+        elif type == 'conversational':
+            return self.generate_response_with_conversational(user_query)
+        else:
+            raise ValueError(f"Unsupported response type: {type}")
+
 
     def generate_response(self, user_query):
         response = self.qa_chain({"query": user_query})
         self.chat_history.append(response)
         return response
 
-    def init_embedding_model(self):
+    def generate_response_with_multi_query(self, user_query):
+        response = self.mq_rag_chain({"question": user_query})
+        self.chat_history.append(response)
+        return response
+
+    def generate_response_with_conversational(self, user_query):
+        last_2_query_answer = self.conversational_chat_history[:-3:-1][::-1]
+        response = self.conversational_qa_chain({"question": user_query, "chat_history": last_2_query_answer})
+        self.chat_history.append(response)
+        self.conversational_chat_history.append((user_query, response["answer"]))
+        return response
+
+    def load_embedding_model(self):
         model_kwargs = {"device": self.device}
         encode_kwargs = {"normalize_embeddings": True}
         return HuggingFaceEmbeddings(
@@ -96,7 +148,7 @@ class MedicalChatbot:
 
     def load_faiss_db_retriever(self):
         faiss_index_path = f"{self.cfg['retrievers']['faiss']['faiss_index_path']}{self.cfg['embedding_model']}"
-        db = FAISS.load_local(faiss_index_path, self.init_embedding_model())
+        db = FAISS.load_local(faiss_index_path, self.load_embedding_model())
         return db.as_retriever(
             search_type="similarity",
             search_kwargs={"k": self.cfg["retrievers"]["faiss"]["topk"]},
@@ -108,26 +160,30 @@ class MedicalChatbot:
             raise ValueError(
                 "Pinecone API key not found. Please set it in the .env file."
             )
-        pc = pinecone.init(api_key=pinecone_api_key)
+
+        pc = pinecone.Pinecone()
         index = pc.Index(self.cfg["retrievers"]["pinecone"]["index_name"])
-        db = Pinecone(index, self.embed_model, "text")
+        db = Pinecone(index, self.load_embedding_model(), "text")
+        # save retriever because we can need it to initilize other chains (conversationa)
         return db.as_retriever(
             search_type=self.cfg["retrievers"]["pinecone"]["search_type"],
-            search_kwargs={"k": self.cfg["retrievers"]["pinecone"]["topk"]},
+            search_kwargs={"k": self.cfg["retrievers"]["pinecone"]["topk"]}
         )
+
 
     def load_ensemble_retriever(self):
-        ensemble_list = []
-        weights = self.cfg["ensemble"]["weights"]
-        for name, value in self.cfg["retrievers"].items():
-            retriever = self.load_retrievers(name)
-            ensemble_list.append(retriever)
+        if self.ensemble_retriever is None:
+            ensemble_list = []
+            weights = self.cfg["ensemble"]["weights"]
+            for name, value in self.cfg["retrievers"].items():
+                retriever = self.load_retrievers(name)
+                ensemble_list.append(retriever)
 
-        if not ensemble_list:
-            raise ValueError("No valid retrievers were loaded.")
-        return EnsembleRetriever(
-            retrievers=ensemble_list, weights=weights
-        )
+            if not ensemble_list:
+                raise ValueError("No valid retrievers were loaded.")
+            self.ensemble_retriever = EnsembleRetriever(retrievers=ensemble_list, weights=weights)
+
+        return self.ensemble_retriever
 
     def init_model(self):
         quantization_config = None
@@ -144,7 +200,7 @@ class MedicalChatbot:
         return AutoModelForCausalLM.from_pretrained(
             self.cfg['llm_model']['name'],
             torch_dtype=torch.float16 if self.device.type == "cuda" else "auto",
-            #torch_dtype=torch.float32 if self.device.type == "cuda" else "auto",
+            # torch_dtype=torch.float32 if self.device.type == "cuda" else "auto",
             device_map="auto",
             trust_remote_code=True,
             quantization_config=quantization_config if quantization_config else None,
@@ -157,26 +213,39 @@ class MedicalChatbot:
 
     def init_llm_pipeline(self):
         generation_config = GenerationConfig.from_pretrained(self.cfg["llm_model"]["name"])
-        generation_config.max_new_tokens=512
-        generation_config.temperature=self.cfg["llm_model"]["temperature"]
-        generation_config.top_p=self.cfg["llm_model"]["top_p"]
-        generation_config.do_sample=True
-        generation_config.repetition_penalty=self.cfg["llm_model"]["repetition_penalty"]
-    
+        generation_config.max_new_tokens = 512
+        generation_config.temperature = self.cfg["llm_model"]["temperature"]
+        generation_config.top_p = self.cfg["llm_model"]["top_p"]
+        generation_config.do_sample = True
+        generation_config.repetition_penalty = self.cfg["llm_model"]["repetition_penalty"]
+
         pipe = pipeline(
             "text-generation",
             model=self.init_model(),
             tokenizer=self.init_tokenizer(),
-            #device=None if self.device=="cuda" else self.device,
+            # device=None if self.device=="cuda" else self.device,
             generation_config=generation_config,
         )
         return HuggingFacePipeline(
             pipeline=pipe
         )
 
+    def get_llm(self):
+        if self.llm is None:
+            if "GPT4ALL" in self.cfg['llm_model']['local_path'].upper():
+                self.llm = GPT4All(model=self.cfg['llm_model']['local_path'],
+                              # max_tokens=2048,
+                              )
+            else:
+                self.llm = self.init_llm_pipeline()
+        return self.llm
+
+
     def init_qa_chain(self):
-        llm = self.init_llm_pipeline()
+
+        llm = self.get_llm()
         prompt = self.get_prompt()
+
         return RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
@@ -184,6 +253,57 @@ class MedicalChatbot:
             return_source_documents=True,
             chain_type_kwargs={"prompt": prompt},
         )
+
+    def init_conversational_qa_chain(self):
+
+        llm = self.get_llm()
+        retriever = self.load_ensemble_retriever()
+
+        return ConversationalRetrievalChain.from_llm(llm=llm,
+                                                     verbose=True,
+                                                     retriever=retriever,
+                                                     )
+
+
+    def init_multi_query_qa_chain(self):
+
+        logging.basicConfig()
+        logging.getLogger("langchain.retrievers.multi_query").setLevel(logging.INFO)
+
+        multi_query_retriever = MultiQueryRetriever.from_llm(
+            retriever=self.load_ensemble_retriever(), llm=self.get_llm())
+
+        multi_query_retrieval_transform_chain = self.load_multi_query_retrieval_transform_chain(multi_query_retriever)
+
+        multi_query_qa_chain = LLMChain(llm=self.get_llm(), prompt=self.get_prompt())
+
+        return SequentialChain(
+            chains=[multi_query_retrieval_transform_chain, multi_query_qa_chain],
+            input_variables=["question"],  # we need to name differently to output "query"
+            output_variables=["query", "context", "text"]
+        )
+
+
+
+
+
+
+    def load_multi_query_retrieval_transform_chain(self, multi_query_retriever):
+
+        def multi_query_retrieval_transform(inputs: dict) -> dict:
+            docs = multi_query_retriever.get_relevant_documents(query=inputs["question"])
+            docs = [d.page_content for d in docs]
+            docs_dict = {
+                "query": inputs["question"],
+                "context": "\n---\n".join(docs)[:2048]  # context window is 2048
+            }
+            return docs_dict
+
+        return TransformChain(
+            input_variables=["question"],
+            output_variables=["query", "context"],
+            transform=multi_query_retrieval_transform
+            )
 
     def get_prompt(self):
         template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks. 
@@ -194,10 +314,13 @@ class MedicalChatbot:
                     Context: {context} 
                     Answer: [/INST]"""
         return PromptTemplate.from_template(template)
-        #return hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
-        
+        # return hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
+
+
     def clean_chat_history(self):
         self.chat_history = []
+
+
 
 
 
