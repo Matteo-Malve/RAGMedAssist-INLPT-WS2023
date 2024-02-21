@@ -85,34 +85,9 @@ class MedicalChatbot:
         if[self.cfg["use_multi_query_qa_chain"] and type(self.cfg["use_multi_query_qa_chain"]) == bool]:
             self.multi_query_qa_chain = self.init_multi_query_qa_chain()
 
-
-    def generate_response_by_type(self, user_query, type='basic'):
-        if type == 'basic':
-            return self.generate_response(user_query)
-        elif type == 'multi_query':
-            return self.generate_response_with_multi_query(user_query)
-        elif type == 'conversational':
-            return self.generate_response_with_conversational(user_query)
-        else:
-            raise ValueError(f"Unsupported response type: {type}")
-
-
-    def generate_response(self, user_query):
-        response = self.qa_chain({"query": user_query})
-        self.chat_history.append(response)
-        return response
-
-    def generate_response_with_multi_query(self, user_query):
-        response = self.multi_query_qa_chain({"question": user_query})
-        self.chat_history.append(response)
-        return response
-
-    def generate_response_with_conversational(self, user_query):
-        last_2_query_answer = self.conversational_chat_history[:-3:-1][::-1]
-        response = self.conversational_qa_chain({"question": user_query, "chat_history": last_2_query_answer})
-        self.chat_history.append(response)
-        self.conversational_chat_history.append((user_query, response["answer"]))
-        return response
+    # ------------------------------------------------------------------------------------------------------------------
+    # Models' loading
+    # ------------------------------------------------------------------------------------------------------------------
 
     def load_embedding_model(self):
         model_kwargs = {"device": self.device}
@@ -180,6 +155,20 @@ class MedicalChatbot:
             self.ensemble_retriever = EnsembleRetriever(retrievers=ensemble_list, weights=weights)
 
         return self.ensemble_retriever
+    
+    def get_llm(self):
+        if self.llm is None:
+            if "GPT4ALL" in self.cfg['llm_model']['local_path'].upper():
+                self.llm = GPT4All(model=self.cfg['llm_model']['local_path'],
+                              # max_tokens=2048,
+                              )
+            else:
+                self.llm = self.init_llm_pipeline()
+        return self.llm
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # Initializations
+    # ------------------------------------------------------------------------------------------------------------------
 
     def init_model(self):
         quantization_config = None
@@ -226,17 +215,6 @@ class MedicalChatbot:
             pipeline=pipe
         )
 
-    def get_llm(self):
-        if self.llm is None:
-            if "GPT4ALL" in self.cfg['llm_model']['local_path'].upper():
-                self.llm = GPT4All(model=self.cfg['llm_model']['local_path'],
-                              # max_tokens=2048,
-                              )
-            else:
-                self.llm = self.init_llm_pipeline()
-        return self.llm
-
-
     def init_qa_chain(self):
 
         llm = self.get_llm()
@@ -259,7 +237,9 @@ class MedicalChatbot:
                                                      verbose=True,
                                                      retriever=retriever,
                                                      )
-
+    # ------------------------------------------------------------------------------------------------------------------
+    # Multi-query specific functions
+    # ------------------------------------------------------------------------------------------------------------------
 
     def init_multi_query_qa_chain(self):
 
@@ -279,11 +259,6 @@ class MedicalChatbot:
             output_variables=["query", "context", "text"]
         )
 
-
-
-
-
-
     def load_multi_query_retrieval_transform_chain(self, multi_query_retriever):
 
         def multi_query_retrieval_transform(inputs: dict) -> dict:
@@ -300,22 +275,105 @@ class MedicalChatbot:
             output_variables=["query", "context"],
             transform=multi_query_retrieval_transform
             )
+    
+    # ------------------------------------------------------------------------------------------------------------------
+    # Prompt template setup
+    # ------------------------------------------------------------------------------------------------------------------
 
     def get_prompt(self):
-        template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks. 
-                    Use only the following retrieved context to answer the question. If the answer is not in the context,
-                    just say that you don't know. 
-                    Provide a response strictly based on the information requested in the query.[/INST] </s> 
-                    [INST] Question: {question} 
-                    Context: {context} 
-                    Answer: [/INST]"""
+        #template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks. 
+        #            Use only the following retrieved context to answer the question. If the answer is not in the context,
+        #            just say that you don't know. 
+        #            Provide a response strictly based on the information requested in the query.[/INST] </s> 
+        #            [INST] Question: {question} 
+        #            Context: {context} 
+        #            Answer: [/INST]"""
+        template = \
+        """
+        Context information is below.
+        {context}
+        Given the context information and not prior knowledge, answer the query.
+        Query: {question}
+        Use maximum three sentences.
+        Answer:
+        """
         return PromptTemplate.from_template(template)
         # return hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
 
+    # ------------------------------------------------------------------------------------------------------------------
+    # Response generation
+    # ------------------------------------------------------------------------------------------------------------------
+
+
+    def generate_response_by_type(self, user_query, type='basic'):
+        if type == 'basic':
+            return self.generate_response(user_query)
+        elif type == 'multi_query':
+            return self.generate_response_with_multi_query(user_query)
+        elif type == 'conversational':
+            return self.generate_response_with_conversational(user_query)
+        else:
+            raise ValueError(f"Unsupported response type: {type}")
+
+
+    def generate_response(self, user_query):
+        response = self.qa_chain({"query": user_query})
+        self.chat_history.append(response)
+
+        markdown_response = ""
+        markdown_response += f"<p>{response['result']}</p>\n"
+        doi_urls = self.retrieve_doi_urls(response)
+        if doi_urls:
+            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
+            for url in doi_urls:
+                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
+        return markdown_response
+
+    def generate_response_with_multi_query(self, user_query):
+        response = self.multi_query_qa_chain({"question": user_query})
+        self.chat_history.append(response)
+
+        markdown_response = ""
+        markdown_response += f"<p>{response['result']}</p>\n"
+        doi_urls = self.retrieve_doi_urls(response)
+        if doi_urls:
+            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
+            for url in doi_urls:
+                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
+        return markdown_response
+
+    def generate_response_with_conversational(self, user_query):
+        last_2_query_answer = self.conversational_chat_history[:-3:-1][::-1]
+        response = self.conversational_qa_chain({"question": user_query, "chat_history": last_2_query_answer})
+        self.chat_history.append(response)
+        self.conversational_chat_history.append((user_query, response["answer"]))
+
+        markdown_response = ""
+        markdown_response += f"<p>{response['result']}</p>\n"
+        doi_urls = self.retrieve_doi_urls(response)
+        if doi_urls:
+            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
+            for url in doi_urls:
+                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
+        return markdown_response
+        
+        
+    # ------------------------------------------------------------------------------------------------------------------
+    # Miscellaneous
+    # ------------------------------------------------------------------------------------------------------------------
 
     def clean_chat_history(self):
         self.chat_history = []
 
+    def retrieve_doi_urls(self,response):
+        response_documents = response['source_documents']
+        base_url = "https://doi.org/"
+        doi_urls=[]
+        for document in response_documents:
+            doi = document.metadata.get('DOI')
+            if doi:
+                doi_urls.append(base_url + doi)
+        return doi_urls
 
 
 
