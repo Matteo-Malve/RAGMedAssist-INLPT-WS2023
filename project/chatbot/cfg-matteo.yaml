@@ -1,0 +1,36 @@
+retrievers:
+  bm25 :
+      topk: 4
+      path: "chunked_docs.pkl"
+
+  faiss :
+      faiss_index_path: "../data/faiss_indices/"
+      topk: 4
+
+#  pinecone :
+#      index_name: "pubmed"
+#      search_type: "similarity"
+#      topk: 4
+
+
+ensemble:
+  weights:
+    - 0.4
+    - 0.6
+
+
+llm_model:
+  name: "mistralai/Mistral-7B-Instruct-v0.1"
+  local_path: "/Users/matteom/Library/Application Support/nomic.ai/GPT4All/mistral-7b-instruct-v0.1.Q4_0.gguf"
+  #  Provide the local path only if you have downloaded the model using GPT4ALL on your device
+  temperature: 0.001
+  top_p: 0.95
+  repetition_penalty: 1.15
+
+
+embedding_model: "thenlper/gte-base"
+
+use_qa_chain: True
+use_conversational_qa_chain: True
+use_multi_query_qa_chain: True
+
