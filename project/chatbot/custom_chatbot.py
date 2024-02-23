@@ -236,6 +236,7 @@ class MedicalChatbot:
         return ConversationalRetrievalChain.from_llm(llm=llm,
                                                      verbose=True,
                                                      retriever=retriever,
+                                                     return_source_documents=True,
                                                      )
     # ------------------------------------------------------------------------------------------------------------------
     # Multi-query specific functions
@@ -326,7 +327,7 @@ class MedicalChatbot:
         return self._generate_response(response, response_key="text", return_raw=return_raw)
 
     def generate_response_with_conversational(self, user_query, return_raw=False):
-        max_history_length = cfg["conversational_chain"]["conversation_depth"]
+        max_history_length = self.cfg["conversational_chain"]["conversation_depth"]
         conversation_history = self.conversational_chat_history[-max_history_length:]
         response = self.conversational_qa_chain({"question": user_query, "chat_history": conversation_history})
         self.chat_history.append(response)
@@ -342,14 +343,15 @@ class MedicalChatbot:
         self.chat_history = []
 
     def retrieve_doi_urls(self, response):
-        response_documents = response['source_documents']
-        base_url = "https://doi.org/"
-        doi_urls = []
-        for document in response_documents:
-            doi = document.metadata.get('DOI')
-            if doi:
-                doi_urls.append(base_url + doi)
-        return doi_urls
+        response_documents = response.get('source_documents')
+        if response_documents:
+            base_url = "https://doi.org/"
+            doi_urls = []
+            for document in response_documents:
+                doi = document.metadata.get('DOI')
+                if doi:
+                    doi_urls.append(base_url + doi)
+            return doi_urls
 
     def _generate_response(self, response, response_key, return_raw=False):
         """
