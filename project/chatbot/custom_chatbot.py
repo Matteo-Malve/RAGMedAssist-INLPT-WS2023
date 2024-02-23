@@ -305,59 +305,36 @@ class MedicalChatbot:
     # ------------------------------------------------------------------------------------------------------------------
 
 
-    def generate_response_by_type(self, user_query, type='basic'):
+    def generate_response_by_type(self, user_query, type='basic', raw_response=False):
         if type == 'basic':
-            return self.generate_response(user_query)
+            return self.generate_response(user_query, raw_response)
         elif type == 'multi_query':
-            return self.generate_response_with_multi_query(user_query)
+            return self.generate_response_with_multi_query(user_query, raw_response)
         elif type == 'conversational':
-            return self.generate_response_with_conversational(user_query)
+            return self.generate_response_with_conversational(user_query, raw_response)
         else:
             raise ValueError(f"Unsupported response type: {type}")
 
-
-    def generate_response(self, user_query):
+    def generate_response(self, user_query, raw_response=False):
         response = self.qa_chain({"query": user_query})
         self.chat_history.append(response)
+        return self._generate_response(response, raw_response)
 
-        markdown_response = ""
-        markdown_response += f"<p>{response['result']}</p>\n"
-        doi_urls = self.retrieve_doi_urls(response)
-        if doi_urls:
-            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
-            for url in doi_urls:
-                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
-        return markdown_response
 
-    def generate_response_with_multi_query(self, user_query):
+    def generate_response_with_multi_query(self, user_query, raw_response=False):
         response = self.multi_query_qa_chain({"question": user_query})
         self.chat_history.append(response)
+        return self._generate_response(response, raw_response)
 
-        markdown_response = ""
-        markdown_response += f"<p>{response['result']}</p>\n"
-        doi_urls = self.retrieve_doi_urls(response)
-        if doi_urls:
-            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
-            for url in doi_urls:
-                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
-        return markdown_response
 
-    def generate_response_with_conversational(self, user_query):
+    def generate_response_with_conversational(self, user_query, raw_response=False):
         last_2_query_answer = self.conversational_chat_history[:-3:-1][::-1]
         response = self.conversational_qa_chain({"question": user_query, "chat_history": last_2_query_answer})
         self.chat_history.append(response)
         self.conversational_chat_history.append((user_query, response["answer"]))
+        return self._generate_response(response, raw_response)
 
-        markdown_response = ""
-        markdown_response += f"<p>{response['result']}</p>\n"
-        doi_urls = self.retrieve_doi_urls(response)
-        if doi_urls:
-            markdown_response += "<p>For more information, please refer to the following links:</p>\n"
-            for url in doi_urls:
-                markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
-        return markdown_response
-        
-        
+
     # ------------------------------------------------------------------------------------------------------------------
     # Miscellaneous
     # ------------------------------------------------------------------------------------------------------------------
@@ -365,15 +342,44 @@ class MedicalChatbot:
     def clean_chat_history(self):
         self.chat_history = []
 
-    def retrieve_doi_urls(self,response):
+    def retrieve_doi_urls(self, response):
         response_documents = response['source_documents']
         base_url = "https://doi.org/"
-        doi_urls=[]
+        doi_urls = []
         for document in response_documents:
             doi = document.metadata.get('DOI')
             if doi:
                 doi_urls.append(base_url + doi)
         return doi_urls
+
+    def _generate_response(self, response, raw_response=False):
+        """
+        Generates and formats a response based on the provided input and flags.
+
+        If `raw_response` is set to True, this function returns the raw response object directly.
+        Otherwise, it formats the response as Markdown, enriching it with DOI links if available, to enhance the presentation.
+
+        Parameters:
+        - response (dict): The response object obtained from a query and contains 'query', 'result', 'source_documents'.
+        - raw_response (bool): A flag to determine the format of the response. If True, the raw response object is returned;
+          if False, a Markdown-formatted string including additional related links is returned.
+
+        Returns:
+        - If `raw_response` is True, the raw `response` object is returned.
+        - Otherwise, a string formatted in Markdown that includes the response and any related DOI URLs is returned.
+        """
+        if raw_response:
+            return response
+
+        else:
+            markdown_response = ""
+            markdown_response += f"<p>{response['result']}</p>\n"
+            doi_urls = self.retrieve_doi_urls(response)
+            if doi_urls:
+                markdown_response += "<p>For more information, please refer to the following links:</p>\n"
+                for url in doi_urls:
+                    markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
+            return markdown_response
 
 
 
