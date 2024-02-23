@@ -1,11 +1,11 @@
 retrievers:
   bm25 :
-      topk: 4
+      topk: 3
       path: "chunked_docs.pkl"
 
   faiss :
       faiss_index_path: "../data/faiss_indices/"
-      topk: 4
+      topk: 3
 
 #  pinecone :
 #      index_name: "pubmed"
@@ -34,3 +34,5 @@ use_qa_chain: True
 use_conversational_qa_chain: True
 use_multi_query_qa_chain: True
 
+conversational_chain:
+  conversation_depth: 2  # The number of recent query-answer pairs to consider for generating the response

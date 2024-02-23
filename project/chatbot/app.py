@@ -27,7 +27,7 @@ if question := st.chat_input("Ask a medical question:"):
     st.chat_message("user").markdown(question)
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": question})
-    markdown_response=chatbot.generate_response_by_type(question)
+    markdown_response=chatbot.generate_response_by_type(question,type="conversational")
     with st.chat_message("assistant"):
         st.markdown(markdown_response, unsafe_allow_html=True)
         # Add assistant response to chat history
