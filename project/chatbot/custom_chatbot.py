@@ -328,8 +328,9 @@ class MedicalChatbot:
 
 
     def generate_response_with_conversational(self, user_query, raw_response=False):
-        last_2_query_answer = self.conversational_chat_history[:-3:-1][::-1]
-        response = self.conversational_qa_chain({"question": user_query, "chat_history": last_2_query_answer})
+        max_history_length = cfg["conversational_chain"]["conversation_depth"]
+        conversation_history = self.conversational_chat_history[-max_history_length:]
+        response = self.conversational_qa_chain({"question": user_query, "chat_history": conversation_history})
         self.chat_history.append(response)
         self.conversational_chat_history.append((user_query, response["answer"]))
         return self._generate_response(response, raw_response)

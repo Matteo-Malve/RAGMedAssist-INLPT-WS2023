@@ -35,3 +35,5 @@ use_qa_chain: True
 use_conversational_qa_chain: True
 use_multi_query_qa_chain: True
 
+conversational_chain:
+  conversation_depth: 2  # The number of recent query-answer pairs to consider for generating the response
