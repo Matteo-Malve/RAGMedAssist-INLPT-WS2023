@@ -89,6 +89,13 @@ We integrated Langchain's `EnsembleRetriever` into our search framework to make 
 
 ## 3.3 Baselines
 
+
+## 3.4 Fine-Tuning
+
+After developing and evaluating the embedding models for our retrieval system, we initially opted against finetuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored finetuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of finetuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is finetuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
+
+Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
+
 # 4. Experimental Setup and Results
 
 ## 4.1 Data
@@ -100,7 +107,7 @@ We integrated Langchain's `EnsembleRetriever` into our search framework to make 
     - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time) ✅
     - most common authors ✅
     - make a topic analysis to see the most common topics (from titles? and abstracts?) ✅
-    - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how    accessible the information is to general audiences, crucial for RAG
+    - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how accessible the information is to general audiences, crucial for RAG
 -->
 
 Our chosen dataset comprises abstracts and associated metadata from medical articles sourced from [PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=intelligence+%5BTitle%2Fabstract%5D&filter=simsearch1.fha&filter=years.2013-2023&sort=date), a free search engine for life sciences and biomedical literature, managed by the U.S. National Library of Medicine at the National Institutes of Health. To manage time and computational constraints, our focus is limited to abstracts published between 2013 and 2023 featuring the keyword "intelligence", totaling 58,854 documents.
@@ -383,3 +390,6 @@ Through extensive testing with varying weights, we optimized the balance between
 - <a name="LDA"></a>Blei, David M., Ng, Andrew Y. & Jordan, Michael I. (2003). Latent Dirichlet Allocation. *Journal of Machine Learning Research*, 3, 993–1022. [https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
 
 - <a name="stopwords"></a>Miyajiwala, Aamir, Ladkat, Arnav, Jagadale, Samiksha & Joshi, Raviraj. (2022). On Sensitivity of Deep Learning Based Text Classification Algorithms to Practical Input Perturbations. *Intelligent Computing*, 613–626. Springer International Publishing. [https://doi.org/10.1007/978-3-031-10464-0_42](https://doi.org/10.1007/978-3-031-10464-0_42)
+
+- <a name="TSDAE"></a>Wang, Kexin, Reimers, Nils & Gurevych, Iryna. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. [https://arxiv.org/abs/2104.06979](https://arxiv.org/abs/2104.06979)
+
