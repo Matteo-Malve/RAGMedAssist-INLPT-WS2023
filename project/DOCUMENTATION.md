@@ -21,7 +21,7 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 ### Anti-Plagiarism Confirmation
 
 <p align="left">
-  <img src="./docs/images/AntiPlagiat.png.jpeg" width="700" />
+  <img src="./docs/images/AntiPlagiat.png" width="700" />
 </p>
 
 ***
