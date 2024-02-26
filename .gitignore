@@ -7,3 +7,5 @@
 __pycache__/
 
 project/finetuning/gte-base-fine-tune
+
+project/data/chunked_docs.pkl
