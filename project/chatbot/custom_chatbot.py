@@ -50,7 +50,7 @@ from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import TransformChain
 from langchain.chains import SequentialChain
 import logging
-
+from custom_retriever import CustomEnsembleRetriever
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
@@ -121,8 +121,9 @@ class MedicalChatbot:
         faiss_index_path = f"{self.cfg['retrievers']['faiss']['faiss_index_path']}{self.cfg['embedding_model']}"
         db = FAISS.load_local(faiss_index_path, self.load_embedding_model())
         return db.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": self.cfg["retrievers"]["faiss"]["topk"]},
+            search_type=self.cfg['retrievers']['faiss']['search_type'],
+            search_kwargs={"k": self.cfg["retrievers"]["faiss"]["topk"],
+                           "score_threshold": self.cfg["retrievers"]["faiss"]["score_threshold"]},
         )
 
     def load_pinecone_db_retriever(self):
@@ -137,9 +138,10 @@ class MedicalChatbot:
         db = Pinecone(index, self.load_embedding_model(), "text")
         # save retriever because we can need it to initilize other chains (conversationa)
         return db.as_retriever(
-            search_type=self.cfg["retrievers"]["pinecone"]["search_type"],
-            search_kwargs={"k": self.cfg["retrievers"]["pinecone"]["topk"]}
-        )
+            search_type=cfg["retrievers"]["pinecone"]["search_type"],
+            search_kwargs={"k": cfg["retrievers"]["pinecone"]["topk"],
+                           "score_threshold": cfg["retrievers"]["faiss"]["score_threshold"]})
+
 
 
     def load_ensemble_retriever(self):
@@ -153,6 +155,21 @@ class MedicalChatbot:
             if not ensemble_list:
                 raise ValueError("No valid retrievers were loaded.")
             self.ensemble_retriever = EnsembleRetriever(retrievers=ensemble_list, weights=weights)
+
+        return self.ensemble_retriever
+
+
+    def load_custom_ensemble_retriever(self):
+        if self.ensemble_retriever is None:
+            ensemble_list = []
+            weights = self.cfg["ensemble"]["weights"]
+            for name, value in self.cfg["retrievers"].items():
+                retriever = self.load_retrievers(name)
+                ensemble_list.append(retriever)
+
+            if not ensemble_list:
+                raise ValueError("No valid retrievers were loaded.")
+            self.ensemble_retriever = CustomEnsembleRetriever(retrievers=ensemble_list, weights=weights)
 
         return self.ensemble_retriever
     
@@ -223,7 +240,7 @@ class MedicalChatbot:
         return RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
-            retriever=self.load_ensemble_retriever(),
+            retriever=self.load_custom_ensemble_retriever(),
             return_source_documents=True,
             chain_type_kwargs={"prompt": prompt},
         )
@@ -231,7 +248,7 @@ class MedicalChatbot:
     def init_conversational_qa_chain(self):
 
         llm = self.get_llm()
-        retriever = self.load_ensemble_retriever()
+        retriever = self.load_custom_ensemble_retriever()
 
         return ConversationalRetrievalChain.from_llm(llm=llm,
                                                      verbose=True,
@@ -248,7 +265,7 @@ class MedicalChatbot:
         logging.getLogger("langchain.retrievers.multi_query").setLevel(logging.INFO)
 
         multi_query_retriever = MultiQueryRetriever.from_llm(
-            retriever=self.load_ensemble_retriever(), llm=self.get_llm())
+            retriever=self.load_custom_ensemble_retriever(), llm=self.get_llm())
 
         multi_query_retrieval_transform_chain = self.load_multi_query_retrieval_transform_chain(multi_query_retriever)
 

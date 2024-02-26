@@ -5,11 +5,14 @@ retrievers:
 
   faiss :
       faiss_index_path: "faiss_indices/"
+      search_type: "similarity_score_threshold"
+      score_threshold: 0.77
       topk: 4
 
 #  pinecone :
 #      index_name: "pubmed"
-#      search_type: "similarity"
+#      search_type: "similarity_score_threshold"
+#      score_threshold: 0.88  # sim. scores are higher on pinecone compared to on faiss
 #      topk: 4
 
 
