@@ -266,23 +266,24 @@ class MedicalChatbot:
         return SequentialChain(
             chains=[multi_query_retrieval_transform_chain, multi_query_qa_chain],
             input_variables=["question"],  # we need to name differently to output "query"
-            output_variables=["query", "context", "text"]
+            output_variables=["query", "context", "source_documents", "text"]
         )
 
     def load_multi_query_retrieval_transform_chain(self, multi_query_retriever):
 
         def multi_query_retrieval_transform(inputs: dict) -> dict:
-            docs = multi_query_retriever.get_relevant_documents(query=inputs["question"])
-            docs = [d.page_content for d in docs]
+            retrieved_docs = multi_query_retriever.get_relevant_documents(query=inputs["question"])
+            docs = [d.page_content for d in retrieved_docs]
             docs_dict = {
                 "query": inputs["question"],
-                "context": "\n---\n".join(docs)[:2048]  # context window is 2048
+                "context": "\n---\n".join(docs)[:2048],  # context window is 2048
+                "source_documents": retrieved_docs
             }
             return docs_dict
 
         return TransformChain(
             input_variables=["question"],
-            output_variables=["query", "context"],
+            output_variables=["query", "context", "source_documents"],
             transform=multi_query_retrieval_transform
             )
 
@@ -325,10 +326,10 @@ class MedicalChatbot:
         else:
             raise ValueError(f"Unsupported response type: {type}")
 
-    def no_docs_response(self, return_raw=False):
-        response = {"result": "I don't know"}
+    def no_docs_response(self, user_query, return_raw=False):
+        response = {"query": user_query, "result": "I don't know.", "source_documents":[]}
         self.chat_history.append(response)
-        return self._generate_response(response, response_key="result", return_raw=return_raw)
+        return self._generate_response(response, return_raw=return_raw)
 
     def check_no_docs_retrieved(self, user_query):
         retrieved_docs_count = len(self.dense_retriever.get_relevant_documents(user_query))
@@ -336,30 +337,35 @@ class MedicalChatbot:
 
     def generate_response(self, user_query, return_raw=False):
         if self.check_no_docs_retrieved(user_query):
-            return self.no_docs_response(return_raw)
+            return self.no_docs_response(user_query, return_raw)
 
         response = self.qa_chain({"query": user_query})
         self.chat_history.append(response)
-        return self._generate_response(response, response_key="result", return_raw=return_raw)
+        return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_multi_query(self, user_query, return_raw=False):
         if self.check_no_docs_retrieved(user_query):
-            return self.no_docs_response(return_raw)
+            return self.no_docs_response(user_query, return_raw)
 
         response = self.multi_query_qa_chain({"question": user_query})
+        response["result"] = response["text"]
+        del response["question"], response["text"]  # unnecessary key-value
         self.chat_history.append(response)
-        return self._generate_response(response, response_key="text", return_raw=return_raw)
+        return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_conversational(self, user_query, return_raw=False):
         if self.check_no_docs_retrieved(user_query):
-            return self.no_docs_response(return_raw)
+            return self.no_docs_response(user_query, return_raw)
 
         max_history_length = self.cfg["conversational_chain"]["conversation_depth"]
         conversation_history = self.conversational_chat_history[-max_history_length:]
         response = self.conversational_qa_chain({"question": user_query, "chat_history": conversation_history})
+        response["result"] = response["answer"]
+        response["query"] = response["question"]
+        del response["answer"], response["question"]  # use keys result, query instead answer, question
         self.chat_history.append(response)
-        self.conversational_chat_history.append((user_query, response["answer"]))
-        return self._generate_response(response, response_key="answer", return_raw=return_raw)
+        self.conversational_chat_history.append((user_query, response["result"]))
+        return self._generate_response(response, return_raw=return_raw)
 
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -380,7 +386,7 @@ class MedicalChatbot:
                     doi_urls.append(base_url + doi)
             return doi_urls
 
-    def _generate_response(self, response, response_key, return_raw=False):
+    def _generate_response(self, response, return_raw=False):
         """
         Generates and formats a response based on the provided input and flags.
 
@@ -402,7 +408,7 @@ class MedicalChatbot:
 
         else:
             markdown_response = ""
-            markdown_response += f"<p>{response[response_key]}</p>\n"
+            markdown_response += f"<p>{response['result']}</p>\n"
             doi_urls = self.retrieve_doi_urls(response)
             if doi_urls:
                 markdown_response += "<p>For more information, please refer to the following links:</p>\n"
@@ -485,8 +491,4 @@ if __name__ == "__main__":
         txt_file.write(txt_content)
 
     print("Results have been saved.")
-
-
-
-    
 
