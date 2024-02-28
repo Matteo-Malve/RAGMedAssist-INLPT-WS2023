@@ -39,7 +39,7 @@
 
 - Does cognitive training increase fluid intelligence in children with developmental disorders?
 
-(- Is there a correlation between emotional intelligence and mental health outcomes in adolescents?)
+- Does tick-borne encephalitis carry a high risk of incomplete recovery in children?
 
 ## Factoid Questions
 
@@ -47,7 +47,7 @@
 
 ## List Questions
 
-(- What are the key components of emotional intelligence as it relates to patient care in nursing?)
+- What are the key components of emotional intelligence as it relates to patient care in nursing?
 
 - List the cognitive domains affected by intelligence quotient (IQ) variations in children with specific learning disabilities.
 
