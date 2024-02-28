@@ -32,44 +32,59 @@
 
 
 ***
+
 # Question Types
 
 ## Confirmation Questions
-1. Does cognitive training increase fluid intelligence in children with developmental disorders?
-2. Is there a correlation between emotional intelligence and mental health outcomes in adolescents?
+
+- Does cognitive training increase fluid intelligence in children with developmental disorders?
+
+(- Is there a correlation between emotional intelligence and mental health outcomes in adolescents?)
 
 ## Factoid Questions
-1. What is the role of artificial intelligence in diagnosing neurodegenerative diseases?
-2. How does the Theory of Multiple Intelligences differentiate cognitive abilities?
+
+- How does the Theory of Multiple Intelligences differentiate cognitive abilities?
 
 ## List Questions
-1. What are the key components of emotional intelligence as it relates to patient care in nursing?
-2. List the cognitive domains affected by intelligence quotient (IQ) variations in children with specific learning disabilities.
+
+(- What are the key components of emotional intelligence as it relates to patient care in nursing?)
+
+- List the cognitive domains affected by intelligence quotient (IQ) variations in children with specific learning disabilities.
 
 ## Causal Questions
-1. How does sleep deprivation impact cognitive intelligence in healthcare professionals?
-2. What is the effect of prenatal nutritional deficiencies on the intelligence quotient (IQ) of children?
+
+- Is the association between intelligence and lifespan mostly genetic?
+
+- Is regular breakfast consumption associated with increased IQ in kindergarten children?
 
 ## Complex Questions
-1. Explore the relationship between genetic factors and intelligence variations in monozygotic twins.
-2. Discuss the impact of chronic stress during adolescence on emotional intelligence and future mental health.
+
+- Explore the relationship between genetic factors and intelligence variations in monozygotic twins.
 
 ## Hypothetical Questions
-1. If a novel gene associated with cognitive intelligence were discovered, how might this influence personalized education plans for children with learning disabilities?
-2. Should artificial intelligence surpass human intelligence in diagnostic accuracy, what ethical considerations would arise in relying on AI for making critical healthcare decisions?
 
+- Based on the discovery that mitochondrial dysfunction plays an important role in Alzheimer's disease, how could interventions aimed at improving mitochondrial function affect the treatment or management of Alzheimer's disease?
+
+- Should artificial intelligence surpass human intelligence in diagnostic accuracy, what ethical considerations would arise in relying on AI for making critical healthcare decisions?
 
 ***
+
 # Edge Cases
 
 ## Questions in Different Languages than English
+
 1. Wie könnten Fortschritte in der künstlichen Intelligenz zur Früherkennung und personalisierten Behandlung der Alzheimer-Krankheit beitragen?
+
 2. Qual è il potenziale dell'apprendimento automatico per prevedere gli esiti dei pazienti sulla base dell'analisi delle immagini mediche in oncologia?
 
 ## Extremely Long Question
+
 1. Considering the rapid advancements in artificial intelligence and its integration into biomedical research, particularly in the field of genomics where vast amounts of data are generated and analyzed, how could the development of more sophisticated AI algorithms enhance our understanding of complex genetic disorders, potentially leading to breakthroughs in identifying novel genetic markers for early diagnosis and the creation of more personalized, effective treatment strategies tailored to the individual genetic makeup of patients, thereby revolutionizing patient care in the realm of personalized medicine?
 
 ## One-Word Questions
+
 1. genetics
+
 2. neuroimaging
+
 3. intelligence
