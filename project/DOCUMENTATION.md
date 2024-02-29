@@ -1,6 +1,6 @@
 # 👾 RAGMedAssist
 
-### Team Members
+### 🧑🏻‍🎓 Team Members
 
 | Name and surname    |  Matric. Nr. | Course of study                            |   e-mail address   |
 |:--------------------|:-------------|:-------------------------------------------|:-------------------|
@@ -39,7 +39,7 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
 ***
 
-# <a name="introduction"></a>1. Introduction
+# <a name="introduction"></a>1. ➡️ Introduction
 
 Navigating the complexities of medical information, especially when it is laden with technical jargon, can be overwhelming yet essential for making critical health decisions. Our system bridges this gap by simplifying the intricate world of medical knowledge. It allows users to ask questions in everyday language and provides informed, understandable answers derived from a comprehensive medical dataset.
 
@@ -59,7 +59,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 [...]"""
 -->
 
-# <a name="related-work"></a>2. Related Work
+# <a name="related-work"></a>2. 📚 Related Work
 <!--
 - put our work into context of current research
 - including papers read for research/that used same techniques but applied to different problems
@@ -67,7 +67,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - ⚠️ only major points, not too much detail
 -->
 
-# <a name="approach"></a>3. Approach
+# <a name="approach"></a>3. ⚙️ Approach
 <!--
 - conceptual details of our system (about its functionality, its components, data processing pipelines, algorithms, key methods)
 - 💡 be specific about methods (include equations, show figures...)
@@ -76,7 +76,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - describe baseline approaches (briefly if from external source)
 -->
 
-## <a name="data-processing"></a>3.1 Data Processing
+## <a name="data-processing"></a>3.1 ✂️ Data Processing
 
 Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocess_data.ipynb)):
 
@@ -94,7 +94,7 @@ Several data cleaning and pre-processing strategies were considered and applied 
 
 ❌ **Handling Bigrams or N-grams:** Advanced Transformer based models do not require this step since they are designed to capture word context using their attention mechanisms and positional embeddings, making explicit n-gram creation less necessary.
 
-## <a name="algorithms-methods"></a>3.2 Algorithms & Methods
+## <a name="algorithms-methods"></a>3.2 👾 Algorithms & Methods
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
@@ -107,19 +107,9 @@ After developing and evaluating the embedding models for our retrieval system, w
 
 Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
 
-# <a name="experimental-setup-results"></a>4. Experimental Setup & Results
+# <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
-## 4.1 Data
-<!-- 
-- describe the data ✅
-- outline where, when, and how it was gathered ✅
-- show insightful metrics
-    - length (max, min, average) ✅
-    - distribution of publications (frequency per year to understand how interest in the topic "intelligence" has grown over time) ✅
-    - most common authors ✅
-    - make a topic analysis to see the most common topics (from titles? and abstracts?) ✅
-    - readability/accessibility scores (e.g., Flesch-Kincaid) on abstracts to assess how accessible the information is to general audiences, crucial for RAG
--->
+## 4.1 💽 Data
 
 Our chosen dataset comprises abstracts and associated metadata from medical articles sourced from [PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=intelligence+%5BTitle%2Fabstract%5D&filter=simsearch1.fha&filter=years.2013-2023&sort=date), a free search engine for life sciences and biomedical literature, managed by the U.S. National Library of Medicine at the National Institutes of Health. To manage time and computational constraints, our focus is limited to abstracts published between 2013 and 2023 featuring the keyword "intelligence", totaling 58,854 documents.
 
@@ -180,7 +170,7 @@ For analyzing common themes appearing in our dataset based on the titles of publ
 </p>
 
 
-## <a name="evaluation"></a>4.2 Evaluation 
+## <a name="evaluation"></a>4.2 📈 Evaluation 
 <!-- 
 - explain & define used/own metrics 
 - motivate expected achievements
@@ -400,7 +390,7 @@ Through extensive testing with varying weights, we optimized the balance between
 - present plots/tables of the before explained evaluation
 -->
 
-## <a name="analysis"></a>4.3 Analysis
+## <a name="analysis"></a>4.3 🧐 Analysis
 <!-- 
 - present qualitative analysis
 - does our system work as expected?
@@ -409,9 +399,9 @@ Through extensive testing with varying weights, we optimized the balance between
 - use examples & metrics to underline our points instead of stating unproven points
 -->
 
-# <a name="limitations-results"></a>5. Limitations/Future Work
+# <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
-# <a name="conclusion"></a>6. Conclusion
+# <a name="conclusion"></a>6. 💡 Conclusion
 <!-- 
 - recap briefly main contributions
 - highlight achievements
@@ -432,15 +422,15 @@ Through extensive testing with varying weights, we optimized the balance between
 
 
 
-# <a name="appendix"></a>8. Appendix
+# <a name="appendix"></a>8. 💻 Appendix
 
-## <a name="contributions"></a>1. Contributions
+## <a name="contributions"></a>8.1 🧑🏻‍🎓 Contributions
 
 Please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. The access was granted to our supervisor during the project. 
 
 We would like to specify that the group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
 
-## <a name="anti-plagiarism"></a>2. Anti-Plagiarism Confirmation
+## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
 <p align="left">
   <img src="./docs/images/AntiPlagiat.png" width="300" />
