@@ -281,7 +281,7 @@ We selected a set of 10 queries from our QA dataset for further qualitative eval
 
 Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
 
-<img src="evalutation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg" width="800" />
+<img src="evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.png" width="700" />
 
 ℹ️ Please note that we could not execute the `Muennighoff/SBERT-base-nli-v2` (SGPT) model as previously planned due to its large size. 
 
@@ -429,7 +429,6 @@ Through extensive testing with varying weights, we optimized the balance between
 - <a name="stopwords"></a>Miyajiwala, Aamir, Ladkat, Arnav, Jagadale, Samiksha & Joshi, Raviraj. (2022). On Sensitivity of Deep Learning Based Text Classification Algorithms to Practical Input Perturbations. *Intelligent Computing*, 613–626. Springer International Publishing. [https://doi.org/10.1007/978-3-031-10464-0_42](https://doi.org/10.1007/978-3-031-10464-0_42)
 
 - <a name="TSDAE"></a>Wang, Kexin, Reimers, Nils & Gurevych, Iryna. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. [https://arxiv.org/abs/2104.06979](https://arxiv.org/abs/2104.06979)
-
 
 
 
