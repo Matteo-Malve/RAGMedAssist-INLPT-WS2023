@@ -8,21 +8,39 @@
 | Sandra Friebolin | 3175035 | M.Sc. Computational linguistics (?) | sandra_friebolin@proton.me |
 | Yusuf Berber | ...... | M.Sc. Data and Computer Science (?) | yusuf.berber@stud.uni-heidelberg.de |
 
-### Member Contributions
-
-Please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. The access was granted to our supervisor during the project. 
-
-We would like to specify that the group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
 
 ### Advisor
 
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
-### Anti-Plagiarism Confirmation
 
-<p align="left">
-  <img src="./docs/images/AntiPlagiat.png" width="700" />
-</p>
+***
+## Table of contents
+
+1. ➡️ [Introduction](#introduction)
+2. 📚 [Related Work](#related-work)
+3. ⚙️ [Approach](#approach)
+    - ✂️ 3.1 [Data Processing](#data-processing)
+    - 👾 3.2 [Algorithms & Methods](#algorithms-methods)
+    - 3.3 [Baselines](#baselines)
+    - 3.4 [Fine-Tuning](#fine-tuning)
+
+4. 🔬 [Experimental Setup & Results](#experimental-setup-results)
+    - 💽 4.1 [Data](#data)
+    - 📈 4.2 [Evaluation](#evaluation)
+        - a) [Evaluation of Information Retrieval](#retrieval-eval)
+        - b) [Evaluation of Chatmodel](#chatmodel-eval)
+    - 🧐 4.3 [Analysis](#analysis)
+
+5. ⚡️ [Limitations & Future Work](#limitations-future-work) 🔮
+
+6. 💡[Conclusion](#conclusion)
+
+7. 💻 [References](#references)
+
+8. 📊 [Appendix](#appendix)
+    - 🧑🏻‍🎓 [Contributions](#contributions)
+    - 📝 [Anti-Plagiarism Declaration](#anti-plagiarism)
 
 ***
 
@@ -63,9 +81,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - describe baseline approaches (briefly if from external source)
 -->
 
-## 3.1 Data Processing Pipelines
-
-### 3.1.1 Data Pre-Processing
+## 3.1 Data Processing
 
 Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocess_data.ipynb)):
 
@@ -83,7 +99,7 @@ Several data cleaning and pre-processing strategies were considered and applied 
 
 ❌ **Handling Bigrams or N-grams:** Advanced Transformer based models do not require this step since they are designed to capture word context using their attention mechanisms and positional embeddings, making explicit n-gram creation less necessary.
 
-## 3.2 Algorithms/Methods
+## 3.2 Algorithms & Methods
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
@@ -96,7 +112,7 @@ After developing and evaluating the embedding models for our retrieval system, w
 
 Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
 
-# 4. Experimental Setup and Results
+# 4. Experimental Setup & Results
 
 ## 4.1 Data
 <!-- 
@@ -169,7 +185,7 @@ For analyzing common themes appearing in our dataset based on the titles of publ
 </p>
 
 
-## 4.2 Evaluation Method
+## 4.2 Evaluation 
 <!-- 
 - explain & define used/own metrics 
 - motivate expected achievements
@@ -270,7 +286,7 @@ We selected a set of 10 queries from our QA dataset for further qualitative eval
 
 Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
 
-<img src="./qualitative_evaluation/images/correct_retrieval.jpg" width="800" />
+<img src="evalutation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg" width="800" />
 
 ℹ️ Please note that we could not execute the `Muennighoff/SBERT-base-nli-v2` (SGPT) model as previously planned due to its large size. 
 
@@ -297,7 +313,7 @@ We evaluated the various parameters and configurations of our model(s)...
 
 To ensure consistency in our evaluation, we selected a set of 10 evaluation questions: 5 were randomly chosen from our QA evaluation dataset, covering a range of medical fields. The other 5 were generated by ChatGPT-4, prompted to create general questions on intelligence topics based on an initial list of 50 questions from the QA dataset. We lastly added 2 unrelated questions about movies and football. This mix aims to assess the model's ability to handle diverse medical topics and its tendency to hallucinate or acknowledge gaps in its knowledge. The questions can be found [here](evaluation/llm_evaluation/EVAL_QUESTIONS.md).
 
-### 4.2.3 Prompt Engineering
+#### I. Prompt Engineering
 
 **Setup of the Experiment:** An important step in the construction of a chatbot with RAG is to choose a proper prompt template. Sometimes even very similar templates can lead to different outputs in terms of quality, completeness and risk of hallucination. It is also crucial to make the tests on a specific model, since the best results on one model do not imply a good result on another one. We tested therefore the prompts on our final choice: `mistralai/Mistral-7B-Instruct-v0.1`.
 
@@ -363,9 +379,8 @@ Moreover we noted and wrote down some trends in the quality and nature of the an
 
 As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
 
-#### Which LLM?
 
-#### Hybrid Search Weights
+#### II. Hybrid Search Weights
 
 Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer. Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
 
@@ -399,7 +414,9 @@ Through extensive testing with varying weights, we optimized the balance between
 - use examples & metrics to underline our points instead of stating unproven points
 -->
 
-# 5. Conclusion and Future Work
+# 5. Limitations/Future Work
+
+# 6. Conclusion
 <!-- 
 - recap briefly main contributions
 - highlight achievements
@@ -418,3 +435,19 @@ Through extensive testing with varying weights, we optimized the balance between
 
 - <a name="TSDAE"></a>Wang, Kexin, Reimers, Nils & Gurevych, Iryna. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. [https://arxiv.org/abs/2104.06979](https://arxiv.org/abs/2104.06979)
 
+
+
+
+# Appendix
+
+## <a name="contributions"></a>1. Contributions
+
+Please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. The access was granted to our supervisor during the project. 
+
+We would like to specify that the group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
+
+## <a name="anti-plagiarism"></a>2. Anti-Plagiarism Confirmation
+
+<p align="left">
+  <img src="./docs/images/AntiPlagiat.png" width="300" />
+</p>
