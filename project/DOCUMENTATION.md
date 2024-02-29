@@ -119,13 +119,13 @@ The GTE model, developed by Alibaba DAMO Academy, is based on the BERT architect
 
 Given the nature of our work with abstract texts, we often encounter documents that exceed the 512 maximum token length capacity of our chosen embedding model. To address this challenge, we employed LangChain's [Text Splitters](https://python.langchain.com/docs/modules/data_connection/document_transformers/) functionality to divide our documents into smaller chunks that the embedding model can manage without exceeding its token limit. Specifically, our approach involves a recursive and token-count-based splitting process, utilizing LangChain's integration with `tiktoken` for its efficient Byte Pair Encoding (BPE) tokenizer capabilities. This tool provides an accurate estimation of the tokens present in the text, ensuring that each document segment conforms to the model's constraints. Additionally, we leverage LangChain's `RecursiveCharacterTextSplitter`, which guarantees that no split exceeds the permissible chunk size in tokens. This splitter ensures that if any segment is too large, it will be further divided recursively until all parts are within the acceptable size range. To maintain coherence and context continuity across the document segments, we incorporated an overlap of 100 tokens between each chunk. 
 
-```py
+```js
 text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size=400,
                                                                     chunk_overlap=100,)
 chunked_docs = text_splitter.split_documents(docs_all)
 ```
 
-This way we created XXXX chunked documents from our XXX original documents that are embedded using the GTE model and uploaded to be stored in our vector database.
+This way we transformed our collection of 58,535 original abstracts into 62,615 chunked documents that are embedded using the GTE model and uploaded to be stored in our vector database.
 
 #### II. Vector Storage
 
