@@ -13,8 +13,8 @@
 
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
-
 ***
+
 ## Table of contents
 
 1. ➡️ [Introduction](#introduction)
@@ -24,27 +24,22 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
     - 👾 3.2 [Algorithms & Methods](#algorithms-methods)
     - 3.3 [Baselines](#baselines)
     - 3.4 [Fine-Tuning](#fine-tuning)
-
 4. 🔬 [Experimental Setup & Results](#experimental-setup-results)
     - 💽 4.1 [Data](#data)
     - 📈 4.2 [Evaluation](#evaluation)
         - a) [Evaluation of Information Retrieval](#retrieval-eval)
         - b) [Evaluation of Chatmodel](#chatmodel-eval)
     - 🧐 4.3 [Analysis](#analysis)
-
 5. ⚡️ [Limitations & Future Work](#limitations-future-work) 🔮
-
 6. 💡[Conclusion](#conclusion)
-
 7. 💻 [References](#references)
-
 8. 📊 [Appendix](#appendix)
     - 🧑🏻‍🎓 [Contributions](#contributions)
     - 📝 [Anti-Plagiarism Declaration](#anti-plagiarism)
 
 ***
 
-# 1. Introduction
+# <a name="introduction"></a>1. Introduction
 
 Navigating the complexities of medical information, especially when it is laden with technical jargon, can be overwhelming yet essential for making critical health decisions. Our system bridges this gap by simplifying the intricate world of medical knowledge. It allows users to ask questions in everyday language and provides informed, understandable answers derived from a comprehensive medical dataset.
 
@@ -64,7 +59,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 [...]"""
 -->
 
-# 2. Related Work
+# <a name="related-work"></a>2. Related Work
 <!--
 - put our work into context of current research
 - including papers read for research/that used same techniques but applied to different problems
@@ -72,7 +67,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - ⚠️ only major points, not too much detail
 -->
 
-# 3. Approach
+# <a name="approach"></a>3. Approach
 <!--
 - conceptual details of our system (about its functionality, its components, data processing pipelines, algorithms, key methods)
 - 💡 be specific about methods (include equations, show figures...)
@@ -81,7 +76,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - describe baseline approaches (briefly if from external source)
 -->
 
-## 3.1 Data Processing
+## <a name="data-processing"></a>3.1 Data Processing
 
 Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocess_data.ipynb)):
 
@@ -99,20 +94,20 @@ Several data cleaning and pre-processing strategies were considered and applied 
 
 ❌ **Handling Bigrams or N-grams:** Advanced Transformer based models do not require this step since they are designed to capture word context using their attention mechanisms and positional embeddings, making explicit n-gram creation less necessary.
 
-## 3.2 Algorithms & Methods
+## <a name="algorithms-methods"></a>3.2 Algorithms & Methods
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
-## 3.3 Baselines
+## <a name="baselines"></a>3.3 Baselines
 
 
-## 3.4 Fine-Tuning
+## <a name="fine-tuning"></a>3.4 Fine-Tuning
 
 After developing and evaluating the embedding models for our retrieval system, we initially opted against finetuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored finetuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of finetuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is finetuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
 Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
 
-# 4. Experimental Setup & Results
+# <a name="experimental-setup-results"></a>4. Experimental Setup & Results
 
 ## 4.1 Data
 <!-- 
@@ -185,13 +180,13 @@ For analyzing common themes appearing in our dataset based on the titles of publ
 </p>
 
 
-## 4.2 Evaluation 
+## <a name="evaluation"></a>4.2 Evaluation 
 <!-- 
 - explain & define used/own metrics 
 - motivate expected achievements
 -->
 
-### 4.2.1 Evaluation of Information Retrieval
+### <a name="retrieval-eval"></a>a) Evaluation of Information Retrieval
 
 For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this evaluation dataset. We use these instances for our experiments.
 
@@ -307,7 +302,7 @@ On the quantitative side, we applied the inverse hyperbolic tangent function to 
 <img src="project/evaluation/qualitative_evaluation/images/evaluation_results.png" width="1000" />
 
 
-### 4.2.2 Evaluation of Chatmodel
+### <a name="chatmodel-eval"></a>b) Evaluation of Chatmodel
 
 We evaluated the various parameters and configurations of our model(s)...
 
@@ -391,21 +386,21 @@ Through extensive testing with varying weights, we optimized the balance between
 <!-- TO DO: qualitative evaluation
 -->
 
-## 4.3 Experimental Details
 <!-- 
+## 4.3 Experimental Details
 - explain configurable parameters of our methods
 - explain specific usage 
 -->
 
-## 4.4 Results
 <!-- 
+## 4.4 Results
 - compare own results to baseline
     - use basic chatmodel as baseline (maybe the one used in one of the assignments) and compare it with our choice
     - idea: 10 questions give to ChatGPT and our system: does RAG improve performance/prevent hallucinations
 - present plots/tables of the before explained evaluation
 -->
 
-## 4.5 Analysis
+## <a name="analysis"></a>4.3 Analysis
 <!-- 
 - present qualitative analysis
 - does our system work as expected?
@@ -414,9 +409,9 @@ Through extensive testing with varying weights, we optimized the balance between
 - use examples & metrics to underline our points instead of stating unproven points
 -->
 
-# 5. Limitations/Future Work
+# <a name="limitations-results"></a>5. Limitations/Future Work
 
-# 6. Conclusion
+# <a name="conclusion"></a>6. Conclusion
 <!-- 
 - recap briefly main contributions
 - highlight achievements
@@ -427,7 +422,7 @@ Through extensive testing with varying weights, we optimized the balance between
 
 ***
 
-# References
+# <a name="references"></a>7. References
 
 - <a name="LDA"></a>Blei, David M., Ng, Andrew Y. & Jordan, Michael I. (2003). Latent Dirichlet Allocation. *Journal of Machine Learning Research*, 3, 993–1022. [https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
 
@@ -438,7 +433,7 @@ Through extensive testing with varying weights, we optimized the balance between
 
 
 
-# Appendix
+# <a name="appendix"></a>8. Appendix
 
 ## <a name="contributions"></a>1. Contributions
 
