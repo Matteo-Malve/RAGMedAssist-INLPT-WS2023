@@ -177,13 +177,13 @@ For analyzing common themes appearing in our dataset based on the titles of publ
 
 ### 4.2.1 Evaluation of Information Retrieval
 
+For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this evaluation dataset. We use these instances for our experiments.
+
 #### I. Quantitative Evaluation
 
-We made use of the [PubMedQA](https://pubmedqa.github.io) for evaluating our retrieval method. This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this evaluation dataset.
+We compute accuracy (see [`evaluate_embeddings_accuracy.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/evaluate_embeddings_accuracy.ipynb)), F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_mrr_ndcg_f1.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_mrr_ndcg_f1.ipynb)). For these quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
 
-We use these instances to compute accuracy (see [`evaluate_embeddings_accuracy.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/evaluate_embeddings_accuracy.ipynb)), F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_mrr_ndcg_f1.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_mrr_ndcg_f1.ipynb)). For our quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
-
-**Accuracy:** We considered different values of top `k` retrieved results. Since we retrieve 3 documents as context for our chat model, we focus the analysis on `k=3`. The best performing models under this configuration are `thenlper_gte-base`, `BAAI_bge-base-en-v1.5` and `jamesgpt1_sf_model_e5`. Keyword search via `BM25` was deployed as a baseline to compare against our semantic search methods (see [`compare_against_keyword_search.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compare_against_keyword_search.ipynb)).
+**Accuracy:** We considered different values of top `k` retrieved results. Since we retrieve three documents as context for our chat model, we focus the analysis on `k=3`. The best performing models under this configuration are `thenlper_gte-base`, `BAAI_bge-base-en-v1.5` and `jamesgpt1_sf_model_e5`. Keyword search via `BM25` was deployed as a baseline to compare against our semantic search methods (see [`compare_against_keyword_search.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compare_against_keyword_search.ipynb)).
 
 |    **Accuracy**                              |   k=1 |   k=2 |   **k=3** |   k=4 |   k=5 |   k=6 |   k=7 |   k=8 |   k=9 |   k=10 |   k=11 |   k=12 |   k=13 |   k=14 |   k=15 |   k=16 |   k=17 |   k=18 |   k=19 |   k=20 |
 |:---------------------------------|------:|------:|------:|------:|------:|------:|------:|------:|------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
@@ -196,7 +196,7 @@ We use these instances to compute accuracy (see [`evaluate_embeddings_accuracy.i
 | **`thenlper_gte-base`**                | 0.91  | 0.946 | **0.976** | 0.976 | 0.982 | 0.994 | 0.994 | 0.994 | 0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |  0.994 |
 | `intfloat_e5-base-v2`              | 0.79  | 0.904 | 0.94  | 0.958 | 0.958 | 0.964 | 0.964 | 0.97  | 0.97  |  0.97  |  0.97  |  0.976 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.982 |  0.988 |
 
-The following plots are arranged in descending order based on the performance of the models, displaying the 3 best-performing models first.
+The following plots are arranged in descending order based on the performance of the models, displaying the three best-performing models first.
 
 <p float="left">
   <img src="evaluation/retrieval_evaluation/quantitative_evaluation/images/retriever_accuracy_thenlper_gte-base.png" width="300" />
@@ -228,7 +228,7 @@ The following plots are arranged in descending order based on the performance of
 | **`thenlper_gte-base`**     | 0.91  | 0.651 | **0.512** | 0.41  | 0.345 | 0.299 | 0.262 | 0.233 | 0.21  |  0.191 |
 | `intfloat_e5-base-v2`   | 0.79  | 0.619 | 0.485 | 0.388 | 0.323 | 0.277 | 0.243 | 0.216 | 0.194 |  0.176 |
 
-The following plots are again arranged in descending order, based on the performance of the models, displaying the 3 best-performing models first.
+The following plots are again arranged in descending order, based on the performance of the models, displaying the three best-performing models first.
 
 <p float="left">
   <img src="evaluation/retrieval_evaluation/quantitative_evaluation/images/retriever_f1_thenlper_gte-base.png" width="300" />
@@ -253,7 +253,7 @@ The following plots are again arranged in descending order, based on the perform
 | **`thenlper_gte-base`**   | **0.938** |
 | `intfloat_e5-base-v2`   | 0.864 |
 
-**nDCG:** Our nDCG evaluation was limited to `k=1,2,3` in order to mirror the operational constraints of our later chat model, which only retrieves the top three documents. It provides insight into how well our retrieval system ranks relevant documents at the top of its search results. A gradual increase in nDCG scores from `k=1` to `k=3`for all models illustrates that while the very first document might not always be the most relevant, the system generally ranks highly relevant documents within the top 3 positions. `thenlper_gte-base` again slightly outperforms the other models across all `k`.
+**nDCG:** Our nDCG evaluation was limited to `k=1,2,3` in order to mirror the operational constraints of our later chat model, which only retrieves the top three documents. It provides insight into how well our retrieval system ranks relevant documents at the top of its search results. A gradual increase in nDCG scores from `k=1` to `k=3`for all models illustrates that while the very first document might not always be the most relevant, the system generally ranks highly relevant documents within the top three positions. `thenlper_gte-base` again slightly outperforms the other models across all `k`.
 
 |   **nDCG**                    |   k=1 |   k=2 |   k=3 |
 |:----------------------|------:|------:|------:|
@@ -266,6 +266,31 @@ The following plots are again arranged in descending order, based on the perform
 
 #### II. Qualitative Evaluation
 
+We selected a set of 10 queries from our QA dataset for further qualitative evaluation. Specifically, we chose the eight semantically most dissimilar queries (via cosine distance) to cover a broad range, and additionally the shortest and longest ones as edge cases (see [`qualitative_evaluation.ipynb`](project/evaluation/retrieval_evaluation/qualitative_evaluation/qualitative_evaluation.ipynb)). Using FAISS to embed queries and retrieve the top three most similar documents. For every model and query we investigate if the correct abstract was among the retrieved results by comparing the PMIDs.
+
+Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
+
+<img src="./qualitative_evaluation/images/correct_retrieval.jpg" width="800" />
+
+ℹ️ Please note that we could not execute the `Muennighoff/SBERT-base-nli-v2` (SGPT) model as previously planned due to its large size. 
+
+💡 Taking into account the results of our quantitative evaluation, we decided to proceed with the qualitative evaluation only of the three top-performing models: `BAAI/bge-base-en-v1.5`, `jamesgpt1/sf_model_e5`, `thenlper/gte-base`. We thus evaluated only the results retrieved by these models in the following. 
+
+We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg).
+
+Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. RESULTS ...
+
+In a next step, we investigated the order of the retrieved results and chose for each query the model that had the most effective ordering of the top three documents. Here, our attention was mainly on the firstly and secondly retrieved documents. We aggregate the scores for each model based on the frequency with which it was perceived as the best in terms of the order in which it presented its retrieval results. 
+
+For our final decision of the embedding models, we carefully balanced the qualitative assessment with the precision of the quantitative analysis. We believe that our human perception is as important as the computational accuracy of the models we assess. This is reflected in the importance we place on our practical qualitative assessments. Such evaluations are especially important considering that our goal is to develop a chatbot that serves as a QA assistant and is ultimately judged on its ability to provide answers that are perceived effective and satisfactory by its human users.
+
+On the quantitative side, we applied the inverse hyperbolic tangent function to all scores, ranging from 0 to 1, to highlight those approaching 1 and thus emphasize exemplary performance over the others. These recalibrated scores are then combined into a single metric and scaled by a factor of ten to fit the qualitative data.
+
+🥇 After carefully looking at everything, we add up the best scores — the ones we highlighted in bold blue — to get our final score. By taking all these steps, we’ve decided that `thenlper/gte-base` is our top pick for the best model.
+
+<img src="project/evaluation/qualitative_evaluation/images/evaluation_results.png" width="1000" />
+
+
 ### 4.2.2 Evaluation of Chatmodel
 
 We evaluated the various parameters and configurations of our model(s)...
@@ -276,7 +301,7 @@ To ensure consistency in our evaluation, we selected a set of 10 evaluation ques
 
 **Setup of the Experiment:** An important step in the construction of a chatbot with RAG is to choose a proper prompt template. Sometimes even very similar templates can lead to different outputs in terms of quality, completeness and risk of hallucination. It is also crucial to make the tests on a specific model, since the best results on one model do not imply a good result on another one. We tested therefore the prompts on our final choice: `mistralai/Mistral-7B-Instruct-v0.1`.
 
-We manually selected seven prompts, detailed in [`perform_prompt_tests.ipynb`](evaluation/llm_evaluation/prompt_engineering/perform_prompt_tests.ipynb)) and designed to guide the generation of concise and relevant answers based on provided context for question-answering tasks while preventing hallucination.
+We manually selected seven prompts, detailed in [`perform_prompt_tests.ipynb`](evaluation/llm_evaluation/prompt_engineering/perform_prompt_tests.ipynb) and designed to guide the generation of concise and relevant answers based on provided context for question-answering tasks while preventing hallucination.
 
 Two examples are:
 
@@ -336,7 +361,7 @@ Moreover we noted and wrote down some trends in the quality and nature of the an
   <img src="./docs/images/prompt-engineering_penalty-scores.png" width="600"/>
 </p>
 
-As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave 7 long-winded answers is still less problematic than one that caused 3 wrong or missing answers. Combining this observations with our annotations we reduced our choice to 3 templates. The one which ended up being chosen (`tempalte_3-short`, which is among the 2 reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
+As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
 
 #### Which LLM?
 
