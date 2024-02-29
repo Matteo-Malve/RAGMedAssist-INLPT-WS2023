@@ -5,16 +5,12 @@ Custom chatbot model for RAG.
 from dotenv import load_dotenv, find_dotenv
 import os
 import pickle
-import random
 import time
 import warnings
 import yaml
 
-import pandas as pd
 import pinecone
 import torch
-from IPython.display import Markdown, display
-from sentence_transformers import SentenceTransformer
 from transformers import (
     AutoModel,
     AutoModelForCausalLM,
@@ -33,19 +29,14 @@ from langchain.text_splitter import (
     RecursiveCharacterTextSplitter,
     TokenTextSplitter,
 )
-# from langchain.vectorstores import Pinecone
 from langchain_community.vectorstores import Pinecone
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import GPT4All
 from langchain.chains import ConversationalRetrievalChain
-from langchain.retrievers.multi_query import MultiQueryRetriever
-from typing import List
 from langchain.chains import LLMChain
-from pydantic.v1 import BaseModel, Field
 from langchain.prompts import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
 from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import TransformChain
 from langchain.chains import SequentialChain
@@ -107,7 +98,8 @@ class MedicalChatbot:
 
     def load_retrievers(self, name):
         if name in ["faiss", "pinecone"]:
-            return self.load_db_retriever(name)
+            self.dense_retriever =  self.load_db_retriever(name)
+            return self.dense_retriever
         elif name == "bm25":
             return self.load_bm25_retriever()
 
@@ -138,9 +130,9 @@ class MedicalChatbot:
         db = Pinecone(index, self.load_embedding_model(), "text")
         # save retriever because we can need it to initilize other chains (conversationa)
         return db.as_retriever(
-            search_type=cfg["retrievers"]["pinecone"]["search_type"],
-            search_kwargs={"k": cfg["retrievers"]["pinecone"]["topk"],
-                           "score_threshold": cfg["retrievers"]["faiss"]["score_threshold"]})
+            search_type=self.cfg["retrievers"]["pinecone"]["search_type"],
+            search_kwargs={"k": self.cfg["retrievers"]["pinecone"]["topk"],
+                           "score_threshold": self.cfg["retrievers"]["faiss"]["score_threshold"]})
 
 
 
@@ -172,7 +164,7 @@ class MedicalChatbot:
             self.ensemble_retriever = CustomEnsembleRetriever(retrievers=ensemble_list, weights=weights)
 
         return self.ensemble_retriever
-    
+
     def get_llm(self):
         if self.llm is None:
             if "GPT4ALL" in self.cfg['llm_model']['local_path'].upper():
@@ -274,37 +266,38 @@ class MedicalChatbot:
         return SequentialChain(
             chains=[multi_query_retrieval_transform_chain, multi_query_qa_chain],
             input_variables=["question"],  # we need to name differently to output "query"
-            output_variables=["query", "context", "text"]
+            output_variables=["query", "context", "source_documents", "text"]
         )
 
     def load_multi_query_retrieval_transform_chain(self, multi_query_retriever):
 
         def multi_query_retrieval_transform(inputs: dict) -> dict:
-            docs = multi_query_retriever.get_relevant_documents(query=inputs["question"])
-            docs = [d.page_content for d in docs]
+            retrieved_docs = multi_query_retriever.get_relevant_documents(query=inputs["question"])
+            docs = [d.page_content for d in retrieved_docs]
             docs_dict = {
                 "query": inputs["question"],
-                "context": "\n---\n".join(docs)[:2048]  # context window is 2048
+                "context": "\n---\n".join(docs)[:2048],  # context window is 2048
+                "source_documents": retrieved_docs
             }
             return docs_dict
 
         return TransformChain(
             input_variables=["question"],
-            output_variables=["query", "context"],
+            output_variables=["query", "context", "source_documents"],
             transform=multi_query_retrieval_transform
             )
-    
+
     # ------------------------------------------------------------------------------------------------------------------
     # Prompt template setup
     # ------------------------------------------------------------------------------------------------------------------
 
     def get_prompt(self):
-        #template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks. 
+        #template = """<s> [INST] You are a helpful assistant for biomedical question-answering tasks.
         #            Use only the following retrieved context to answer the question. If the answer is not in the context,
-        #            just say that you don't know. 
-        #            Provide a response strictly based on the information requested in the query.[/INST] </s> 
-        #            [INST] Question: {question} 
-        #            Context: {context} 
+        #            just say that you don't know.
+        #            Provide a response strictly based on the information requested in the query.[/INST] </s>
+        #            [INST] Question: {question}
+        #            Context: {context}
         #            Answer: [/INST]"""
         template = \
         """
@@ -333,23 +326,46 @@ class MedicalChatbot:
         else:
             raise ValueError(f"Unsupported response type: {type}")
 
+    def no_docs_response(self, user_query, return_raw=False):
+        response = {"query": user_query, "result": "I don't know.", "source_documents":[]}
+        self.chat_history.append(response)
+        return self._generate_response(response, return_raw=return_raw)
+
+    def check_no_docs_retrieved(self, user_query):
+        retrieved_docs_count = len(self.dense_retriever.get_relevant_documents(user_query))
+        return retrieved_docs_count == 0
+
     def generate_response(self, user_query, return_raw=False):
+        if self.check_no_docs_retrieved(user_query):
+            return self.no_docs_response(user_query, return_raw)
+
         response = self.qa_chain({"query": user_query})
         self.chat_history.append(response)
-        return self._generate_response(response, response_key="result", return_raw=return_raw)
+        return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_multi_query(self, user_query, return_raw=False):
+        if self.check_no_docs_retrieved(user_query):
+            return self.no_docs_response(user_query, return_raw)
+
         response = self.multi_query_qa_chain({"question": user_query})
+        response["result"] = response["text"]
+        del response["question"], response["text"]  # unnecessary key-value
         self.chat_history.append(response)
-        return self._generate_response(response, response_key="text", return_raw=return_raw)
+        return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_conversational(self, user_query, return_raw=False):
+        if self.check_no_docs_retrieved(user_query):
+            return self.no_docs_response(user_query, return_raw)
+
         max_history_length = self.cfg["conversational_chain"]["conversation_depth"]
         conversation_history = self.conversational_chat_history[-max_history_length:]
         response = self.conversational_qa_chain({"question": user_query, "chat_history": conversation_history})
+        response["result"] = response["answer"]
+        response["query"] = response["question"]
+        del response["answer"], response["question"]  # use keys result, query instead answer, question
         self.chat_history.append(response)
-        self.conversational_chat_history.append((user_query, response["answer"]))
-        return self._generate_response(response, response_key="answer", return_raw=return_raw)
+        self.conversational_chat_history.append((user_query, response["result"]))
+        return self._generate_response(response, return_raw=return_raw)
 
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -370,7 +386,7 @@ class MedicalChatbot:
                     doi_urls.append(base_url + doi)
             return doi_urls
 
-    def _generate_response(self, response, response_key, return_raw=False):
+    def _generate_response(self, response, return_raw=False):
         """
         Generates and formats a response based on the provided input and flags.
 
@@ -392,7 +408,7 @@ class MedicalChatbot:
 
         else:
             markdown_response = ""
-            markdown_response += f"<p>{response[response_key]}</p>\n"
+            markdown_response += f"<p>{response['result']}</p>\n"
             doi_urls = self.retrieve_doi_urls(response)
             if doi_urls:
                 markdown_response += "<p>For more information, please refer to the following links:</p>\n"
@@ -475,8 +491,4 @@ if __name__ == "__main__":
         txt_file.write(txt_content)
 
     print("Results have been saved.")
-
-
-
-    
 
