@@ -1,0 +1,32 @@
+# Basic modules
+torch 
+torchvision
+jupyter
+scikit-learn
+scipy
+pandas
+pandas-datareader
+matplotlib
+pillow
+tqdm
+requests
+h5py
+pyyaml
+flask
+boto3
+ipykernel
+
+# Project specific modules
+streamlit
+streamlit-chat
+python-dotenv
+pinecone-client
+sentence_transformers
+langchain
+gpt4all
+langchain-community
+rank_bm25
+accelerate
+
+# Cuda specific
+faiss-gpu
