@@ -327,7 +327,7 @@ class MedicalChatbot:
             raise ValueError(f"Unsupported response type: {type}")
 
     def no_docs_response(self, user_query, return_raw=False):
-        response = {"query": user_query, "result": "I don't know.", "source_documents":[]}
+        response = {"query": user_query, "result": "Sorry, but I don't know as my capabilities are focused on medical assistance", "source_documents":[]}
         self.chat_history.append(response)
         return self._generate_response(response, return_raw=return_raw)
 
@@ -374,6 +374,9 @@ class MedicalChatbot:
 
     def clean_chat_history(self):
         self.chat_history = []
+
+    def set_similarity_score_threshold(self, score):
+        self.dense_retriever.search_kwargs["score_threshold"] = score
 
     def retrieve_doi_urls(self, response):
         response_documents = response.get('source_documents')
