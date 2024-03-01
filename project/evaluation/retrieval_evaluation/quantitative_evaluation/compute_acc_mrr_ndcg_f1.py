@@ -3,7 +3,7 @@
 This script computes retrieval accuracy, MRR, nDCG, and F1 scores for different embedding models, using the FAISS vector base as retriever, and plots & saves results.
 """
 
-from generate_embeddings import generate_embeddings
+from project.data.embeddings.generate_embeddings import generate_embeddings
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 import torch

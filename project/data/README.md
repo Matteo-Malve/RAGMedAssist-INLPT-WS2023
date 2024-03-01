@@ -1,18 +1,32 @@
-## Code Files
+# 📊 data
 
-- **📄 [`download_pubmed_data.py`](download_pubmed_data.py):** Downloads abstracts and metadata from the PubMed website and saves it to a csv file ([pubmed_data.csv](pubmed_data.csv)).
+- 🗂️ [`embeddings`](embeddings): This folder contains code for generating, uploading, and saving embeddings.
 
-- **📄 [`preprocess_data.py`](preprocess_data.py):** Applies preprocessing steps to the parsed data.
+    - 🗂️ [`faiss_indices`](embeddings/faiss_indices): This folder contains the saved FAISS embeddings.
+
+    - 💽 [`chunked_docs.pkl`](embeddings/chunked_docs.pkl): Documents chunked via text splitting, later used by the BM25 retriever.
+
+    - 💻 [`generate_embeddings.py`](embeddings/generate_embeddings.py): This code chunks documents and generates embeddings, finally saving them in [`faiss_indices`](embeddings/faiss_indices).
+
+    - 💻 [`upload_thenlper_gte_embs_into_pinecone.ipynb`](embeddings/upload_thenlper_gte_embs_into_pinecone.ipynb): This code, while not currently integrated into our chatbot, uploads embeddings to Pinecone. It serves as an alternative for those preferring Pinecone over FAISS for vector search.
+
+- 🗂️ [`evaluation_data`](evaluation_data): This folder contains data used for evaluation.
+
+    - 🗂️ [`retrieval_eval_data`](evaluation_data/retrieval_eval_data): This folder contains data used to evaluate our retrieval system.
+
+        - 💻 [`download_questions_answers.ipynb`](evaluation_data/retrieval_eval_data/download_questions_answers.ipynb): This code downloads the QA evaluation set.
+        - 💽 [`questions_answers.csv`](evaluation_data/retrieval_eval_data/questions_answers.csv): QA pairs used as gold truths for retrieval evaluation.
 
 
-## Data Files
+- 🗂️ [`original_pubmed_data`](original_pubmed_data): this folder contains the original PubMed data.
 
-- **💽 [`pubmed_data.csv`](pubmed_data.csv):** Contains the downloaded abstracts with all their metadata.
+    - 💻 [`download_pubmed_data.ipynb`](original_pubmed_data/download_pubmed_data.ipynb): This code downloads our original dataset from PubMed.
+    - 💽 [`pubmed_data_part1.csv`](original_pubmed_data/pubmed_data_part1.csv): Part 1 of our dataset.
+    - 💽 [`pubmed_data_part2.csv`](original_pubmed_data/pubmed_data_part2.csv): Part 2 of our dataset.
 
-- **💽 [`processed_data.csv`](processed_data.csv):** Contains preprocessed abstracts with relevant metadata such as authors, title, publication date and DOI.
+- 🗂️ [`preprocessing_and_analytics`](preprocessing_and_analytics): This folder contains code for pre-processing and analyzing our data.
 
-- **🗂️ [`question_answers`](question_answers):**
-
-    - **🗂️ [`download_questions_answers.ipynb`](questions_answers/download_questions_answers.ipynb):** Downloads evaluation data set.
-
-     - **🗂️ [`questions_answers.csv`](questions_answers/questions_answers.csv):** Evaluation data set used for our quantitative and qualitative experiments to determine the best embedding model for retrieval.
+    - 💻 [`data_anaylitics.ipynb`](preprocessing_and_analytics/data_anaylitics.ipynb): This code analyzes our data and generates various plots.
+    - 💻 [`preprocess_data.ipynb`](preprocessing_and_analytics/preprocess_data.ipynb): This code pre-processes and cleans our dataset.
+    - 💽 [`processed_data_part1.csv`](preprocessing_and_analytics/processed_data_part1.csv): Part 1 of our pre-processed dataset.
+    - 💽 [`processed_data_part2.csv`](preprocessing_and_analytics/processed_data_part2.csv): Part 2 of our pre-processed dataset.
