@@ -379,20 +379,20 @@ class MedicalChatbot:
     def set_similarity_score_threshold(self, score):
         self.dense_retriever.search_kwargs["score_threshold"] = score
 
-    def retrieve_doi_urls(self, response):
+    def retrieve_pmid_urls(self, response):
         response_documents = response.get('source_documents')
         if response_documents:
-            base_url = "https://doi.org/"
-            doi_urls = []
+            base_url = "https://pubmed.ncbi.nlm.nih.gov/"
+            pmid_urls = []
             for document in response_documents:
-                doi = document.metadata.get('DOI')
-                if doi:
-                    doi_urls.append(base_url + doi)
-            return doi_urls
+                pmid = document.metadata.get('PMID')
+                if pmid:
+                    pmid_urls.append(base_url + pmid)
+            return pmid_urls
 
     def _generate_response(self, response, return_raw=False):
         """
-        Generates and formats a response based on the provided input and flags.
+        s.
 
         If `return_raw` is set to True, this function returns the raw response object directly.
         Otherwise, it formats the response as Markdown, enriching it with DOI links if available, to enhance the presentation.
@@ -413,10 +413,10 @@ class MedicalChatbot:
         else:
             markdown_response = ""
             markdown_response += f"<p>{response['result']}</p>\n"
-            doi_urls = self.retrieve_doi_urls(response)
-            if doi_urls:
+            pmid_urls = self.retrieve_pmid_urls(response)
+            if pmid_urls:
                 markdown_response += "<p>For more information, please refer to the following links:</p>\n"
-                for url in doi_urls:
+                for url in pmid_urls:
                     markdown_response += f"<p><a href='{url}' target='_blank'>{url}</a></p>\n"
             return markdown_response
 
