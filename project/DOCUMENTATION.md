@@ -5,8 +5,8 @@
 | Name and surname    | Matric. Nr. | Course of study                            |   e-mail address   |
 |:--------------------|:------------|:-------------------------------------------|:-------------------|
 | Matteo Malvestiti | 4731243     | M.Sc. Data and Computer science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
-| Sandra Friebolin | 3175035     | M.Sc. Computational linguistics (?) | sandra_friebolin@proton.me |
-| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science (?) | yusuf.berber@stud.uni-heidelberg.de |
+| Sandra Friebolin | 3175035     | B.Sc. Computational linguistics | sandra_friebolin@proton.me |
+| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science <span style="color:red"> **(?)** </span> | yusuf.berber@stud.uni-heidelberg.de |
 
 
 ### Advisor
@@ -491,9 +491,27 @@ Through extensive testing with varying weights, we optimized the balance between
 
 During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and try out all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on thsis project again in the future, they would be surely topics we would address. At the same time they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
 
-- Token limit
+- **Token limit**: <span style="color:red"> **MISSING** is it a problem of GPT4ALL? </span> \
+Right now we cannot have more than <span style="color:red"> **???** </span> tokens in our model, causing two major issues, of which the first is solved, but the second remains an open issue: 
+  - We cannot pass too many retrieved chunks to the LLM.\
+    Solution: We pass to the chain a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
+  - We cannot have long conversations, since we reach the limit after a few questions. \
+    Possible solution: We could free memory by deleting the oldest queries, together with contexts and relative answers, when we reach the limit. It's a FIFO (First In First Out) storage technique.\
+    We did not implement it ourselves since it wasn't a priority for us. With three abstracts per query we could still easily have a conversation of three answer+question without reaching the threshold. Anyway it is worth mentioning for a future developement, as this easily solvable limitation would otherwise harm our product's competitiveness on the market.
+- **Inclusion of metadata**: Our chatbot doesn't currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to inctroduce in the app interface hard coded boxes to filter on these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions.
+  - Possible solution \#1: \
+    We could have modified the prompts so that the chatbot responded differently when the user asks a question related to metadata. For instance, _"What were the developments made in 2006 for the cure of cancer?"_ 
+  - Possible solution \#2: \
+    Alternatively, we could have implemented a system where users could specify in the query to perform metadata filtering such as: _"[year=2006] What are the developments made in 2006 for the cure of cancer?"_ 
 
+  Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In FAISS, the filtering occurs after retrieving the documents. For example, you can retrieve 1,000 documents and then apply the filtering criteria based on metadata. For BM25, there is no metadata-filtering support. In this context, Pinecone offers better support. \
+  To add some complications on top of this, it might have been difficult to implement a filtering criterion in the ensemble retriever,<span style="color:red"> **Are we sure of this? can't we inherit in this case?** </span>as it would have been necessary to modify the EnsembleRetriever class in LangChain.
 
+  In the end we didn't find worth it to invest more time on this and we rather turned our attention to more pressing tasks, but we recognise the great potential that this itegration could bring.
+
+- **Fine tuning of the LLM** <span style="color:red"> **MISSING** I'm sorry I just realised I'm not up to date with this discussion and I don't want to say stupid stuff</span>
+
+- **Including data from other domains**: Even in the medical field, our chatmodel only has access to a handful of abstracts. A very promising path lies ahead, if anyone would want to pick the project up and embed new source data on other domains.
 
 # <a name="conclusion"></a>6. 💡 Conclusion
 <!-- 
