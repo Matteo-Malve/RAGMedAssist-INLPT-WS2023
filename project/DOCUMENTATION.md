@@ -2,11 +2,11 @@
 
 ### 🧑🏻‍🎓 Team Members
 
-| Name and surname    |  Matric. Nr. | Course of study                            |   e-mail address   |
-|:--------------------|:-------------|:-------------------------------------------|:-------------------|
-| Matteo Malvestiti | 4731243| M.Sc. Data and Computer science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
-| Sandra Friebolin | 3175035 | M.Sc. Computational linguistics (?) | sandra_friebolin@proton.me |
-| Yusuf Berber | ...... | M.Sc. Data and Computer Science (?) | yusuf.berber@stud.uni-heidelberg.de |
+| Name and surname    | Matric. Nr. | Course of study                            |   e-mail address   |
+|:--------------------|:------------|:-------------------------------------------|:-------------------|
+| Matteo Malvestiti | 4731243     | M.Sc. Data and Computer science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
+| Sandra Friebolin | 3175035     | M.Sc. Computational linguistics (?) | sandra_friebolin@proton.me |
+| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science (?) | yusuf.berber@stud.uni-heidelberg.de |
 
 
 ### Advisor
