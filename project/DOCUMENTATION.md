@@ -456,14 +456,26 @@ As mentioned before, the severity of the shortcomings was manually assessed. The
 
 #### II. Hybrid Search Weights
 
-Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer. Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
+Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer (see [`compute_bleu_rouge_bertscore.ipynb`](evaluation/llm_evaluation/hybrid_search/compute_bleu_rouge_bertscore.ipynb)). Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
 
 <p align="left">
   <img src="./docs/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
 </p>
 
-<!-- TO DO: qualitative evaluation
--->
+#### III. Handling of Different Question Types
+
+To assess how our chatbot manages various types of questions, we conducted a performance evaluation focusing on complex, causal, factoid, list, and hypothetical questions, as documented in [`question_types_evaluation.md`](evaluation/llm_evaluation/question_types/question_types_evaluation.md). We also compared the responses with those produced by ChatGPT-4 to discern differences in handling questions without specific context. The results are accessible [here](evaluation/llm_evaluation/question_types/testset_different_question_types.xlsx). 
+
+ℹ️ This evaluation, tailored to the needs of our primary users — medical professionals — is inherently subjective. We examined the responses, highlighting our preferred ones in the results document with a dotted outline. 
+
+💡 In 70% of instances, our chatbot was the source of the favored response. A notable distinction between our system and ChatGPT-4 lies in the response length. Unlike ChatGPT-4’s lengthy elaborations, our chatbot delivers concise answers, comprising essential information effectively. This approach prevents information overload, ensuring users receive precise and focused information. In contrast, ChatGPT-4 tends to offer more generalized and expansive answers, often providing more detail than necessary for the query at hand. One of the main advantages that becomes obvious here is of course the links to the specific documents used for the answer generation.
+
+Below is an example of the differing answer types:
+
+| Question | Answer of Our System | Answer of ChatGPT-4 |
+|----------|----------------------|---------------------|
+| *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_RAG.png) | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_gpt.png) |
+
 
 <!-- 
 ## 4.3 Experimental Details
