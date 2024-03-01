@@ -6,7 +6,7 @@
 
     - 💻 [`custom_chatbot.py`](app/custom_chatbot.py): Main code for chatbot.
 
-    - 💻 [`custom_retriever.py`](app/custom_chatbot.py): Main code file.
+    - 💻 [`custom_retriever.py`](app/custom_chatbot.py): Overwrites LangChain's `EnsembleRetriever` to perform rank fusion of documents retrieved by multiple retrievers.
 
     - 💻 [`multi_query_retrieval_helper.py`](app/multi_query_retrieval_helper.py): Additional code for multi-query retrieval.
 
