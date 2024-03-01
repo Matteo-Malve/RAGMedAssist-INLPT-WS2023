@@ -135,10 +135,11 @@ This way we transformed our collection of 58,535 original abstracts into 62,615 
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
+Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
+
 #### IV. Chatmodel Configuration & Integration
 
 #### V. Innovative Aspects & Technical Choices
-
 
 ## <a name="baselines"></a>3.3 Baselines
 
@@ -489,29 +490,39 @@ Through extensive testing with varying weights, we optimized the balance between
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
-During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and try out all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on thsis project again in the future, they would be surely topics we would address. At the same time they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
+During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and try out all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on thsis project again in the future, they would be surely topics we would address. At the same time, they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
 
-- **Token limit**: <span style="color:red"> **MISSING** is it a problem of GPT4ALL? </span> \
-Right now we cannot have more than <span style="color:red"> **???** </span> tokens in our model, causing two major issues, of which the first is solved, but the second remains an open issue: 
-  - We cannot pass too many retrieved chunks to the LLM.\
-    Solution: We pass to the chain a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
-  - We cannot have long conversations, since we reach the limit after a few questions. \
-    Possible solution: We could free memory by deleting the oldest queries, together with contexts and relative answers, when we reach the limit. It's a FIFO (First In First Out) storage technique.\
-    We did not implement it ourselves since it wasn't a priority for us. With three abstracts per query we could still easily have a conversation of three answer+question without reaching the threshold. Anyway it is worth mentioning for a future developement, as this easily solvable limitation would otherwise harm our product's competitiveness on the market.
-- **Inclusion of metadata**: Our chatbot doesn't currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to inctroduce in the app interface hard coded boxes to filter on these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions.
-  - Possible solution \#1: \
-    We could have modified the prompts so that the chatbot responded differently when the user asks a question related to metadata. For instance, _"What were the developments made in 2006 for the cure of cancer?"_ 
-  - Possible solution \#2: \
-    Alternatively, we could have implemented a system where users could specify in the query to perform metadata filtering such as: _"[year=2006] What are the developments made in 2006 for the cure of cancer?"_ 
+#### I. Token Limits
 
-  Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In FAISS, the filtering occurs after retrieving the documents. For example, you can retrieve 1,000 documents and then apply the filtering criteria based on metadata. For BM25, there is no metadata-filtering support. In this context, Pinecone offers better support. \
-  To add some complications on top of this, it might have been difficult to implement a filtering criterion in the ensemble retriever,<span style="color:red"> **Are we sure of this? can't we inherit in this case?** </span>as it would have been necessary to modify the EnsembleRetriever class in LangChain.
+There are several token limits to consider. We efficiently handled the input token limit via chunking our documents. The context length token limit, however, is a bit more challenging. For our LLM, the maximum `context_len` is 8192 tokens ([Jiang et al., 2023](#mistral)). We currently reach this limit in longer conversations after a few questions. In the future, we would consider different strategies to save tokens and surpass this limitation:
 
-  In the end we didn't find worth it to invest more time on this and we rather turned our attention to more pressing tasks, but we recognise the great potential that this itegration could bring.
+- Shortening the prompt message and retrieved documents by deleting unnecessary words such as function words. 
 
-- **Fine tuning of the LLM** <span style="color:red"> **MISSING** I'm sorry I just realised I'm not up to date with this discussion and I don't want to say stupid stuff</span>
+- Creating summaries of retrieved documents and/or of the whole chat history. This could be done after every query or once the limit is reached, a summary of the whole conversation could be given as input to a new conversation. This solution requires carful consideration of suitable summary models.
 
-- **Including data from other domains**: Even in the medical field, our chatmodel only has access to a handful of abstracts. A very promising path lies ahead, if anyone would want to pick the project up and embed new source data on other domains.
+- Multithreading via [lightspeedGPT](https://github.com/andrewgcodes/lightspeedGPT) could be used to segment longer documents or chat history and process them in parallel. Answers would be collected and then assembled to a single answer. This would of course entail consideration about how to properly combine the multiple generated answers.
+
+Since this limitation was not a priority for us, we therefore limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
+
+#### II. Inclusion of Metadata
+
+Our chatbot does not currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to inctroduce in the app interface hard coded boxes to filter on these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions. For future work however, we would consider the following solutions:
+
+- We could modify the prompts so that the chatbot responded differently when the user asks a question related to metadata. For instance, _"What were the developments made in 2006 for the cure of cancer?"_ 
+
+- Alternatively, we could implement a system where users could specify in the query to perform metadata filtering such as: _"[year=2006] What are the developments made in 2006 for the cure of cancer?"_ 
+
+Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In FAISS, the filtering occurs after retrieving the documents. For example, you can retrieve 1,000 documents and then apply the filtering criteria based on metadata. For BM25, there is no metadata-filtering support. In this context, Pinecone offers better support.
+
+While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
+
+#### III. LLM Fine-Tuning
+<span style="color:red"> **MISSING**</span>
+
+
+#### IV. Inclusion of Other Domains
+
+Currently, our chatbot is limited to the biomedical field, more specifically to topics related to intelligence. However, a promising path lies ahead of us, as our RAG system can easily be expanded to include additional data from other fields. Adding new documents from the latest research is also theoretically straightforward. While we are currently limited to English documents, there may also be an extension to other languages in the future.
 
 # <a name="conclusion"></a>6. 💡 Conclusion
 <!-- 
@@ -532,6 +543,7 @@ Right now we cannot have more than <span style="color:red"> **???** </span> toke
 
 - <a name="TSDAE"></a>Wang, Kexin, Reimers, Nils & Gurevych, Iryna. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. [https://arxiv.org/abs/2104.06979](https://arxiv.org/abs/2104.06979)
 
+- <a name="mistral"></a>Jiang, Albert Q., Sablayrolles, Alexandre, Mensch, Arthur, Bamford, Chris, Chaplot, Devendra Singh, de las Casas, Diego, Bressand, Florian, Lengyel, Gianna, Lample, Guillaume, Saulnier, Lucile, Lavaud, Lélio Renard, Lachaux, Marie-Anne, Stock, Pierre, Le Scao, Teven, Lavril, Thibaut, Wang, Thomas, Lacroix, Timothée & El Sayed, William. (2023). Mistral 7B. [https://arxiv.org/pdf/2310.06825.pdf](https://arxiv.org/pdf/2310.06825.pdf)
 
 
 # <a name="appendix"></a>8. 💻 Appendix
