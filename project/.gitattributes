@@ -1,0 +1,2 @@
+chatbot/chunked_docs.pkl filter=lfs diff=lfs merge=lfs -text
+data/faiss_indices/** filter=lfs diff=lfs merge=lfs -text

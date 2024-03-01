@@ -18,12 +18,12 @@ Hence, the first thing to do is to install the missing packages in your python e
 
     # If you run on M1/M2 Macs
     pip install -r requirements-mps.txt
-    
+
     # For machines with support for Cuda
     pip install -r requirements-cuda.txt
 
 
-NOTE: We all run and tested on torch environment for ARM machines on Miniconda, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules on your own environment.
+NOTE: We all ran and tested on a Miniconda environment for ARM machines, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules in your own environment.
 
 ### 2) Embedding and LLM
 The Embedding model will be automatically downloaded from Huggingface's hub. It's public, thus it should not require any authentification token.
