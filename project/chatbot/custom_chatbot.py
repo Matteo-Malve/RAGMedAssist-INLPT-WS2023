@@ -383,10 +383,12 @@ class MedicalChatbot:
         response_documents = response.get('source_documents')
         if response_documents:
             base_url = "https://pubmed.ncbi.nlm.nih.gov/"
+            pmid_set = set() # to avoid duplicates
             pmid_urls = []
             for document in response_documents:
                 pmid = document.metadata.get('PMID')
-                if pmid:
+                if pmid and pmid not in pmid_set:
+                    pmid_set.add(pmid) # Add PMID to set to track uniqueness
                     pmid_urls.append(base_url + pmid)
             return pmid_urls
 
