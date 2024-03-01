@@ -3,11 +3,11 @@ from streamlit_chat import message
 import yaml
 
 # Streamlit app
-st.title("Pubmed chat")
+st.title("RAGMedAssist")
 
-from custom_chatbot import MedicalChatbot
+from project.chatbot.app.custom_chatbot import MedicalChatbot
 
-with open("cfg-matteo.yaml", "r") as file:
+with open("cfg.yaml", "r") as file:
         cfg = yaml.safe_load(file)
 
 chatbot = MedicalChatbot(cfg)

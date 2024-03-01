@@ -41,7 +41,7 @@ from langchain.retrievers.multi_query import MultiQueryRetriever
 from langchain.chains import TransformChain
 from langchain.chains import SequentialChain
 import logging
-from custom_retriever import CustomEnsembleRetriever
+from project.chatbot.app.custom_retriever import CustomEnsembleRetriever
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
