@@ -233,7 +233,7 @@ For each query, we also had the correct context, which was generated based on th
   <img src="./evaluation/compare_retrievers/images/success_percentage_plot.png" width="400"/>
 </p>
 
-Here, you can see the results in a table:
+Below, you can view the results presented in tables:
 
 **Results for FAISS:**
 
@@ -255,7 +255,7 @@ Here, you can see the results in a table:
 | k=4 | 0.2165 seconds | 36.1497 | 163 | 97.60% |
 | k=5 | 0.2098 seconds | 35.0408 | 164 | 98.20% |
 
-To sum up, FAISS satisfied all our needs and was faster than Pinecone. FAISS can retrieves ralavant documents only in 0.02 second. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
+In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
 
 
 ## <a name="evaluation"></a>4.3 📈 Evaluation 
