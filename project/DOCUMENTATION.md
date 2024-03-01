@@ -504,7 +504,11 @@ There are several token limits to consider. We efficiently handled the input tok
 
 Since this limitation was not a priority for us, we therefore limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
 
-#### II. Inclusion of Metadata
+### II. Chain of Thought Prompting
+
+Currently we are using a rather simple prompt, but in the future we would investigate the possibility of a Chain of Thought prompting. This instructs the LLM to solve a complex question step by step by making intermediate steps ("chains of thought") explicit. Instructions such as "Let's think step by step" are used to guide the model through the thought process. This can be particularly helpful for complex queries that require a step-by-step way of thinking. It should be stated that this kind of prompting can lead to longer answers, as the thought process is also output by the model, and could thus lead to reaching token limits. Moreover, the correctness of the thought process is not garantueed: while the model can generate a logically appearing thought process, it can still arrive at an incorrect conclusion. Lastly, this method is only useful for complex tasks and not required for simple yes/no questions. 
+
+#### III. Inclusion of Metadata
 
 Our chatbot does not currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to inctroduce in the app interface hard coded boxes to filter on these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions. For future work however, we would consider the following solutions:
 
@@ -516,11 +520,11 @@ Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In F
 
 While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
 
-#### III. LLM Fine-Tuning
+#### IV. LLM Fine-Tuning
 <span style="color:red"> **MISSING**</span>
 
 
-#### IV. Expansion to other Domains
+#### V. Expansion to other Domains
 
 Currently, our chatbot is limited to the biomedical field, more specifically to topics related to intelligence. However, a promising path lies ahead of us, as our RAG system can easily be expanded to include additional data from other fields. Adding new documents from the latest research is also theoretically straightforward. While we are currently limited to English documents, there may also be an extension to other languages in the future.
 
