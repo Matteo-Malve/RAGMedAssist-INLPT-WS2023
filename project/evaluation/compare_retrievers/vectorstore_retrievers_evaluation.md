@@ -14,21 +14,21 @@ The evaluation was conducted over a set of 167 queries, comparing the performanc
 
 | Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
 |--------|--------|-------|--------|-------|
-| k=1 | 0.0211 seconds | 3.5279 | 152 | 91.02% |
-| k=2 | 0.0209 seconds | 3.4897 | 158 | 94.61% |
-| k=3 | 0.0207 seconds | 3.4646 | 163 | 97.60% |
-| k=4 | 0.0207 seconds | 3.4566 | 163 | 97.60% |
-| k=5 | 0.0208 seconds | 3.4670 | 164 | 98.20% |
+| k=1 | 0.0236 seconds | 3.9481 | 152 | 91.02% |
+| k=2 | 0.0231 seconds | 3.8656 | 158 | 94.61% |
+| k=3 | 0.0246 seconds | 4.1032 | 163 | 97.60% |
+| k=4 | 0.0220 seconds | 3.6683 | 163 | 97.60% |
+| k=5 | 0.0212 seconds | 3.5427 | 164 | 98.20% |
 
 ###  Results for Pinecone
 
 | Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
 |--------|--------|-------|--------|-------|
-| k=1 | 0.2124 seconds | 35.4665 | 152 | 91.02% |
-| k=2 | 0.2247 seconds | 37.5285 | 159 | 95.21% |
-| k=3 | 0.2227 seconds | 37.1911 | 162 | 97.01% |
-| k=4 | 0.2232 seconds | 37.2780 | 163 | 97.60% |
-| k=5 | 0.2248 seconds | 37.5450 | 164 | 98.20% |
+| k=1 | 0.2125 seconds | 35.4944 | 152 | 91.02% |
+| k=2 | 0.2003 seconds | 33.4454 | 159 | 95.21% |
+| k=3 | 0.2309 seconds | 38.5603 | 162 | 97.01% |
+| k=4 | 0.2165 seconds | 36.1497 | 163 | 97.60% |
+| k=5 | 0.2098 seconds | 35.0408 | 164 | 98.20% |
 
 ## Performance Comparison
 
