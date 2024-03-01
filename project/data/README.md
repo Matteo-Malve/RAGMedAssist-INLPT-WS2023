@@ -26,6 +26,7 @@
 
 - 🗂️ [`preprocessing_and_analytics`](preprocessing_and_analytics): This folder contains code for pre-processing and analyzing our data.
 
+    - 📸 [`images`](preprocessing_and_analytics/images): Image folder containing all images related to our data analysis.
     - 💻 [`data_anaylitics.ipynb`](preprocessing_and_analytics/data_anaylitics.ipynb): This code analyzes our data and generates various plots.
     - 💻 [`preprocess_data.ipynb`](preprocessing_and_analytics/preprocess_data.ipynb): This code pre-processes and cleans our dataset.
     - 💽 [`processed_data_part1.csv`](preprocessing_and_analytics/processed_data_part1.csv): Part 1 of our pre-processed dataset.
