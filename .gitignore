@@ -7,3 +7,7 @@
 __pycache__/
 
 project/finetuning/gte-base-fine-tune
+
+project/chatbot/chunked_docs.pkl
+
+project/data/faiss_indices
