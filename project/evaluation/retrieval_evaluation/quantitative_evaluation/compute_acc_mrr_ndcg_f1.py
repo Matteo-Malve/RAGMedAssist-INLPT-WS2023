@@ -102,7 +102,6 @@ def compute_mrr(eval_path, file_name):
                 break
 
     mrr /= len(eval_queries)
-    print(mrr)
 
     # Save MRRs to a text file
     with open(f"retriever_MRR_{file_name}.txt", 'w') as f:
