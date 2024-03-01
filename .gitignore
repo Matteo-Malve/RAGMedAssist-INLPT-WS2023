@@ -5,6 +5,3 @@
 *.ipynb_checkpoints
 .env
 __pycache__/
-
-
-project/finetuning/gte-base-fine-tune
