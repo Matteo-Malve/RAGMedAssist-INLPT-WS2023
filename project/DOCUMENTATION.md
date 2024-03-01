@@ -378,7 +378,7 @@ On the quantitative side, we applied the inverse hyperbolic tangent function to 
 
 🥇 After carefully looking at everything, we add up the best scores — the ones we highlighted in bold blue — to get our final score. By taking all these steps, we’ve decided that `thenlper/gte-base` is our top pick for the best model.
 
-<img src="project/evaluation/qualitative_evaluation/images/evaluation_results.png" width="1000" />
+<img src="evaluation/retrieval_evaluation/qualitative_evaluation/images/evaluation_results.png" width="1000" />
 
 
 ### <a name="chatmodel-eval"></a>b) Evaluation of Chatmodel
