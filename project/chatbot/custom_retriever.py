@@ -7,6 +7,11 @@ from langchain_core.documents.base import Document
 
 
 class CustomEnsembleRetriever(EnsembleRetriever):
+    topk_rrf: int = 3
+
+    def __init__(self, topk_rrf: int = 3, **kwargs):
+        super().__init__(**kwargs)
+        self.topk_rrf = topk_rrf
 
     def rank_fusion(
         self,
@@ -80,5 +85,6 @@ class CustomEnsembleRetriever(EnsembleRetriever):
 
         # apply rank fusion
         fused_documents = self.weighted_reciprocal_rank(retriever_docs)
+        fused_documents = fused_documents[:self.topk_rrf]
 
         return fused_documents

@@ -20,6 +20,7 @@ ensemble:
   weights:
     - 0.5
     - 0.5
+  topk_rrf: 3
 
 
 llm_model:

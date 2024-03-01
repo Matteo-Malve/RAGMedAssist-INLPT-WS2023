@@ -19,6 +19,7 @@ ensemble:
   weights:
     - 0.4
     - 0.6
+  topk_rrf: 3
 
 
 llm_model:
