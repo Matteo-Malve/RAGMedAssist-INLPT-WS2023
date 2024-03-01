@@ -69,6 +69,8 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 -->
 - Leaderboard paper on embedding models
 - sth about Perplexity.ai ? (similar system to ours)
+- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was: \
+[Gordon V. Cormack, Charles L A Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval (SIGIR '09). Association for Computing Machinery, New York, NY, USA, 758–759. ](https://doi.org/10.1145/1571941.1572114)
 
 # <a name="approach"></a>3. ⚙️ Approach
 <!--
@@ -511,6 +513,12 @@ Through extensive testing with varying weights, we optimized the balance between
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
+During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and try out all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on thsis project again in the future, they would be surely topics we would address. At the same time they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
+
+- Token limit
+
+
+
 # <a name="conclusion"></a>6. 💡 Conclusion
 <!-- 
 - recap briefly main contributions
@@ -543,5 +551,5 @@ We would like to specify that the group had a good chemistry and we all worked t
 ## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
 <p align="left">
-  <img src="./docs/images/AntiPlagiat.png" width="700" />
+  <img src="./docs/images/AntiPlagiat.jpg" width="700" />
 </p>
