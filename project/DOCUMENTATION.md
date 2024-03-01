@@ -520,7 +520,7 @@ While we focused our attention on other issues, we recognise the great potential
 <span style="color:red"> **MISSING**</span>
 
 
-#### IV. Inclusion of Other Domains
+#### IV. Expansion to other Domains
 
 Currently, our chatbot is limited to the biomedical field, more specifically to topics related to intelligence. However, a promising path lies ahead of us, as our RAG system can easily be expanded to include additional data from other fields. Adding new documents from the latest research is also theoretically straightforward. While we are currently limited to English documents, there may also be an extension to other languages in the future.
 
