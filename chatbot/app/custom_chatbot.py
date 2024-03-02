@@ -135,22 +135,6 @@ class MedicalChatbot:
                            "score_threshold": self.cfg["retrievers"]["faiss"]["score_threshold"]})
 
 
-    # THis function is unused
-    def load_ensemble_retriever(self):
-        if self.ensemble_retriever is None:
-            ensemble_list = []
-            weights = self.cfg["ensemble"]["weights"]
-            for name, value in self.cfg["retrievers"].items():
-                retriever = self.load_retrievers(name)
-                ensemble_list.append(retriever)
-
-            if not ensemble_list:
-                raise ValueError("No valid retrievers were loaded.")
-            self.ensemble_retriever = EnsembleRetriever(retrievers=ensemble_list, weights=weights)
-
-        return self.ensemble_retriever
-
-
     def load_custom_ensemble_retriever(self):
         if self.ensemble_retriever is None:
             ensemble_list = []
