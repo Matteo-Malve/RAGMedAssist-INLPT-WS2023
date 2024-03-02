@@ -5,7 +5,7 @@ import yaml
 # Streamlit app
 st.title("RAGMedAssist")
 
-from project.chatbot.app.custom_chatbot import MedicalChatbot
+from chatbot.app.custom_chatbot import MedicalChatbot
 
 with open("cfg.yaml", "r") as file:
         cfg = yaml.safe_load(file)
