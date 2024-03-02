@@ -42,28 +42,14 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
 # <a name="introduction"></a>1. ➡️ Introduction
 
-Navigating the complexities of medical information, especially when it is laden with technical jargon, can be overwhelming yet essential for making critical health decisions. Our system bridges this gap by simplifying the intricate world of medical knowledge. It allows users to ask questions in everyday language and provides informed, understandable answers derived from a comprehensive medical dataset.
+Our chatbot is specifically designed for biomedical professionals seeking to navigate the vast and complex field of medical research and literature. It serves as an advanced tool for acquiring insights into specific studies, understanding the latest research on various topics, or evaluating the effectiveness of certain methods. Recognizing the value of source verification in the scientific community, our chatbot provides clickable links to the papers whose abstracts were used for answer generation. This feature enables users to delve deeper into their research, ensuring they have access to and can trust the foundational material.
 
-By also citing sources and providing clickable links to them, our system not only educates but also empowers users to verify and trust the information, facilitating more informed health decisions. The target audience for our project are indeed doctors and researchers of the medical field.
+Tailored to meet the needs of doctors, researchers, and other medical field experts, our chatbot simplifies the complex domain of medical knowledge into manageable, accessible information. Users can pose questions in everyday language and receive concise, clear answers that are directly sourced from a comprehensive database of medical literature, including over 60,000 PubMed article abstracts.
 
-Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. <span style="color:red"> Our innovative use of [Pinecone's](https://www.pinecone.io/) hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. </span>
+By integrating generative artificial intelligence (AI) with advanced Retrieval Augmented Generation (RAG) techniques, our chatbot exceeds the limitations of conventional keyword searches. It employs a sophisticated hybrid search algorithm that combines semantic retrieval — leveraging dense vector search for detecting relevance through cosine similarity — with precise keyword search to identify domain-specific terms. This dual approach ensures that our biomedical professional users are equipped with the most relevant, up-to-date, and accurate medical information available, facilitating informed decision-making and further research exploration.
 
-- outline of our approach 
+<span style="color:red"> **MISSING: outlook on results**</span>
 
-  <span style="color:red"> **MISSING**</span>
-
-- outlook on results
-
-  <span style="color:red"> **MISSING**</span>
-
-<!-- maybe it is best written at the end, since we don't know exactly what our results will be/which exact problem (students/professionals..) we address :D 
-
-I would not put the following in the introduction. I think it should only briefly outline our approach without technical details :) 
-
-"""as it will be better explained in sec.3 [Approach]. The code is entirely written in python and we make use of the incredible langchain lybrary.
-Before arriving at this point though, a huge amoutn of work was spent on the retrieval of the dataset, on the search of a good database and on the choice of the embedding model. The latter was supported by a big evaluation process, distinguished in two phases: quantitative and qualitative. More detailes are recorded in section 3 and in the README of the evaluation folder.
-[...]"""
--->
 
 # <a name="related-work"></a>2. 📚 Related Work
 <!--
@@ -72,13 +58,14 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
-Our chatbot application follows the Retrieval Augmented Generation (RAG) approach that combines pre-trained parametric and non-parametric memory for language generation tasks, thus allowing the model to access explicit knowledge sources and enabling them to generate enhanced, factual content ([Lewis et al., 2021](#RAG)). Having an effective retrieval system is crucial, as it determines the quality and relevance of the generated answer to the query. An influential work examining the efficacy of embedding models for retrieval tasks is "MTEB: Massive Text Embedding Benchmark" by [Muenninghoff et al., 2023](#MTEB). This paper presents an extensive framework for the evaluation of embedding models and addresses their limitations. It served as a key resource for us to survey available models, with a particular focus on those tailored for retrieval and semantic textual similarity tasks. The paper is directly connected to the [Hugging Face Massive Text Embedding Benchmark (MTEB) Leaderboard](https://huggingface.co/spaces/mteb/leaderboard). This platform enables researchers to benchmark text embeddings, comparing their effectiveness across an array of tasks and datasets, thus facilitating a deeper understanding of model capabilities and performance nuances. We used it as a foundational guide in selecting the most suitable embedding model for our needs.
+Our chatbot application follows the RAG approach that combines pre-trained parametric and non-parametric memory for language generation tasks, thus allowing the model to access explicit knowledge sources and enabling them to generate enhanced, factual content ([Lewis et al., 2021](#RAG)). Having an effective retrieval system is crucial, as it determines the quality and relevance of the generated answer to the query. An influential work examining the efficacy of embedding models for retrieval tasks is "MTEB: Massive Text Embedding Benchmark" by [Muenninghoff et al., 2023](#MTEB). This paper presents an extensive framework for the evaluation of embedding models and addresses their limitations. It served as a key resource for us to survey available models, with a particular focus on those tailored for retrieval and semantic textual similarity tasks. The paper is directly connected to the [Hugging Face Massive Text Embedding Benchmark (MTEB) Leaderboard](https://huggingface.co/spaces/mteb/leaderboard). This platform enables researchers to benchmark text embeddings, comparing their effectiveness across an array of tasks and datasets, thus facilitating a deeper understanding of model capabilities and performance nuances. We used it as a foundational guide in selecting the most suitable embedding model for our needs.
 
-A platform similar to our own is [Perplexity.ai](https://www.perplexity.ai/), a search engine leveraging NLP and machine learning to deliver precise and detailed responses to user inquiries. Notably, it supports attaching files to queries, enabling QA based on the content of those files. This feature mirrors an aspect of our system's capabilities, particularly in generating answers from provided information. However, our system distinguishes itself by autonomously identifying and extracting relevant sources, thereby simplifying user interaction. This reduces complexity for the user and introduces them to potentially unknown but valuable information sources, enhancing the overall search and discovery experience.
+A platform similar to our own is [Perplexity.ai](https://www.perplexity.ai/), a search engine leveraging NLP and machine learning to deliver precise and detailed responses to user inquiries. Notably, it supports attaching files to queries, enabling QA based on the content of those files. This feature mirrors an aspect of our system's capabilities, particularly in generating answers from provided information. Another similarity is the provision of sources: Perplexity.ai, much like our application, presents its sources through clickable links. However, a notable distinction emerges upon closer examination, as illustrated in the screenshot below. Often, Perplexity.ai's sources span a broad spectrum, including non-scientific references, whereas our chatbot exclusively utilizes scientific sources. This deliberate choice ensures our platform is finely tuned to meet the needs of medical professionals who depend on trustworthy information for their research and decision-making processes.
+<p align="left">
+  <img src="organization_and_documentation/images/perplexity.png" width="400" />
+</p>
 
 - <span style="color:red"> **Elaborate**</span> A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriever and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
-
-- <span style="color:red"> **MISSING**</span>
 
 # <a name="approach"></a>3. ⚙️ Approach
 <!--
@@ -594,5 +581,5 @@ Some important notes:
 ## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
 <p align="left">
-  <img src="presentation_materials/AntiPlagiat.jpg" width="700" />
+  <img src="organization_and_documentation/images/AntiPlagiat.jpg" width="700" />
 </p>
