@@ -582,5 +582,5 @@ We would like to specify that the group had a good chemistry and we all worked t
 ## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
 <p align="left">
-  <img src="./docs/images/AntiPlagiat.jpg" width="700" />
+  <img src="presentation_materials/AntiPlagiat.jpg" width="700" />
 </p>
