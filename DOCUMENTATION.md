@@ -67,6 +67,10 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
+Our chatbot application follows the Retrieval Augmented Generation (RAG) approach that combines pre-trained parametric and non-parametric memory for language generation tasks, thus allowing the model to access explicit knowledge sources and enabling them to generate enhanced, factual content ([Lewis et al., 2021](#RAG)).
+
+A system similar to ours is [Perplexity.ai](https://www.perplexity.ai/), a web serach engine that utilizes natural language processing and machine learning to provide accurate and comprehensive answers to user queries. Besides answering arbitrary questions, files can be attached to queries, on which questions can be asked. In this regard, it has a similar functionality to our system, as it also enables answer generation based on provided information. However, our system automatically extracts the relevant sources and users don't have to provide them themselves. It is thus less complex to use and offers information on sources one might not know before. 
+
 - Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
 - sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
 - A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriever and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
@@ -449,18 +453,18 @@ For the last two queries we considered instead:
 Clearly the penalties were weighted differently depending on the severity. This will be clear in the presentation of the results.
 
 <p align="left">
-  <img src="./docs/images/prompt-engineering_table_analysis.png" width="700"/>
+  <img src="evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_table_analysis.png" width="700"/>
 </p>
 
 Moreover we noted and wrote down some trends in the quality and nature of the answers.
 <p align="left">
-  <img src="./docs/images/prompt-engineering_annotations.png" width="600"/>
+  <img src="evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_annotations.png" width="600"/>
 </p>
 
 **Interpretation of the Results:** Summing all the entries of the previous table, we obtained the following penalty scores:
 
 <p align="left">
-  <img src="./docs/images/prompt-engineering_penalty-scores.png" width="600"/>
+  <img src=".evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_penalty-scores.png" width="600"/>
 </p>
 
 As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
@@ -546,7 +550,7 @@ Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In F
 While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
 
 #### IV. LLM Domain-Specific Fine-Tuning
-Before using MistralAI's Mistral-7B-Instruct-v0.1, we experimented with 
+Before using MistralAI's Mistral-7B-Instruct-v0.1 <span style="color:red"> **add links**</span>, we experimented with 
 Microsoft's Phi-2. Phi-2 is a base model, and we noticed that the LLM sometimes 
 generated code or completed the given user input instead of providing the 
 instructive response we were expecting for our queries. This led us to switch 
@@ -581,6 +585,8 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 - <a name="LDA"></a>Blei, David M., Ng, Andrew Y. & Jordan, Michael I. (2003). Latent Dirichlet Allocation. *Journal of Machine Learning Research*, 3, 993–1022. [https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
 
 - <a name="mistral"></a>Jiang, Albert Q., Sablayrolles, Alexandre, Mensch, Arthur, Bamford, Chris, Chaplot, Devendra Singh, de las Casas, Diego, Bressand, Florian, Lengyel, Gianna, Lample, Guillaume, Saulnier, Lucile, Lavaud, Lélio Renard, Lachaux, Marie-Anne, Stock, Pierre, Le Scao, Teven, Lavril, Thibaut, Wang, Thomas, Lacroix, Timothée & El Sayed, William. (2023). Mistral 7B. [https://arxiv.org/pdf/2310.06825.pdf](https://arxiv.org/pdf/2310.06825.pdf)
+
+- <a name="RAG"></a>Lewis, Patrick, Perez, Ethan, Piktus, Aleksandra, Petroni, Fabio, Karpukhin, Vladimir, Goyal, Naman, Küttler, Heinrich, Lewis, Mike, Yih, Wen-tau, Rocktäschel, Tim, Riedel, Sebastian & Kiela, Douwe. (2021). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. [https://arxiv.org/abs/2005.11401](https://arxiv.org/abs/2005.11401)
 
 - <a name="stopwords"></a>Miyajiwala, Aamir, Ladkat, Arnav, Jagadale, Samiksha & Joshi, Raviraj. (2022). On Sensitivity of Deep Learning Based Text Classification Algorithms to Practical Input Perturbations. *Intelligent Computing*, 613–626. Springer International Publishing. [https://doi.org/10.1007/978-3-031-10464-0_42](https://doi.org/10.1007/978-3-031-10464-0_42)
 
