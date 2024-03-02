@@ -174,16 +174,17 @@ The response to a given user query is generated using the methods `generate_resp
 
 - **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research (see [`link code`]()). Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
 
-- <span style="color:red"> **ADD MORE POINTS**</span>
+- <span style="color:red"> **ADD MORE POINTS, Matteo: Maybe citing again without details the Ensemble retrieval and or the different chains?**</span>
 
 ## <a name="baselines"></a>3.3 Baselines
 
+<span style="color:red"> **MISSING or we REMOVE IT**</span>
 
 ## <a name="fine-tuning"></a>3.4 Fine-Tuning
 
 After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
-Upon further consultation with our advisor though, we decided not to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
+Upon further consultation with our advisor though, we decided to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
@@ -241,7 +242,9 @@ Firstly, we compared the execution time of both retrievers. It turned out that F
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
-💡 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
+💡 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. On the other hand, Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, however these extra functions can only be accessed with a paid account.
+
+<span style="color:red"> **They might criticize than pinecone can be used locally as well. If I'm not mistaken**</span>
 
 ## <a name="evaluation"></a>4.3 📈 Evaluation 
 <!-- 
@@ -316,6 +319,8 @@ The following plots are again arranged in descending order, based on the perform
   <img src="evaluation/retrieval_evaluation/quantitative_evaluation/images/keyword_search_bm25_F1.png" width="300" /> 
 </p>
 
+<span style="color:red"> **Would it be to much work to merge all these graphs into one with lines in different colors and a legend? I realised only now, reading everything through that they are not super clear**</span>
+
 **MRR:** For MRR, the consideration of varying k is not applicable because the metric is singularly focused on how well a system ranks the first piece of relevant information - whether that relevant item appears at rank 1 or any other position. MRR captures this by measuring the average inverse rank of the first relevant document across all queries. Our results show that on average, the first relevant or correct answer tends to be very close to the top position in the search results, with `thenlper_gte-base` repeatedly displaying top performance, emphasizing its capability in not just identifying relevant documents but also in ranking the most relevant document as close to the top position as possible, which is important for retrieval systems. The baseline in contrast has a much lower score.
 
 |    **MRR**                   |     |
@@ -352,7 +357,7 @@ Detailed results can be found here: [`qualitative_evaluation_table.xlsx`](evalua
 
 We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx).
 
-Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. RESULTS ...
+Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. <span style="color:red"> **RESULTS ...**</span> 
 
 In a next step, we investigated the order of the retrieved results and chose for each query the model that had the most effective ordering of the top three documents. Here, our attention was mainly on the firstly and secondly retrieved documents. We aggregate the scores for each model based on the frequency with which it was perceived as the best in terms of the order in which it presented its retrieval results. 
 
@@ -367,7 +372,8 @@ On the quantitative side, we applied the inverse hyperbolic tangent function to 
 
 ### <a name="chatmodel-eval"></a>b) Evaluation of Chatmodel
 
-We evaluated the various parameters and configurations of our model(s)...
+We evaluated the various parameters and configurations of our model(s)... <span style="color:red"> **INCOMPLETE**</span> 
+
 
 To ensure consistency in our evaluation, we selected a set of 10 evaluation questions: 5 were randomly chosen from our QA evaluation dataset, covering a range of medical fields. The other 5 were generated by ChatGPT-4, prompted to create general questions on intelligence topics based on an initial list of 50 questions from the QA dataset. We lastly added 2 unrelated questions about movies and football. This mix aims to assess the model's ability to handle diverse medical topics and its tendency to hallucinate or acknowledge gaps in its knowledge. The questions can be found [here](evaluation/llm_evaluation/EVAL_QUESTIONS.md).
 
@@ -404,7 +410,7 @@ Answer:
 """
 ```
 
-In general, the "`_short`" version of a template is identical to the base version, which contains an additional request of concision.
+In general, the "`_short`" version of a template is identical to the base version, but it contains an additional request for concision.
 
 In a thorough evaluation, we ran the 17 different queries selected for this purpose (as described above) on all of them. The answers were orderly formatted in markdown and then manually analyzed.
 
@@ -432,15 +438,16 @@ Moreover we noted and wrote down some trends in the quality and nature of the an
 **Interpretation of the Results:** Summing all the entries of the previous table, we obtained the following penalty scores:
 
 <p align="left">
-  <img src=".evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_penalty-scores.png" width="600"/>
+  <img src="evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_penalty-scores.png" width="600"/>
 </p>
 
-As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
+As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrated some light tendencies to hallucinate. To be fair, this test was run while the [Similarity Score Threshold feature](#v-innovative-aspects--technical-choices) was still under developement, meaning that we now have in the final product another safety margin, that leaves us confident in our choice. \
+Anyways, we always had a fallback plan available, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate.
 
 
 #### II. Hybrid Search Weights
 
-Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer (see [`compute_bleu_rouge_bertscore.ipynb`](evaluation/llm_evaluation/hybrid_search/compute_bleu_rouge_bertscore.ipynb)). Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
+Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer (see [`compute_bleu_rouge_bertscore.ipynb`](evaluation/llm_evaluation/hybrid_search/compute_bleu_rouge_bertscore.ipynb)). Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs.
 
 <p align="left">
   <img src="evaluation/llm_evaluation/hybrid_search/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
@@ -462,7 +469,7 @@ Below is an example of the differing answer types:
 
 #### IV. Handling Edge Cases with Different Similarity Thresholds
 
-This study evaluates a medical chatbot's ability to handle a variety of edge case questions across five categories: Unrelated Queries, Queries in Other Languages, One-Word Queries, Very Long Queries, Poorly Structured Queries, and Medical Questions (Non-Edge). We generated four questions for each category using ChatGPT and analyzed the chatbot's responses under six similarity score thresholds: 0.74, 0.77, 0.80, 0.83, 0.86, and 0.89. The chatbot was programmed to respond with a default message when no relevant documents were retrieved due to the threshold settings.
+This study evaluates our medical chatbot's ability to handle a variety of edge case questions across five categories: Unrelated Queries, Queries in Other Languages, One-Word Queries, Very Long Queries, Poorly Structured Queries, and Medical Questions (Non-Edge). We generated four questions for each category using ChatGPT and analyzed the chatbot's responses under six similarity score thresholds: 0.74, 0.77, 0.80, 0.83, 0.86, and 0.89. The chatbot was programmed to respond with a default message when no relevant documents were retrieved due to the threshold settings.
 
 A summary table was created to display the number of questions that received at least one document above the threshold, thereby avoiding the default message ("Sorry, but I don't know as my capabilities are focused on medical assistance"), across the various thresholds. This comparative analysis aims to identify the threshold that strikes an optimal balance between answering accurately and acknowledging when it shouldn't provide a response based on our documents.
 
@@ -477,7 +484,7 @@ A summary table was created to display the number of questions that received at 
 | 0.89                 | 0 / 4             | 0 / 4                      | 0 / 4            | 0 / 4             | 0 / 4                     | 1 / 4                      |
 
 
-The thresholds between 0.77 and 0.83 appear to be the most effective, particularly in distinguishing unrelated and complex queries from relevant medical questions. Additionally, the analysis of responses to edge questions indicates that the model is adept at identifying irrelevant document retrievals, especially for queries in other languages.
+💡 The thresholds between 0.77 and 0.83 appear to be the most effective, particularly in distinguishing unrelated and complex queries from relevant medical questions. Additionally, the analysis of responses to edge questions indicates that the model is skilled at identifying irrelevant document retrievals, especially for queries in other languages.
 
 For detailed results and model-generated responses for all queries across all thresholds, refer to the [edge question analysis documentation](../evaluation/llm_evaluation/edge_cases/results/edge_questions_analysis.md).
 
@@ -504,11 +511,11 @@ For detailed results and model-generated responses for all queries across all th
 - does baseline succeeds/fails in same cases?
 - use examples & metrics to underline our points instead of stating unproven points
 -->
-<span style="color:red"> **MISSING**</span>
+<span style="color:red"> **MISSING or we can delete the section**</span>
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
-During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and try out all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on thsis project again in the future, they would be surely topics we would address. At the same time, they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
+During the span of this project we had many itneresting ideas, but, unfrotunately, due to time and resources' constrains, we couldn't implement and experiment with all of them. Moreover, we are aware of some limitations in this release. Here we want to openly recognise them, discuss them and introduce the reader to some possible hypothetical solutions we devised. If we had a chance to work on this project again in the future, they would be surely topics we would address. At the same time, they can be inspiration for future work if someone else wanted to pick up our pjocect for further developement in the future.
 
 #### I. Token Limits
 
@@ -520,7 +527,7 @@ There are several token limits to consider. We efficiently handled the input tok
 
 - Multithreading via [lightspeedGPT](https://github.com/andrewgcodes/lightspeedGPT) could be used to segment longer documents or chat history and process them in parallel. Answers would be collected and then assembled to a single answer. This would of course entail consideration about how to properly combine the multiple generated answers.
 
-Since this limitation was not a priority for us, we therefore limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
+Since this limitation was not a priority for us, we limited ourselves for the time being to reducing the context provided to two <span style="color:red"> **Weren't we using three?**</span> documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
 
 #### II. Chain of Thought Prompting
 
@@ -528,15 +535,14 @@ Currently we are using a rather simple prompt, but in the future we would invest
 
 #### III. Inclusion of Metadata
 
-Our chatbot does not currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to inctroduce in the app interface hard coded boxes to filter on these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions. For future work however, we would consider the following solutions:
+Our chatbot does not currently make use of the rich ammount of metadata coming with the abstracts, most notably the authors' names and the publication dates. It was not our intention to introduce archive-style's text boxes in the UI to filter these kind of requirements, as we wanted our product to be a simple chatbot rather than a search engine. Therefore we could only rely on capturing the metadata from the user's questions. For future work however, we would consider the following solutions:
 
-- We could modify the prompts so that the chatbot responded differently when the user asks a question related to metadata. For instance, _"What were the developments made in 2006 for the cure of cancer?"_ 
+- We could modify the prompts so that the chatbot would respond differently when the user asks a question related to metadata. For instance, _"What were the developments made in 2006 for the cure of cancer?"_ 
 
 - Alternatively, we could implement a system where users could specify in the query to perform metadata filtering such as: _"[year=2006] What are the developments made in 2006 for the cure of cancer?"_ 
 
 Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In FAISS, the filtering occurs after retrieving the documents. For example, you can retrieve 1,000 documents and then apply the filtering criteria based on metadata. For BM25, there is no metadata-filtering support. In this context, Pinecone offers better support.
-
-While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
+Although we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
 
 #### IV. LLM Domain-Specific Fine-Tuning
 Before using [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1), we experimented with 
@@ -565,7 +571,7 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 - briefly give insights what was learned during this project
 -->
 
-***
+<span style="color:red"> **MISSING or we can delete the section**</span>
 
 # <a name="references"></a>7. References
 
@@ -589,7 +595,7 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 
 ## <a name="contributions"></a>8.1 🧑🏻‍🎓 Contributions
 
-As areed with our tutor, please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. \
+As agreed with our tutor, please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. \
 Tasks have been put in chronological order, if you access the "list view", it will look like this (here is a screenshot of less than half of it):
 <p align="left">
   <img src="./organization_and_documentation/images/asana.png" width="700" />
@@ -598,7 +604,7 @@ Tasks have been put in chronological order, if you access the "list view", it wi
 
 Some important notes:
 - The access was granted to our supervisor already during the project
-- We subdivided jobs in very small tasks. Nobody took charge of the whole chatbot, rather we built it up brick by brick together.
+- We subdivided jobs in very small tasks. Nobody took charge of the entirety of major feature, rather we built it up brick by brick together.
 - As a consequence, we all have a complete understanding of every aspect of the code. We worked as team.
 - The group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
 
