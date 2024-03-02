@@ -8,8 +8,6 @@
 
     - 💻 [`custom_retriever.py`](app/custom_chatbot.py): Overwrites LangChain's `EnsembleRetriever` to perform rank fusion of documents retrieved by multiple retrievers.
 
-    - 💻 [`multi_query_retrieval_helper.py`](app/multi_query_retrieval_helper.py): Additional code for multi-query retrieval.
-
 - 🗂️ [`frontend`](frontend): This folder contains the code for our frontend web application.
 
     - 💻 [`app_launcher.ipynb`](frontend/app_launcher.ipynb): Launches the web application.
