@@ -67,10 +67,16 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
+<<<<<<< HEAD:project/DOCUMENTATION.md
 - Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
 - sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
 - A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was: \
 [Gordon V. Cormack, Charles L A Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval (SIGIR '09). Association for Computing Machinery, New York, NY, USA, 758–759. ](https://doi.org/10.1145/1571941.1572114)
+=======
+- Leaderboard paper on embedding models
+- sth about Perplexity.ai ? (similar system to ours)
+- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
+>>>>>>> 058dc62e35f5d4eda55299977706fb7e713d4626:DOCUMENTATION.md
 
 - <span style="color:red"> **MISSING**</span>
 
@@ -140,6 +146,29 @@ We integrated Langchain's `EnsembleRetriever` into our search framework to make 
 Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
 
 #### IV. Chatmodel Configuration & Integration
+
+
+The `MedicalChatbot` utilizes Retrieval-Augmented Generation (RAG) to process and respond to user queries. We have implemented three types of question-answering chains to cater to different user expectations. For each chain, the following instances are initialized in `MedicalChatbot`:
+
+- **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in `cfg.yaml`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
+
+- **`retriever`**: We used an `Ensemble Retriever` combining a sparse retriever (bm25) and a dense retriever using faiss with a similarity score threshold. 
+
+- **`PromptTemplate`**: This is dependent on the specific chain, providing instructions to the LLM on how to handle the given input and retrieved context.
+
+The chains operate independently from each other and are as follows:
+
+- **Retrieval QA Chain**: This chain first performs a retrieval step to fetch relevant documents, then passes those documents to an LLM to generate a response.
+
+- **Conversational Retrieval QA Chain**: This chain is used for conversations. It takes in a question and previous conversation history. The length of the conversation history can be adjusted in `cfg.yaml`, which is set to 2 by default. If there is previous conversation history, it uses an LLM to rewrite the conversation into a query to send to a retriever (otherwise, it just uses the latest user input). It then fetches those documents and passes them (along with the conversation) to an LLM to respond.
+
+- **Multi-Query Retrieval QA Chain**: This is the most sophisticated among the chains. It is designed to handle complex queries that may not have straightforward answers or require synthesizing information from multiple sources. The chain breaks down the original query into sub-queries (three in our case), retrieves information relevant to each sub-query, and then combines this information to generate a comprehensive response. This process involves several steps:
+  - **Multi-Query Retrieval**: In this step, `MultiQueryRetriever` generates three different sub-queries using the LLM to offer different perspectives for a given user input query. For each query, it retrieves a set of relevant documents.
+  - **Retrieval Transformation**: The retrieved documents are transformed into a format suitable for the language model to process.
+  - **Response Generation**: Utilizes the language model to synthesize the information into a coherent and comprehensive answer.
+
+The response to a given user query is generated using the methods `generate_response`, `generate_response_with_conversational`, and `generate_response_with_multi_query`. These methods check before calling the LLM if the dense retriever with a similarity score threshold can retrieve any documents above the threshold. If not, we generate a response with the result "Sorry, but I don't know as my capabilities are focused on medical assistance". The methods can return the raw response generated by the LLM or decorate it with HTML tags and add metadata information about source documents to present them in an elegant format in our UI.
+
 
 #### V. Innovative Aspects & Technical Choices
 
@@ -556,13 +585,16 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 
 # <a name="references"></a>7. References
 
+- <a name="RRF"></a>Cormack, Gordon V., Clarke, Charles L. A., & Buettcher, Stefan. (2009). Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods. *Proceedings of the 32nd International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR '09)*, 758–759. Association for Computing Machinery, New York, NY, USA. [https://doi.org/10.1145/1571941.1572114](https://doi.org/10.1145/1571941.1572114)
+
 - <a name="LDA"></a>Blei, David M., Ng, Andrew Y. & Jordan, Michael I. (2003). Latent Dirichlet Allocation. *Journal of Machine Learning Research*, 3, 993–1022. [https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
+
+- <a name="mistral"></a>Jiang, Albert Q., Sablayrolles, Alexandre, Mensch, Arthur, Bamford, Chris, Chaplot, Devendra Singh, de las Casas, Diego, Bressand, Florian, Lengyel, Gianna, Lample, Guillaume, Saulnier, Lucile, Lavaud, Lélio Renard, Lachaux, Marie-Anne, Stock, Pierre, Le Scao, Teven, Lavril, Thibaut, Wang, Thomas, Lacroix, Timothée & El Sayed, William. (2023). Mistral 7B. [https://arxiv.org/pdf/2310.06825.pdf](https://arxiv.org/pdf/2310.06825.pdf)
 
 - <a name="stopwords"></a>Miyajiwala, Aamir, Ladkat, Arnav, Jagadale, Samiksha & Joshi, Raviraj. (2022). On Sensitivity of Deep Learning Based Text Classification Algorithms to Practical Input Perturbations. *Intelligent Computing*, 613–626. Springer International Publishing. [https://doi.org/10.1007/978-3-031-10464-0_42](https://doi.org/10.1007/978-3-031-10464-0_42)
 
 - <a name="TSDAE"></a>Wang, Kexin, Reimers, Nils & Gurevych, Iryna. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. [https://arxiv.org/abs/2104.06979](https://arxiv.org/abs/2104.06979)
 
-- <a name="mistral"></a>Jiang, Albert Q., Sablayrolles, Alexandre, Mensch, Arthur, Bamford, Chris, Chaplot, Devendra Singh, de las Casas, Diego, Bressand, Florian, Lengyel, Gianna, Lample, Guillaume, Saulnier, Lucile, Lavaud, Lélio Renard, Lachaux, Marie-Anne, Stock, Pierre, Le Scao, Teven, Lavril, Thibaut, Wang, Thomas, Lacroix, Timothée & El Sayed, William. (2023). Mistral 7B. [https://arxiv.org/pdf/2310.06825.pdf](https://arxiv.org/pdf/2310.06825.pdf)
 
 
 # <a name="appendix"></a>8. 💻 Appendix
