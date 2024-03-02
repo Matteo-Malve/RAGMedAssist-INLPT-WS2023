@@ -339,8 +339,8 @@ class MedicalChatbot:
         return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_conversational(self, user_query, return_raw=False):
-        if self.check_no_docs_retrieved(user_query):
-            return self.no_docs_response(user_query, return_raw)
+        # if self.check_no_docs_retrieved(user_query):
+        #     return self.no_docs_response(user_query, return_raw)
 
         max_history_length = self.cfg["conversational_chain"]["conversation_depth"]
         conversation_history = self.conversational_chat_history[-max_history_length:]

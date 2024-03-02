@@ -6,7 +6,7 @@ retrievers:
   faiss :
       faiss_index_path: "../../data/embeddings/faiss_indices/"
       search_type: "similarity_score_threshold"
-      score_threshold: 0.77
+      score_threshold: 0.70
       topk: 2
 
 #  pinecone :
