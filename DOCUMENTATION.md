@@ -460,6 +460,27 @@ Below is an example of the differing answer types:
 |----------|----------------------|---------------------|
 | *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_RAG.png) | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_gpt.png) |
 
+#### IV. Handling Edge Cases with Different Similarity Thresholds
+
+This study evaluates a medical chatbot's ability to handle a variety of edge case questions across five categories: Unrelated Queries, Queries in Other Languages, One-Word Queries, Very Long Queries, Poorly Structured Queries, and Medical Questions (Non-Edge). We generated four questions for each category using ChatGPT and analyzed the chatbot's responses under six similarity score thresholds: 0.74, 0.77, 0.80, 0.83, 0.86, and 0.89. The chatbot was programmed to respond with a default message when no relevant documents were retrieved due to the threshold settings.
+
+A summary table was created to display the number of questions that received at least one document above the threshold, thereby avoiding the default message ("Sorry, but I don't know as my capabilities are focused on medical assistance"), across the various thresholds. This comparative analysis aims to identify the threshold that strikes an optimal balance between answering accurately and acknowledging when it shouldn't provide a response based on our documents.
+
+
+| Similarity Threshold | Unrelated Queries | Queries in Other Languages | One-Word Queries | Very Long Queries | Poorly Structured Queries | Medical Queries (Non-Edge) |
+|----------------------|-------------------|----------------------------|------------------|-------------------|---------------------------|----------------------------|
+| 0.74                 | 0 / 4             | 3 / 4                      | 4 / 4            | 3 / 4             | 2 / 4                     | 4 / 4                      |
+| 0.77                 | 0 / 4             | 3 / 4                      | 4 / 4            | 3 / 4             | 0 / 4                     | 4 / 4                      |
+| 0.80                 | 0 / 4             | 2 / 4                      | 3 / 4            | 2 / 4             | 0 / 4                     | 4 / 4                      |
+| 0.83                 | 0 / 4             | 0 / 4                      | 2 / 4            | 2 / 4             | 0 / 4                     | 4 / 4                      |
+| 0.86                 | 0 / 4             | 0 / 4                      | 0 / 4            | 1 / 4             | 0 / 4                     | 2 / 4                      |
+| 0.89                 | 0 / 4             | 0 / 4                      | 0 / 4            | 0 / 4             | 0 / 4                     | 1 / 4                      |
+
+
+The thresholds between 0.77 and 0.83 appear to be the most effective, particularly in distinguishing unrelated and complex queries from relevant medical questions. Additionally, the analysis of responses to edge questions indicates that the model is adept at identifying irrelevant document retrievals, especially for queries in other languages.
+
+For detailed results and model-generated responses for all queries across all thresholds, refer to the [edge question analysis documentation](../evaluation/llm_evaluation/edge_cases/results/edge_questions_analysis.md).
+
 
 <!-- 
 ## 4.3 Experimental Details
