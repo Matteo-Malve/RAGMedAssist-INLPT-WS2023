@@ -4,8 +4,8 @@
 
 | Name and surname    | Matric. Nr. | Course of study                            |   e-mail address   |
 |:--------------------|:------------|:-------------------------------------------|:-------------------|
-| Matteo Malvestiti | 4731243     | M.Sc. Data and Computer science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
-| Sandra Friebolin | 3175035     | B.Sc. Computational linguistics | sandra_friebolin@proton.me |
+| Matteo Malvestiti | 4731243     | M.Sc. Data and Computer Science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
+| Sandra Friebolin | 3175035     | B.Sc. Computational Linguistics | sandra_friebolin@proton.me |
 | Yusuf Berber | 4736316     | M.Sc. Data and Computer Science <span style="color:red"> **(?)** </span> | yusuf.berber@stud.uni-heidelberg.de |
 
 
@@ -46,7 +46,7 @@ Navigating the complexities of medical information, especially when it is laden 
 
 By also citing sources, our system not only educates but empowers users to verify and trust the information, facilitating more informed health decisions. The target audience for our project is [...]
 
-Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. Our innovative use of Pinecone's hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. 
+Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. Our innovative use of [Pinecone's](https://www.pinecone.io/) hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. 
 
 - outline of our approach 
 - outlook on results
@@ -67,16 +67,10 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
-<<<<<<< HEAD:project/DOCUMENTATION.md
 - Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
 - sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
 - A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was: \
 [Gordon V. Cormack, Charles L A Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval (SIGIR '09). Association for Computing Machinery, New York, NY, USA, 758–759. ](https://doi.org/10.1145/1571941.1572114)
-=======
-- Leaderboard paper on embedding models
-- sth about Perplexity.ai ? (similar system to ours)
-- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
->>>>>>> 058dc62e35f5d4eda55299977706fb7e713d4626:DOCUMENTATION.md
 
 - <span style="color:red"> **MISSING**</span>
 
@@ -91,7 +85,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 
 ## <a name="data-processing"></a>3.1 ✂️ Data Processing
 
-Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocess_data.ipynb)):
+Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocessing_and_analytics/preprocess_data.ipynb)):
 
 ✅ **Removing Special Characters:** This includes stripping out unnecessary punctuation, symbols, or special characters that are not relevant to the analysis or could interfere with the model's understanding of the text. We apply this step to to enhance data consistency and reduce noise, thereby improving model focus and efficiency.
 
@@ -143,16 +137,16 @@ This way we transformed our collection of 58,535 original abstracts into 62,615 
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
-Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
+Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/app/cfg.yaml).
 
 #### IV. Chatmodel Configuration & Integration
 
 
 The `MedicalChatbot` utilizes Retrieval-Augmented Generation (RAG) to process and respond to user queries. We have implemented three types of question-answering chains to cater to different user expectations. For each chain, the following instances are initialized in `MedicalChatbot`:
 
-- **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in `cfg.yaml`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
+- **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in [`cfg.yaml`](chatbot/app/cfg.yaml)`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
 
-- **`retriever`**: We used an `Ensemble Retriever` combining a sparse retriever (bm25) and a dense retriever using faiss with a similarity score threshold. 
+- **`retriever`**: We used an `Ensemble Retriever` combining a sparse retriever (bm25) and a dense retriever using [FAISS](https://ai.meta.com/tools/faiss/) with a similarity score threshold.
 
 - **`PromptTemplate`**: This is dependent on the specific chain, providing instructions to the LLM on how to handle the given input and retrieved context.
 
@@ -177,9 +171,9 @@ The response to a given user query is generated using the methods `generate_resp
 
 ## <a name="fine-tuning"></a>3.4 Fine-Tuning
 
-After developing and evaluating the embedding models for our retrieval system, we initially opted against finetuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored finetuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of finetuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is finetuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
+After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
-Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
+Upon further consultation with our advisor though, we decided not to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
@@ -200,7 +194,7 @@ The documents in the dataset follow a structured format typical of biomedical li
 The metadata selected for our project encompasses the authors, title, date, and DOI of each document, as illustrated in this data point example:
 
 <p align="left">
-  <img src="./docs/images/datapoint_example.png" width="700" />
+  <img src="data/preprocessing_and_analytics/images/datapoint_example.png" width="700" />
 </p>
 
 The abstracts, serving as the core of our dataset, will be utilized by our retrieval system to identify and present the most pertinent documents in response to user queries, thereby forming the basis for generating informed and accurate answers by our chosen LLM. Metadata such as the DOI not only aids in establishing the credibility and context of the research but also enables our system to link directly to the source in the answers it generates - an additional functionality of our system.
@@ -211,9 +205,9 @@ We acquired the data on January 4, 2024, via the `BioPython Entrez` API, which i
 query = f"intelligence[Title/Abstract] AND (\"{year}/{month_start}\"[Date -  Publication] : \"{year}/{month_end}\"[Date - Publication])"
 ```
 
-We downloaded the data in XML format and segmented the retrieval quarterly across different years to sequentially gather the required dataset in manageable batches, ensuring comprehensive data collection without overstepping the API's limitations. See [`download_pubmed_data.ipynb`](data/download_pubmed_data.ipynb) for details.
+We downloaded the data in XML format and segmented the retrieval quarterly across different years to sequentially gather the required dataset in manageable batches, ensuring comprehensive data collection without overstepping the API's limitations. See [`download_pubmed_data.ipynb`](data/original_pubmed_data/download_pubmed_data.ipynb) for details.
 
-Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/data_anaylitics.ipynb)).
+Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/preprocessing_and_analytics/data_anaylitics.ipynb)).
 
 | Aspect | Plot | Explanation |
 |--------------|-------------------------------|---------------------|
@@ -226,12 +220,12 @@ Following the data preprocessing steps, we conducted an in-depth analysis to ext
 
 ## <a name="vectorstore"></a>4.2 📥 Vector Database
 
-We compared two vector databasesm FAISS (local) and Pinecone (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the following metrics:
+We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (local) and [Pinecone](https://www.pinecone.io/) (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the following metrics:
 
 Firstly, we compared the speed of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
 
 <p align="left">
-  <img src="./evaluation/compare_retrievers/images/total_execution_time_plot.png" width="400"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/total_execution_time_plot.png" width="400"/>
 </p>
 
 The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
@@ -239,7 +233,7 @@ The comparison occurred with a stable internet connection. Because FAISS is a lo
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
 <p align="left">
-  <img src="./evaluation/compare_retrievers/images/success_percentage_plot.png" width="400"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="400"/>
 </p>
 
 Below, you can view the results presented in tables:
