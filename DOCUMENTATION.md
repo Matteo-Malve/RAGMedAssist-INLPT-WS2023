@@ -176,6 +176,21 @@ The response to a given user query is generated using the methods `generate_resp
 
 - <span style="color:red"> **ADD MORE POINTS, Matteo: Maybe citing again without details the Ensemble retrieval and or the different chains?**</span>
 
+#### VI. App and User Interface
+
+For the front end aspect of our chatbot we chose to develop a very easy app with [streamlit](https://streamlit.io), relying especially on the streamlit-chat module.
+It's a very higl level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
+The instruction to run the app are all detailed in the root folder's [README](./README.md).
+
+The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app everytime.
+Another reason for the app's simplicity is that the class' method for responding to queries already returnes answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
+
+Runtimes are really fast on a M2 MacBook Pro, with one or two seconds to start up and just around five seconds to generate an answer. Times are much slower on Colab, where the models must be downloaded every time.
+<span style="color:red"> **Yusuf** is this still true or has it got slower woith recent additions?</span>
+
+<span style="color:red"> **PICTURE OF A CHAT HERE**</span>
+
+
 ## <a name="baselines"></a>3.3 Baselines
 
 <span style="color:red"> **MISSING or we REMOVE IT**</span>
@@ -185,6 +200,7 @@ The response to a given user query is generated using the methods `generate_resp
 After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
 Upon further consultation with our advisor though, we decided to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
+
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 

@@ -9,6 +9,8 @@
 ### Advisor
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
+# 🔀 Cloning the git repository
+It's a prerequisite to have a working installation of [Git Large File Storage](https://git-lfs.com) (LFS). Embeddings and chunked text are for example syncronized via LFS. Follow the appropriate installation procedure for your machine. Afterwards cloning proceeds in the standard way.
 
 # 🛠️ Installation
 
@@ -60,4 +62,7 @@ You will have to click on the provided url.
 A gate webpage will block you before actually getting to the app. Copy and paste the IP address printed by the cell, paste it in the password-box and cofirm.
 ⚠️ DISCLAIMER: The setup on Colab is very slow, because it needs to download all the models and generate the embeddings and this is needed every time the app is launched. It might be rough, but we tested it and it works correctly.
 
-
+This is how the app will look like!
+<p align="left">
+  <img src="chatbot/app/images/UI.png" width="500" />
+</p>
