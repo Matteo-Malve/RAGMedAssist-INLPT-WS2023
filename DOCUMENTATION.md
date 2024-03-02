@@ -171,6 +171,17 @@ The response to a given user query is generated using the methods `generate_resp
 
 
 #### V. Innovative Aspects & Technical Choices
+- **Similarity Score Threshold**: Our chat model occasionally retrieved documents for the unrelated
+queries, leading to responses that either hallucinated or stated an inability to find a 
+connection between the provided context and the query. To address this, we implemented 
+a similarity score threshold for the retriever, utilizing a FAISS vector store. 
+However, we encountered a limitation with the BM25 retriever, as it lacks a comparable parameter. 
+This was problematic in our `Ensemble Retriever`, which combines the `BM25` and `FAISS retriever` with 
+a `similarity score threshold`, resulting in the retrieval of documents by `BM25` regardless of 
+relevance. To resolve this, we modified the `EnsembleRetriever` class from LangChain to 
+ensure `bm25` retrieves the same number of documents as the `FAISS retriever`, 
+if there were any document in `topk` below the given threshold.
+- <span style="color:red"> **ADD MORE POINTS**</span>
 
 ## <a name="baselines"></a>3.3 Baselines
 
