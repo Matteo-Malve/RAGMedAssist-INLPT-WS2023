@@ -69,8 +69,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 -->
 - Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
 - sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
-- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was: \
-[Gordon V. Cormack, Charles L A Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval (SIGIR '09). Association for Computing Machinery, New York, NY, USA, 758–759. ](https://doi.org/10.1145/1571941.1572114)
+- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriever and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
 
 - <span style="color:red"> **MISSING**</span>
 
