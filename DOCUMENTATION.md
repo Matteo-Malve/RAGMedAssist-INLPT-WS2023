@@ -181,41 +181,18 @@ query = f"intelligence[Title/Abstract] AND (\"{year}/{month_start}\"[Date -  Pub
 
 We downloaded the data in XML format and segmented the retrieval quarterly across different years to sequentially gather the required dataset in manageable batches, ensuring comprehensive data collection without overstepping the API's limitations. See [`download_pubmed_data.ipynb`](data/download_pubmed_data.ipynb) for details.
 
-Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/data_anaylitics.ipynb)). We discovered that abstract lengths show a wide range, with the shortest being 93 characters and the longest reaching 60,664 characters. The average abstract length stands at 1,504.78 characters. The histogram presented below illustrates the distribution of abstract lengths, highlighting how frequently each length occurs.
+Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/data_anaylitics.ipynb)).
 
-<p align="left">
-  <img src="./docs/images/distribution_abstract_length_log_scale.png" width="700" />
-</p>
+| Aspect | Plot | Explanation |
+|--------------|-------------------------------|---------------------|
+| Abstract length |![](data/preprocessing_and_analytics/images/distribution_abstract_length_log_scale.png) | Wide range: shortest 93 characters, longest 60,664 characters; average abstract length 1,504.78 characters |
+| Publications over time  |![](data/preprocessing_and_analytics/images/distribution_publications_over_time.png) | Growing interest for topic "intelligence" over time, signaling a growing engagement |
+| Author frequency |![](data/preprocessing_and_analytics/images/distribution_authors_frequency_contribution.png) | Majority contribute fewer than 2 publications on average, thus many singular contributions within the field; most prolific author made 94 contributions ([Ian J Deary](https://www.research.ed.ac.uk/en/persons/ian-deary-2) is the leading author, due to his involvement in intelligence and cognitive aging research) |
+| Top 10 authors (number of publications)  |![](data/preprocessing_and_analytics/images/distribution_authors_most_frequent.png) | 'Unknown' appears as fourth-highest entry, signaling some unidentified authors within the dataset |
+| Common topics |![](data/preprocessing_and_analytics/images/topics_LDA.png) |Common themes based on titles via Latent Dirichlet Allocation (LDA), a simple method for extracting latent topics ([Blei et al., 2003](#LDA)): identified two topics, the first with prominent terms like "study", "ai" and "chatgpt", pointing to a strong emphasis on artificial intelligence research; the second focuses on terms like "cognitive", "effect", "brain", "patient" and "disorder", indicating research concentration on cognitive associations, possibly in developmental or clinical contexts; despite obvious prevalence of the term "intelligence", prominent emergence of AI as distinct theme was a notable discovery |
 
-Turning our attention to the publication frequency on the topic of "intelligence," we noted a growing interest over time. The barplot below visualizes this upward trend, clearly showing a year-over-year increase in the number of publications, which signals a growing engagement with the topic.
-
-<p align="left">
-  <img src="./docs/images/distribution_publications_over_time.png" width="700" />
-</p>
-
-The visual analysis of publications per author reveals a common trend: the majority of authors contribute fewer than 2 publications on average, highlighting a broad base of singular contributions within the field. Notably, the most prolific author has made an impressive 94 contributions.
-
-<p align="left">
-  <img src="./docs/images/distribution_authors_frequency_contribution.png" width="700" />
-</p>
-
-[Ian J Deary](https://www.research.ed.ac.uk/en/persons/ian-deary-2) stands out as the leading author, reflecting his extensive involvement in intelligence and cognitive aging research. The following visualization ranks the top 10 authors by their number of publications. Notably, 'Unknown' appears as the fourth-highest entry, signaling some unidentified authors within the dataset.
-
-<p align="left">
-  <img src="./docs/images/distribution_authors_most_frequent.png" width="700" />
-</p>
-
-For analyzing common themes appearing in our dataset based on the titles of publications, Latent Dirichlet Allocation (LDA) was used as a simple method for extracting latent topics ([Blei et al., 2003](#LDA)). We identified two topics, the first of which displays prominent terms such as "study", "ai" and "chatgpt", pointing to a strong emphasis on artificial intelligence research. The second topic focuses on terms like "cognitive", "effect", "brain", "patient" and "disorder", indicating a research concentration on cognitive associations, possibly in developmental or clinical contexts. Interestingly, despite the obvious prevalence of the term "intelligence" across our documents, the prominent emergence of artificial intelligence as a distinct theme was a notable discovery.
-
-<p align="left">
-  <img src="./docs/images/topics_LDA.png" width="700"/>
-</p>
-
-
-Your document is well-structured and provides a clear comparison between Pinecone and FAISS as vector databases. Below are some proofreading suggestions to enhance clarity, grammar, and consistency:
 
 ## <a name="vectorstore"></a>4.2 📥 Vector Database
-
 
 We compared two vector databasesm FAISS (local) and Pinecone (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the following metrics:
 
