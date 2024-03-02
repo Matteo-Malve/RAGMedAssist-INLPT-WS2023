@@ -146,7 +146,6 @@ Keeping the context token limit in mind, we pass to the chain only a reasonable 
 
 #### IV. Chatmodel Configuration & Integration
 
-
 The `MedicalChatbot` utilizes Retrieval-Augmented Generation (RAG) to process and respond to user queries. We have implemented three types of question-answering chains to cater to different user expectations. For each chain, the following instances are initialized in `MedicalChatbot`:
 
 - **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in [`cfg.yaml`](chatbot/app/cfg.yaml)`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
@@ -170,16 +169,11 @@ The response to a given user query is generated using the methods `generate_resp
 
 
 #### V. Innovative Aspects & Technical Choices
-- **Similarity Score Threshold**: Our chat model occasionally retrieved documents for the unrelated
-queries, leading to responses that either hallucinated or stated an inability to find a 
-connection between the provided context and the query. To address this, we implemented 
-a similarity score threshold for the retriever, utilizing a FAISS vector store. 
-However, we encountered a limitation with the BM25 retriever, as it lacks a comparable parameter. 
-This was problematic in our `Ensemble Retriever`, which combines the `BM25` and `FAISS retriever` with 
-a `similarity score threshold`, resulting in the retrieval of documents by `BM25` regardless of 
-relevance. To resolve this, we modified the `EnsembleRetriever` class from LangChain to 
-ensure `bm25` retrieves the same number of documents as the `FAISS retriever`, 
-if there were any document in `topk` below the given threshold.
+
+- **Similarity Score Threshold**: Our chat model occasionally retrieved documents for the unrelated queries, leading to responses that either hallucinated or stated an inability to find a connection between the provided context and the query. To address this, we implemented a similarity score threshold for the retriever, utilizing a FAISS vector store. However, we encountered a limitation with the BM25 retriever, as it lacks a comparable parameter. This was problematic in our `Ensemble Retriever`, which combines the `BM25` and `FAISS retriever` with a `similarity score threshold`, resulting in the retrieval of documents by `BM25` regardless of relevance. To resolve this, we modified the `EnsembleRetriever` class from LangChain to ensure `bm25` retrieves the same number of documents as the `FAISS retriever`, if there were any document in `topk` below the given threshold.
+
+- **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research. Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
+
 - <span style="color:red"> **ADD MORE POINTS**</span>
 
 ## <a name="baselines"></a>3.3 Baselines
