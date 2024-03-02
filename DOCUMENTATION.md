@@ -2,11 +2,11 @@
 
 ### 🧑🏻‍🎓 Team Members
 
-| Name and surname    | Matric. Nr. | Course of study                            |   e-mail address   |
-|:--------------------|:------------|:-------------------------------------------|:-------------------|
+| Name and surname    | Matric. Nr. | Course of study                           |   e-mail address   |
+|:--------------------|:------------|:------------------------------------------|:-------------------|
 | Matteo Malvestiti | 4731243     | M.Sc. Data and Computer Science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
-| Sandra Friebolin | 3175035     | B.Sc. Computational Linguistics | sandra_friebolin@proton.me |
-| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science <span style="color:red"> **(?)** </span> | yusuf.berber@stud.uni-heidelberg.de |
+| Sandra Friebolin | 3175035     | B.Sc. Computational Linguistics           | sandra_friebolin@proton.me |
+| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science           | yusuf.berber@stud.uni-heidelberg.de |
 
 
 ### Advisor
@@ -230,43 +230,20 @@ Following the data preprocessing steps, we conducted an in-depth analysis to ext
 
 ## <a name="vectorstore"></a>4.2 📥 Vector Database
 
-We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (local) and [Pinecone](https://www.pinecone.io/) (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the following metrics:
+We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (local) and [Pinecone](https://www.pinecone.io/) (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the execution time and success percentage:
 
-Firstly, we compared the speed of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
 
-<p align="left">
-  <img src="evaluation/llm_evaluation/compare_retrievers/images/total_execution_time_plot.png" width="400"/>
+
+<p float="left">
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/total_execution_time_plot.png" width="250"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/execution_time_per_query_plot.png" width="250"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="250"/>
 </p>
-
+Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
 The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
-<p align="left">
-  <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="400"/>
-</p>
-
-Below, you can view the results presented in tables:
-
-**Results for FAISS:**
-
-| Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
-|--------|--------|-------|--------|-------|
-| k=1 | 0.0236 seconds | 3.9481 | 152 | 91.02% |
-| k=2 | 0.0231 seconds | 3.8656 | 158 | 94.61% |
-| k=3 | 0.0246 seconds | 4.1032 | 163 | 97.60% |
-| k=4 | 0.0220 seconds | 3.6683 | 163 | 97.60% |
-| k=5 | 0.0212 seconds | 3.5427 | 164 | 98.20% |
-
-**Results for Pinecone:**
-
-| Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
-|--------|--------|-------|--------|-------|
-| k=1 | 0.2125 seconds | 35.4944 | 152 | 91.02% |
-| k=2 | 0.2003 seconds | 33.4454 | 159 | 95.21% |
-| k=3 | 0.2309 seconds | 38.5603 | 162 | 97.01% |
-| k=4 | 0.2165 seconds | 36.1497 | 163 | 97.60% |
-| k=5 | 0.2098 seconds | 35.0408 | 164 | 98.20% |
 
 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
 
