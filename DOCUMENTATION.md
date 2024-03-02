@@ -172,7 +172,7 @@ The response to a given user query is generated using the methods `generate_resp
 
 - **Similarity Score Threshold**: Our chat model occasionally retrieved documents for the unrelated queries, leading to responses that either hallucinated or stated an inability to find a connection between the provided context and the query. To address this, we implemented a similarity score threshold for the retriever, utilizing a FAISS vector store. However, we encountered a limitation with the BM25 retriever, as it lacks a comparable parameter. This was problematic in our `Ensemble Retriever`, which combines the `BM25` and `FAISS retriever` with a `similarity score threshold`, resulting in the retrieval of documents by `BM25` regardless of relevance. To resolve this, we modified the `EnsembleRetriever` class from LangChain to ensure `bm25` retrieves the same number of documents as the `FAISS retriever`, if there were any document in `topk` below the given threshold.
 
-- **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research (see [`link code`]()). Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
+- **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research. Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
 
 - <span style="color:red"> **ADD MORE POINTS, Matteo: Maybe citing again without details the Ensemble retrieval and or the different chains?**</span>
 
@@ -242,15 +242,9 @@ Firstly, we compared the execution time of both retrievers. It turned out that F
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
-💡 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. On the other hand, Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, however these extra functions can only be accessed with a paid account.
-
-<span style="color:red"> **They might criticize than pinecone can be used locally as well. If I'm not mistaken**</span>
+💡 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. While we have found the local storage of FAISS indices to be an advantage, especially in terms of data protection, it must be noted that the storage size is almost 200 MB. An advantage of Pinecone, on the other hand, is that it currently offers more features than FAISS, such as Ensemble Retriever or metadata filtering, but these additional features are only accessible with a paid account.
 
 ## <a name="evaluation"></a>4.3 📈 Evaluation 
-<!-- 
-- explain & define used/own metrics 
-- motivate expected achievements
--->
 
 ### <a name="retrieval-eval"></a>a) Evaluation of Information Retrieval
 
