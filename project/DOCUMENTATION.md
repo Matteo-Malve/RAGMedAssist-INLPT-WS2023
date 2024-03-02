@@ -67,10 +67,12 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
-- Leaderboard paper on embedding models
-- sth about Perplexity.ai ? (similar system to ours)
+- Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
+- sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
 - A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was: \
 [Gordon V. Cormack, Charles L A Clarke, and Stefan Buettcher. 2009. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval (SIGIR '09). Association for Computing Machinery, New York, NY, USA, 758–759. ](https://doi.org/10.1145/1571941.1572114)
+
+- <span style="color:red"> **MISSING**</span>
 
 # <a name="approach"></a>3. ⚙️ Approach
 <!--
@@ -499,6 +501,7 @@ Below is an example of the differing answer types:
 - does baseline succeeds/fails in same cases?
 - use examples & metrics to underline our points instead of stating unproven points
 -->
+<span style="color:red"> **MISSING**</span>
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
@@ -516,7 +519,7 @@ There are several token limits to consider. We efficiently handled the input tok
 
 Since this limitation was not a priority for us, we therefore limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
 
-### II. Chain of Thought Prompting
+#### II. Chain of Thought Prompting
 
 Currently we are using a rather simple prompt, but in the future we would investigate the possibility of a Chain of Thought prompting. This instructs the LLM to solve a complex question step by step by making intermediate steps ("chains of thought") explicit. Instructions such as "Let's think step by step" are used to guide the model through the thought process. This can be particularly helpful for complex queries that require a step-by-step way of thinking. It should be stated that this kind of prompting can lead to longer answers, as the thought process is also output by the model, and could thus lead to reaching token limits. Moreover, the correctness of the thought process is not garantueed: while the model can generate a logically appearing thought process, it can still arrive at an incorrect conclusion. Lastly, this method is only useful for complex tasks and not required for simple yes/no questions. 
 
