@@ -2,11 +2,11 @@
 
 ### 🧑🏻‍🎓 Team Members
 
-| Name and surname    | Matric. Nr. | Course of study                            |   e-mail address   |
-|:--------------------|:------------|:-------------------------------------------|:-------------------|
-| Matteo Malvestiti | 4731243     | M.Sc. Data and Computer science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
-| Sandra Friebolin | 3175035     | B.Sc. Computational linguistics | sandra_friebolin@proton.me |
-| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science <span style="color:red"> **(?)** </span> | yusuf.berber@stud.uni-heidelberg.de |
+| Name and surname    | Matric. Nr. | Course of study                           |   e-mail address   |
+|:--------------------|:------------|:------------------------------------------|:-------------------|
+| Matteo Malvestiti | 4731243     | M.Sc. Data and Computer Science (Erasmus) | matteo.malvestiti@stud.uni-heidelberg.de|
+| Sandra Friebolin | 3175035     | B.Sc. Computational Linguistics           | sandra_friebolin@proton.me |
+| Yusuf Berber | 4736316     | M.Sc. Data and Computer Science           | yusuf.berber@stud.uni-heidelberg.de |
 
 
 ### Advisor
@@ -46,7 +46,7 @@ Navigating the complexities of medical information, especially when it is laden 
 
 By also citing sources and providing clickable links to them, our system not only educates but also empowers users to verify and trust the information, facilitating more informed health decisions. The target audience for our project are indeed doctors and researchers of the medical field.
 
-Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. <span style="color:red"> Our innovative use of Pinecone's hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. </span>
+Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. <span style="color:red"> Our innovative use of [Pinecone's](https://www.pinecone.io/) hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. </span>
 
 - outline of our approach 
 
@@ -72,9 +72,13 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 - emphasize how our work differs from previous work, outlining their limitations/why our application domain is different
 - ⚠️ only major points, not too much detail
 -->
-- Leaderboard paper on embedding models
-- sth about Perplexity.ai ? (similar system to ours)
-- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriver and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
+Our chatbot application follows the Retrieval Augmented Generation (RAG) approach that combines pre-trained parametric and non-parametric memory for language generation tasks, thus allowing the model to access explicit knowledge sources and enabling them to generate enhanced, factual content ([Lewis et al., 2021](#RAG)).
+
+A system similar to ours is [Perplexity.ai](https://www.perplexity.ai/), a web serach engine that utilizes natural language processing and machine learning to provide accurate and comprehensive answers to user queries. Besides answering arbitrary questions, files can be attached to queries, on which questions can be asked. In this regard, it has a similar functionality to our system, as it also enables answer generation based on provided information. However, our system automatically extracts the relevant sources and users don't have to provide them themselves. It is thus less complex to use and offers information on sources one might not know before. 
+
+- Leaderboard paper on embedding models <span style="color:red"> **MISSING**</span>
+- sth about Perplexity.ai ? (similar system to ours) <span style="color:red"> **MISSING**</span>
+- A feature that we implemented and we will discuss in [sec. 3.2](#iii-document-retrieval) is Ensemble Retrieval. More specifically, we retrieved documents both with a sparse retriever and a dense retriever and reranked them with Reciprocal Rank Fusion. Inspiration and guideline for this procedure was [Cormack et al., 2009](#RRF)
 
 - <span style="color:red"> **MISSING**</span>
 
@@ -89,7 +93,7 @@ Before arriving at this point though, a huge amoutn of work was spent on the ret
 
 ## <a name="data-processing"></a>3.1 ✂️ Data Processing
 
-Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocess_data.ipynb)):
+Several data cleaning and pre-processing strategies were considered and applied according to their usefulness to our specific application (see [`preprocess_data.py`](data/preprocessing_and_analytics/preprocess_data.ipynb)):
 
 ✅ **Removing Special Characters:** This includes stripping out unnecessary punctuation, symbols, or special characters that are not relevant to the analysis or could interfere with the model's understanding of the text. We apply this step to to enhance data consistency and reduce noise, thereby improving model focus and efficiency.
 
@@ -141,16 +145,16 @@ This way we transformed our collection of 58,535 original abstracts into 62,615 
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
 
-Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/cfg.yaml).
+Keeping the context token limit in mind, we pass to the chain only a reasonable number of abstracts: we use the ensemble retriever, we rank them with RRF and finally we only keep the first $topk_{RRF}$, a parameter defaulted to three, but that can be specified in the [configuration file](chatbot/app/cfg.yaml).
 
 #### IV. Chatmodel Configuration & Integration
 
 
 The `MedicalChatbot` utilizes Retrieval-Augmented Generation (RAG) to process and respond to user queries. We have implemented three types of question-answering chains to cater to different user expectations. For each chain, the following instances are initialized in `MedicalChatbot`:
 
-- **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in `cfg.yaml`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
+- **`llm`**: We used `mistralai/Mistral-7B-Instruct-v0.1` as our language model, which is downloaded locally from HuggingFace. Our steps to initialize the LLM are quite generic, and changing the `model_name` in `cfg.yaml` will result in a different model being initialized. We performed the quantization and acceleration methods only when the `device` is `cuda`, as it fails on `mps` or `cpu`. Additionally, it is possible to use locally downloaded models from [GPT4ALL](https://gpt4all.io/index.html) by providing a `model_path` in [`cfg.yaml`](chatbot/app/cfg.yaml)`, which performs much better on Mac compared to using MPS on models downloaded from HuggingFace.
 
-- **`retriever`**: We used an `Ensemble Retriever` combining a sparse retriever (bm25) and a dense retriever using faiss with a similarity score threshold. 
+- **`retriever`**: We used an `Ensemble Retriever` combining a sparse retriever (bm25) and a dense retriever using [FAISS](https://ai.meta.com/tools/faiss/) with a similarity score threshold.
 
 - **`PromptTemplate`**: This is dependent on the specific chain, providing instructions to the LLM on how to handle the given input and retrieved context.
 
@@ -169,15 +173,26 @@ The response to a given user query is generated using the methods `generate_resp
 
 
 #### V. Innovative Aspects & Technical Choices
+- **Similarity Score Threshold**: Our chat model occasionally retrieved documents for the unrelated
+queries, leading to responses that either hallucinated or stated an inability to find a 
+connection between the provided context and the query. To address this, we implemented 
+a similarity score threshold for the retriever, utilizing a FAISS vector store. 
+However, we encountered a limitation with the BM25 retriever, as it lacks a comparable parameter. 
+This was problematic in our `Ensemble Retriever`, which combines the `BM25` and `FAISS retriever` with 
+a `similarity score threshold`, resulting in the retrieval of documents by `BM25` regardless of 
+relevance. To resolve this, we modified the `EnsembleRetriever` class from LangChain to 
+ensure `bm25` retrieves the same number of documents as the `FAISS retriever`, 
+if there were any document in `topk` below the given threshold.
+- <span style="color:red"> **ADD MORE POINTS**</span>
 
 ## <a name="baselines"></a>3.3 Baselines
 
 
 ## <a name="fine-tuning"></a>3.4 Fine-Tuning
 
-After developing and evaluating the embedding models for our retrieval system, we initially opted against finetuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored finetuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of finetuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is finetuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
+After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
-Upon further consultation with our advisor though, we decided not to keep this finetuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after finetuning.
+Upon further consultation with our advisor though, we decided not to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
@@ -198,7 +213,7 @@ The documents in the dataset follow a structured format typical of biomedical li
 The metadata selected for our project encompasses the authors, title, date, and DOI of each document, as illustrated in this data point example:
 
 <p align="left">
-  <img src="./docs/images/datapoint_example.png" width="700" />
+  <img src="data/preprocessing_and_analytics/images/datapoint_example.png" width="700" />
 </p>
 
 The abstracts, serving as the core of our dataset, will be utilized by our retrieval system to identify and present the most pertinent documents in response to user queries, thereby forming the basis for generating informed and accurate answers by our chosen LLM. Metadata such as the DOI not only aids in establishing the credibility and context of the research but also enables our system to link directly to the source in the answers it generates - an additional functionality of our system.
@@ -209,81 +224,35 @@ We acquired the data on January 4, 2024, via the `BioPython Entrez` API, which i
 query = f"intelligence[Title/Abstract] AND (\"{year}/{month_start}\"[Date -  Publication] : \"{year}/{month_end}\"[Date - Publication])"
 ```
 
-We downloaded the data in XML format and segmented the retrieval quarterly across different years to sequentially gather the required dataset in manageable batches, ensuring comprehensive data collection without overstepping the API's limitations. See [`download_pubmed_data.ipynb`](data/download_pubmed_data.ipynb) for details.
+We downloaded the data in XML format and segmented the retrieval quarterly across different years to sequentially gather the required dataset in manageable batches, ensuring comprehensive data collection without overstepping the API's limitations. See [`download_pubmed_data.ipynb`](data/original_pubmed_data/download_pubmed_data.ipynb) for details.
 
-Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/data_anaylitics.ipynb)). We discovered that abstract lengths show a wide range, with the shortest being 93 characters and the longest reaching 60,664 characters. The average abstract length stands at 1,504.78 characters. The histogram presented below illustrates the distribution of abstract lengths, highlighting how frequently each length occurs.
+Following the data preprocessing steps, we conducted an in-depth analysis to extract meaningful insights about our dataset (see [`data_analytics.ipynb`](data/preprocessing_and_analytics/data_anaylitics.ipynb)).
 
-<p align="left">
-  <img src="./docs/images/distribution_abstract_length_log_scale.png" width="700" />
-</p>
+| Aspect | Plot | Explanation |
+|--------------|-------------------------------|---------------------|
+| Abstract length |![](data/preprocessing_and_analytics/images/distribution_abstract_length_log_scale.png) | Wide range: shortest 93 characters, longest 60,664 characters; average abstract length 1,504.78 characters |
+| Publications over time  |![](data/preprocessing_and_analytics/images/distribution_publications_over_time.png) | Growing interest for topic "intelligence" over time, signaling a growing engagement |
+| Author frequency |![](data/preprocessing_and_analytics/images/distribution_authors_frequency_contribution.png) | Majority contribute fewer than 2 publications on average, thus many singular contributions within the field; most prolific author made 94 contributions ([Ian J Deary](https://www.research.ed.ac.uk/en/persons/ian-deary-2) is the leading author, due to his involvement in intelligence and cognitive aging research) |
+| Top 10 authors (number of publications)  |![](data/preprocessing_and_analytics/images/distribution_authors_most_frequent.png) | 'Unknown' appears as fourth-highest entry, signaling some unidentified authors within the dataset |
+| Common topics |![](data/preprocessing_and_analytics/images/topics_LDA.png) |Common themes based on titles via Latent Dirichlet Allocation (LDA), a simple method for extracting latent topics ([Blei et al., 2003](#LDA)): identified two topics, the first with prominent terms like "study", "ai" and "chatgpt", pointing to a strong emphasis on artificial intelligence research; the second focuses on terms like "cognitive", "effect", "brain", "patient" and "disorder", indicating research concentration on cognitive associations, possibly in developmental or clinical contexts; despite obvious prevalence of the term "intelligence", prominent emergence of AI as distinct theme was a notable discovery |
 
-Turning our attention to the publication frequency on the topic of "intelligence," we noted a growing interest over time. The barplot below visualizes this upward trend, clearly showing a year-over-year increase in the number of publications, which signals a growing engagement with the topic.
-
-<p align="left">
-  <img src="./docs/images/distribution_publications_over_time.png" width="700" />
-</p>
-
-The visual analysis of publications per author reveals a common trend: the majority of authors contribute fewer than 2 publications on average, highlighting a broad base of singular contributions within the field. Notably, the most prolific author has made an impressive 94 contributions.
-
-<p align="left">
-  <img src="./docs/images/distribution_authors_frequency_contribution.png" width="700" />
-</p>
-
-[Ian J Deary](https://www.research.ed.ac.uk/en/persons/ian-deary-2) stands out as the leading author, reflecting his extensive involvement in intelligence and cognitive aging research. The following visualization ranks the top 10 authors by their number of publications. Notably, 'Unknown' appears as the fourth-highest entry, signaling some unidentified authors within the dataset.
-
-<p align="left">
-  <img src="./docs/images/distribution_authors_most_frequent.png" width="700" />
-</p>
-
-For analyzing common themes appearing in our dataset based on the titles of publications, Latent Dirichlet Allocation (LDA) was used as a simple method for extracting latent topics ([Blei et al., 2003](#LDA)). We identified two topics, the first of which displays prominent terms such as "study", "ai" and "chatgpt", pointing to a strong emphasis on artificial intelligence research. The second topic focuses on terms like "cognitive", "effect", "brain", "patient" and "disorder", indicating a research concentration on cognitive associations, possibly in developmental or clinical contexts. Interestingly, despite the obvious prevalence of the term "intelligence" across our documents, the prominent emergence of artificial intelligence as a distinct theme was a notable discovery.
-
-<p align="left">
-  <img src="./docs/images/topics_LDA.png" width="700"/>
-</p>
-
-
-Your document is well-structured and provides a clear comparison between Pinecone and FAISS as vector databases. Below are some proofreading suggestions to enhance clarity, grammar, and consistency:
 
 ## <a name="vectorstore"></a>4.2 📥 Vector Database
 
+We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (local) and [Pinecone](https://www.pinecone.io/) (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the execution time and success percentage:
 
-We compared two vector databasesm FAISS (local) and Pinecone (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the following metrics:
 
-Firstly, we compared the speed of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
 
-<p align="left">
-  <img src="./evaluation/compare_retrievers/images/total_execution_time_plot.png" width="400"/>
+<p float="left">
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/total_execution_time_plot.png" width="250"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/execution_time_per_query_plot.png" width="250"/>
+  <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="250"/>
 </p>
-
+Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
 The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
-<p align="left">
-  <img src="./evaluation/compare_retrievers/images/success_percentage_plot.png" width="400"/>
-</p>
-
-Below, you can view the results presented in tables:
-
-**Results for FAISS:**
-
-| Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
-|--------|--------|-------|--------|-------|
-| k=1 | 0.0236 seconds | 3.9481 | 152 | 91.02% |
-| k=2 | 0.0231 seconds | 3.8656 | 158 | 94.61% |
-| k=3 | 0.0246 seconds | 4.1032 | 163 | 97.60% |
-| k=4 | 0.0220 seconds | 3.6683 | 163 | 97.60% |
-| k=5 | 0.0212 seconds | 3.5427 | 164 | 98.20% |
-
-**Results for Pinecone:**
-
-| Metric | Execution Time per Query | Total Execution Time | Match Count | Success Percentage |
-|--------|--------|-------|--------|-------|
-| k=1 | 0.2125 seconds | 35.4944 | 152 | 91.02% |
-| k=2 | 0.2003 seconds | 33.4454 | 159 | 95.21% |
-| k=3 | 0.2309 seconds | 38.5603 | 162 | 97.01% |
-| k=4 | 0.2165 seconds | 36.1497 | 163 | 97.60% |
-| k=5 | 0.2098 seconds | 35.0408 | 164 | 98.20% |
 
 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
 
@@ -300,7 +269,7 @@ For the quantitative and qualitative evaluation of our retrieval system, we made
 
 #### I. Quantitative Evaluation
 
-We compute accuracy (see [`evaluate_embeddings_accuracy.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/evaluate_embeddings_accuracy.ipynb)), F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_mrr_ndcg_f1.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_mrr_ndcg_f1.ipynb)). For these quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
+We compute accuracy, F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_acc_mrr_ndcg_f1.py`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_acc_mrr_ndcg_f1.py)). For these quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
 
 **Accuracy:** We considered different values of top `k` retrieved results. Since we retrieve three documents as context for our chat model, we focus the analysis on `k=3`. The best performing models under this configuration are `thenlper_gte-base`, `BAAI_bge-base-en-v1.5` and `jamesgpt1_sf_model_e5`. Keyword search via `BM25` was deployed as a baseline to compare against our semantic search methods (see [`compare_against_keyword_search.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compare_against_keyword_search.ipynb)).
 
@@ -385,9 +354,9 @@ The following plots are again arranged in descending order, based on the perform
 
 #### II. Qualitative Evaluation
 
-We selected a set of 10 queries from our QA dataset for further qualitative evaluation. Specifically, we chose the eight semantically most dissimilar queries (via cosine distance) to cover a broad range, and additionally the shortest and longest ones as edge cases (see [`qualitative_evaluation.ipynb`](project/evaluation/retrieval_evaluation/qualitative_evaluation/qualitative_evaluation.ipynb)). Using FAISS to embed queries and retrieve the top three most similar documents. For every model and query we investigate if the correct abstract was among the retrieved results by comparing the PMIDs.
+We selected a set of 10 queries from our QA dataset for further qualitative evaluation. Specifically, we chose the eight semantically most dissimilar queries (via cosine distance) to cover a broad range, and additionally the shortest and longest ones as edge cases (see [`qualitative_evaluation.ipynb`](evaluation/retrieval_evaluation/qualitative_evaluation/qualitative_evaluation.ipynb)). Using FAISS to embed queries and retrieve the top three most similar documents. For every model and query we investigate if the correct abstract was among the retrieved results by comparing the PMIDs.
 
-Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
+Detailed results can be found here: [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
 
 <img src="evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.png" width="700" />
 
@@ -395,7 +364,7 @@ Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation
 
 💡 Taking into account the results of our quantitative evaluation, we decided to proceed with the qualitative evaluation only of the three top-performing models: `BAAI/bge-base-en-v1.5`, `jamesgpt1/sf_model_e5`, `thenlper/gte-base`. We thus evaluated only the results retrieved by these models in the following. 
 
-We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg).
+We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx).
 
 Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. RESULTS ...
 
@@ -466,18 +435,18 @@ For the last two queries we considered instead:
 Clearly the penalties were weighted differently depending on the severity. This will be clear in the presentation of the results.
 
 <p align="left">
-  <img src="./docs/images/prompt-engineering_table_analysis.png" width="700"/>
+  <img src="evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_table_analysis.png" width="700"/>
 </p>
 
 Moreover we noted and wrote down some trends in the quality and nature of the answers.
 <p align="left">
-  <img src="./docs/images/prompt-engineering_annotations.png" width="600"/>
+  <img src="evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_annotations.png" width="600"/>
 </p>
 
 **Interpretation of the Results:** Summing all the entries of the previous table, we obtained the following penalty scores:
 
 <p align="left">
-  <img src="./docs/images/prompt-engineering_penalty-scores.png" width="600"/>
+  <img src=".evaluation/llm_evaluation/prompt_engineering/images/prompt-engineering_penalty-scores.png" width="600"/>
 </p>
 
 As mentioned before, the severity of the shortcomings was manually assessed. The logic is that a prompt that gave seven long-winded answers is still less problematic than one that caused three wrong or missing answers. Combining this observations with our annotations we reduced our choice to three templates. The one which ended up being chosen (`tempalte_3-short`, which is among the two reported above) is a small bet on our side: it is by far the best at answering but it demonstrates some light tendencies to hallucinate. We always had a fallback in mind, with the second best and the third best templates, which are less punctual at responding, but are more solid and less prone to hallucinate, a safe bet.
@@ -488,12 +457,12 @@ As mentioned before, the severity of the shortcomings was manually assessed. The
 Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer (see [`compute_bleu_rouge_bertscore.ipynb`](evaluation/llm_evaluation/hybrid_search/compute_bleu_rouge_bertscore.ipynb)). Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
 
 <p align="left">
-  <img src="./docs/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
+  <img src="evaluation/llm_evaluation/hybrid_search/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
 </p>
 
 #### III. Handling of Different Question Types
 
-To assess how our chatbot manages various types of questions, we conducted a performance evaluation focusing on complex, causal, factoid, list, and hypothetical questions, as documented in [`question_types_evaluation.md`](evaluation/llm_evaluation/question_types/question_types_evaluation.md). We also compared the responses with those produced by ChatGPT-4 to discern differences in handling questions without specific context. The results are accessible [here](evaluation/llm_evaluation/question_types/testset_different_question_types.xlsx). 
+To assess how our chatbot manages various types of questions, we conducted a performance evaluation focusing on complex, causal, factoid, list, and hypothetical questions, as documented in [`question_types_evaluation.md`](evaluation/llm_evaluation/question_types/results/question_types_evaluation.md). We also compared the responses with those produced by ChatGPT-4 to discern differences in handling questions without specific context. The results are accessible [here](evaluation/llm_evaluation/question_types/results/testset_different_question_types.xlsx). 
 
 ℹ️ This evaluation, tailored to the needs of our primary users — medical professionals — is inherently subjective. We examined the responses, highlighting our preferred ones in the results document with a dotted outline. 
 
@@ -503,7 +472,7 @@ Below is an example of the differing answer types:
 
 | Question | Answer of Our System | Answer of ChatGPT-4 |
 |----------|----------------------|---------------------|
-| *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_RAG.png) | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_gpt.png) |
+| *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_RAG.png) | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_gpt.png) |
 
 
 <!-- 
@@ -562,9 +531,19 @@ Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In F
 
 While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
 
-#### IV. LLM Fine-Tuning
-<span style="color:red"> **MISSING**</span>
-
+#### IV. LLM Domain-Specific Fine-Tuning
+Before using MistralAI's Mistral-7B-Instruct-v0.1 <span style="color:red"> **add links**</span>, we experimented with 
+Microsoft's Phi-2. Phi-2 is a base model, and we noticed that the LLM sometimes 
+generated code or completed the given user input instead of providing the 
+instructive response we were expecting for our queries. This led us to switch 
+to MistralAI's Mistral-7B-Instruct-v0.1, an instruction-fine-tuned version of 
+MistralAI's Mistral-7B-v0.1. Currently, this LLM model accurately follows the 
+instructions provided in the PromptTemplate for all three Q&A chains we implemented 
+in our chatbot. However, Mistral-7B-Instruct-v0.1 is not tailored for the medical domain. 
+We believe **domain-specific fine-tuning** would significantly benefit our project. 
+Although it's evident that the LLM's performance declines in areas outside its fine-tuned domain, 
+Our primary focus is on the medical domain, where models like Med-PaLM 2—Google's PaLM 2 model, 
+fine-tuned for medical applications—serve as noteworthy examples.
 
 #### V. Expansion to other Domains
 
@@ -588,6 +567,8 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 - <a name="LDA"></a>Blei, David M., Ng, Andrew Y. & Jordan, Michael I. (2003). Latent Dirichlet Allocation. *Journal of Machine Learning Research*, 3, 993–1022. [https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf](https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
 
 - <a name="mistral"></a>Jiang, Albert Q., Sablayrolles, Alexandre, Mensch, Arthur, Bamford, Chris, Chaplot, Devendra Singh, de las Casas, Diego, Bressand, Florian, Lengyel, Gianna, Lample, Guillaume, Saulnier, Lucile, Lavaud, Lélio Renard, Lachaux, Marie-Anne, Stock, Pierre, Le Scao, Teven, Lavril, Thibaut, Wang, Thomas, Lacroix, Timothée & El Sayed, William. (2023). Mistral 7B. [https://arxiv.org/pdf/2310.06825.pdf](https://arxiv.org/pdf/2310.06825.pdf)
+
+- <a name="RAG"></a>Lewis, Patrick, Perez, Ethan, Piktus, Aleksandra, Petroni, Fabio, Karpukhin, Vladimir, Goyal, Naman, Küttler, Heinrich, Lewis, Mike, Yih, Wen-tau, Rocktäschel, Tim, Riedel, Sebastian & Kiela, Douwe. (2021). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. [https://arxiv.org/abs/2005.11401](https://arxiv.org/abs/2005.11401)
 
 - <a name="stopwords"></a>Miyajiwala, Aamir, Ladkat, Arnav, Jagadale, Samiksha & Joshi, Raviraj. (2022). On Sensitivity of Deep Learning Based Text Classification Algorithms to Practical Input Perturbations. *Intelligent Computing*, 613–626. Springer International Publishing. [https://doi.org/10.1007/978-3-031-10464-0_42](https://doi.org/10.1007/978-3-031-10464-0_42)
 
@@ -615,5 +596,5 @@ Some important notes:
 ## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
 <p align="left">
-  <img src="./docs/images/AntiPlagiat.jpg" width="700" />
+  <img src="presentation_materials/AntiPlagiat.jpg" width="700" />
 </p>
