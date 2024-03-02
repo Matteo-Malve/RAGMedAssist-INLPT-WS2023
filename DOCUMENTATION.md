@@ -44,12 +44,17 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
 Navigating the complexities of medical information, especially when it is laden with technical jargon, can be overwhelming yet essential for making critical health decisions. Our system bridges this gap by simplifying the intricate world of medical knowledge. It allows users to ask questions in everyday language and provides informed, understandable answers derived from a comprehensive medical dataset.
 
-By also citing sources, our system not only educates but empowers users to verify and trust the information, facilitating more informed health decisions. The target audience for our project is [...]
+By also citing sources and providing clickable links to them, our system not only educates but also empowers users to verify and trust the information, facilitating more informed health decisions. The target audience for our project are indeed doctors and researchers of the medical field.
 
-Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. Our innovative use of [Pinecone's](https://www.pinecone.io/) hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. 
+Our focus is on leveraging generative AI with Retrieval Augmented Generation (RAG) techniques to efficiently navigate through 60,000 PubMed article abstracts on intelligence. This approach overcomes the limitations of traditional keyword searches by using a hybrid search algorithm. It combines semantic retrieval, using dense vector search for relevance based on cosine similarity, with keyword search for domain-specific terms. <span style="color:red"> Our innovative use of [Pinecone's](https://www.pinecone.io/) hybrid search integrates a sparse-dense index, optimizing accuracy and preventing misinformation. </span>
 
 - outline of our approach 
+
+  <span style="color:red"> **MISSING**</span>
+
 - outlook on results
+
+  <span style="color:red"> **MISSING**</span>
 
 <!-- maybe it is best written at the end, since we don't know exactly what our results will be/which exact problem (students/professionals..) we address :D 
 
@@ -573,9 +578,18 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 
 ## <a name="contributions"></a>8.1 🧑🏻‍🎓 Contributions
 
-Please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. The access was granted to our supervisor during the project. 
+As areed with our tutor, please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. \
+Tasks have been put in chronological order, if you access the "list view", it will look like this (here is less than half of it):
+<p align="left">
+  <img src="./docs/images/asana.jpg" width="700" />
+</p>
+<!-- Once I know where to put it, I will push it to git -->
 
-We would like to specify that the group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
+Some important notes:
+- The access was granted to our supervisor already during the project
+- We subdivided jobs in very small tasks. Nobody took charge of the whole chatbot, rather we built it up brick by brick together.
+- As a consequence, we all have a complete understanding of every aspect of the code. We worked as team.
+- The group had a good chemistry and we all worked together to the final goal, helping each other out and coordinating efficiently when some tasks were dependent on others.
 
 ## <a name="anti-plagiarism"></a>8.2 📝 Anti-Plagiarism Confirmation
 
