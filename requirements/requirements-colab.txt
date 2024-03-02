@@ -21,7 +21,7 @@ streamlit
 streamlit-chat
 python-dotenv
 pinecone-client
-sentence_transformers
+sentence-transformers
 langchain
 gpt4all
 langchain-community
@@ -29,5 +29,12 @@ rank_bm25
 accelerate
 
 # Cuda specific
-bitsandbytes
 faiss-gpu
+bitsandbytes
+
+# Colab specifics
+xformer
+git+https://github.com/huggingface/transformers
+unstructured
+tiktoken
+langchainhub

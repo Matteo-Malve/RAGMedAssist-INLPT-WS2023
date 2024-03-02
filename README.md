@@ -19,11 +19,15 @@ Hence, the first thing to do is to install the missing packages in your python e
 
 First of all, move inside the requirements folder: `cd requirements`. Then:
 
-➡️ If you run on M1/M2 Macs: `pip install -r requirements-mps.txt` (see [`requirements-mps.txt`](project/requirements/requirements-mps.txt))
+➡️ If you run on M1/M2 Macs: `pip install -r requirements-mps.txt` (see [`requirements-mps.txt`](./requirements/requirements-mps.txt))
 
-➡️ For machines with support for Cuda: `pip install -r requirements-cuda.txt` (see [`requirements-cuda.txt`](project/requirements/requirements-cuda.txt))
+➡️ On Colab: `pip install -r requirements-colab.txt` (see [`requirements-colab.txt`](./requirements/requirements-colab.txt)). A line of code to invoke it is already provided in the Colab's section of the [app launcher](./chatbot/frontend/app_launcher.ipynb).
 
-⚠️ We all ran and tested on a Miniconda environment for ARM machines, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules in your own environment.
+➡️ For machines with support for Cuda: `pip install -r requirements-cuda.txt` (see [`requirements-cuda.txt`](./requirements/requirements-cuda.txt))
+
+⚠️ We all ran and tested on a Miniconda environment for ARM machines, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules in your own environment. \
+On Colab we tested that the app ran without errors, but no in depth testing campaign was carried out.
+
 
 ### 2) Embedding and LLM Models
 
@@ -31,7 +35,7 @@ The embedding model will be automatically downloaded from [Huggingface's Hub](ht
 
 Concernig the LLM _Mistral Instruct_, our code is flexible. You can either:
 - Do nothing and it will be automatically downloaded from [Huggingface's Hub](https://huggingface.co/mistralai/Mistral-7B-v0.1/discussions/104)
-- 🍎 Suggested for Mac users: download it manually with GPT4ALL and specify your local path in the [`cfg.yaml`](project/chatbot/app/cfg.yaml) configuration file.
+- 🍎 Suggested for Mac users: download it manually with GPT4ALL and specify your local path in the [`cfg.yaml`](./chatbot/app/cfg.yaml) configuration file.
 
 # 🚀 Launch the chatbot app
 
