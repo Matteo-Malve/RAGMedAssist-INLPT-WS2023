@@ -124,6 +124,20 @@ This way we transformed our collection of 58,535 original abstracts into 62,615 
 
 #### II. Vector Storage
 
+Our selected vector database, [FAISS](https://ai.meta.com/tools/faiss/), an acronym for Facebook AI Similarity Search, emerged as our leading choice due to several reasons: It is specialized for efficient similarity search and clustering of dense vectors and designed to handle large-scale datasets ([Muenninghoff et al., 2023](#MTEB)). This makes it particularly useful for our task and also offers scope for future scalability. A decisive factor in our preference for FAISS was its deterministic nature, guaranteeing consistent results for identical queries. This level of predictability was a significant advantage over alternatives like [Pinecone](https://www.pinecone.io/), which lacks this deterministic feature. Such consistency is crucial in a scientific context, where reproducibility of results is paramount. Furthermore, we highly valued the easy process for uploading and locally storing generated indices (see [`faiss_indices`](data/embeddings/faiss_indices)). The ease with which we could save, load, and utilize the embeddings, illustrated in the code snippet below, confirmed FAISS as our database of choice
+
+```py
+# Set up Faiss vector database
+db = FAISS.from_documents(chunked_docs, embedding=embed_model)
+
+# Save embeddings locally
+index_save_path = f"faiss_indices/{model_name}"
+db.save_local(index_save_path)
+
+# Load embeddings
+db = FAISS.load_local(f"{index_path}", embed_model)
+```
+
 #### III. Document Retrieval
 
 We integrated Langchain's `EnsembleRetriever` into our search framework to make use of a hybrid model that combines BM25-based keyword search with vector search to provide precise and contextually relevant results. This approach is particularly beneficial for datasets dealing with highly specific terms, such as our biomedical abstracts, where keyword search excels in precision. By leveraging the strengths of both methodologies, we ensure users receive accurate information that not only aligns with their query's intent but also navigates the complexities of specialized terminology. 
@@ -224,21 +238,16 @@ Following the data preprocessing steps, we conducted an in-depth analysis to ext
 
 We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (local) and [Pinecone](https://www.pinecone.io/) (cloud-based), for our project. To do this, we created two retrievers with the same configurations: one uses FAISS and the other Pinecone as the vector store. The evaluation was conducted over a set of 167 queries, comparing the performance based on the execution time and success percentage:
 
-
-
 <p float="left">
   <img src="evaluation/llm_evaluation/compare_retrievers/images/total_execution_time_plot.png" width="250"/>
   <img src="evaluation/llm_evaluation/compare_retrievers/images/execution_time_per_query_plot.png" width="250"/>
   <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="250"/>
 </p>
-Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds.
-The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
+Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds. The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
 
-
-In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
-
+💡 In summary, FAISS met all our requirements and proved to be faster than Pinecone. FAISS can retrieve relevant documents in just 0.02 seconds. The only disadvantage was that we need to store our FAISS indices locally, which corresponds to almost 200MB. Pinecone is a commercial vector store and will be actively developed. It offers more functions than FAISS, such as ensemble retriever or metadata filtering, but these extra functions can only be accessed with a paid account.
 
 ## <a name="evaluation"></a>4.3 📈 Evaluation 
 <!-- 
