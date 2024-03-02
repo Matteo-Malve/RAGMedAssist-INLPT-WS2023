@@ -284,7 +284,7 @@ For the quantitative and qualitative evaluation of our retrieval system, we made
 
 #### I. Quantitative Evaluation
 
-We compute accuracy (see [`evaluate_embeddings_accuracy.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/evaluate_embeddings_accuracy.ipynb)), F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_mrr_ndcg_f1.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_mrr_ndcg_f1.ipynb)). For these quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
+We compute accuracy, F1 score, mean reciprocal rank (MRR), and normalized discounted cumulative gain (nDCG) (see [`compute_acc_mrr_ndcg_f1.py`](evaluation/retrieval_evaluation/quantitative_evaluation/compute_acc_mrr_ndcg_f1.py)). For these quantitative experiments, we compare the PMID of our retrieved documents with the ground truth PMID. The evaluated embedding models were chosen from the [HuggingFace Leaderboard for Retrieval](https://huggingface.co/spaces/mteb/leaderboard) based on their performance but also their size (some advanced models were too large for our resources). We used [Faiss](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) as our vector database for the experiments since it is deterministic and thus makes comparable results possible.
 
 **Accuracy:** We considered different values of top `k` retrieved results. Since we retrieve three documents as context for our chat model, we focus the analysis on `k=3`. The best performing models under this configuration are `thenlper_gte-base`, `BAAI_bge-base-en-v1.5` and `jamesgpt1_sf_model_e5`. Keyword search via `BM25` was deployed as a baseline to compare against our semantic search methods (see [`compare_against_keyword_search.ipynb`](evaluation/retrieval_evaluation/quantitative_evaluation/compare_against_keyword_search.ipynb)).
 
@@ -369,9 +369,9 @@ The following plots are again arranged in descending order, based on the perform
 
 #### II. Qualitative Evaluation
 
-We selected a set of 10 queries from our QA dataset for further qualitative evaluation. Specifically, we chose the eight semantically most dissimilar queries (via cosine distance) to cover a broad range, and additionally the shortest and longest ones as edge cases (see [`qualitative_evaluation.ipynb`](project/evaluation/retrieval_evaluation/qualitative_evaluation/qualitative_evaluation.ipynb)). Using FAISS to embed queries and retrieve the top three most similar documents. For every model and query we investigate if the correct abstract was among the retrieved results by comparing the PMIDs.
+We selected a set of 10 queries from our QA dataset for further qualitative evaluation. Specifically, we chose the eight semantically most dissimilar queries (via cosine distance) to cover a broad range, and additionally the shortest and longest ones as edge cases (see [`qualitative_evaluation.ipynb`](evaluation/retrieval_evaluation/qualitative_evaluation/qualitative_evaluation.ipynb)). Using FAISS to embed queries and retrieve the top three most similar documents. For every model and query we investigate if the correct abstract was among the retrieved results by comparing the PMIDs.
 
-Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
+Detailed results can be found here: [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx). As can be seen in the table below, the correct document was among the three top results for all models except `dmis-lab_biobert-base-cased-v1.1` and `all-MiniLM-L6-v2`. We consequently discarded them from further experiments due to their inaccuracy.
 
 <img src="evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.png" width="700" />
 
@@ -379,7 +379,7 @@ Detailed results can be found here: [`correct_retrieval.jpg`](project/evaluation
 
 💡 Taking into account the results of our quantitative evaluation, we decided to proceed with the qualitative evaluation only of the three top-performing models: `BAAI/bge-base-en-v1.5`, `jamesgpt1/sf_model_e5`, `thenlper/gte-base`. We thus evaluated only the results retrieved by these models in the following. 
 
-We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`correct_retrieval.jpg`](project/evaluation/retrieval_evaluation/qualitative_evaluation/images/correct_retrieval.jpg).
+We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx).
 
 Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. RESULTS ...
 
@@ -472,12 +472,12 @@ As mentioned before, the severity of the shortcomings was manually assessed. The
 Through extensive testing with varying weights, we optimized the balance between term-specific accuracy and semantic understanding. We used the ten questions sampled from the QA dataset and evaluated the generated responses against the ground truth answers from the dataset. We computed BLEU, ROUGE and BERTScore to get a quantitative measure of similarity between generated and ground truth answer (see [`compute_bleu_rouge_bertscore.ipynb`](evaluation/llm_evaluation/hybrid_search/compute_bleu_rouge_bertscore.ipynb)). Our results indicate that the hybrid model, with equal weights of 0.5 for both keyword and vector search methods, showcases optimal effectiveness in addressing a broad spectrum of search needs
 
 <p align="left">
-  <img src="./docs/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
+  <img src="evaluation/llm_evaluation/hybrid_search/images/bleu_rouge_bert_hybrid_search.png" width="700"/>
 </p>
 
 #### III. Handling of Different Question Types
 
-To assess how our chatbot manages various types of questions, we conducted a performance evaluation focusing on complex, causal, factoid, list, and hypothetical questions, as documented in [`question_types_evaluation.md`](evaluation/llm_evaluation/question_types/question_types_evaluation.md). We also compared the responses with those produced by ChatGPT-4 to discern differences in handling questions without specific context. The results are accessible [here](evaluation/llm_evaluation/question_types/testset_different_question_types.xlsx). 
+To assess how our chatbot manages various types of questions, we conducted a performance evaluation focusing on complex, causal, factoid, list, and hypothetical questions, as documented in [`question_types_evaluation.md`](evaluation/llm_evaluation/question_types/results/question_types_evaluation.md). We also compared the responses with those produced by ChatGPT-4 to discern differences in handling questions without specific context. The results are accessible [here](evaluation/llm_evaluation/question_types/results/testset_different_question_types.xlsx). 
 
 ℹ️ This evaluation, tailored to the needs of our primary users — medical professionals — is inherently subjective. We examined the responses, highlighting our preferred ones in the results document with a dotted outline. 
 
@@ -487,7 +487,7 @@ Below is an example of the differing answer types:
 
 | Question | Answer of Our System | Answer of ChatGPT-4 |
 |----------|----------------------|---------------------|
-| *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_RAG.png) | ![](./evaluation/llm_evaluation/question_types/breakfast_answer_gpt.png) |
+| *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_RAG.png) | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_gpt.png) |
 
 
 <!-- 
