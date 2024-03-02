@@ -539,14 +539,14 @@ Unfortunately, the filtering criteria do not work well with BM25 and FAISS. In F
 While we focused our attention on other issues, we recognise the great potential that this itegration could bring in the future.
 
 #### IV. LLM Domain-Specific Fine-Tuning
-Before using MistralAI's Mistral-7B-Instruct-v0.1 <span style="color:red"> **add links**</span>, we experimented with 
-Microsoft's Phi-2. Phi-2 is a base model, and we noticed that the LLM sometimes 
+Before using [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1), we experimented with 
+ [microsoft/phi-2](https://huggingface.co/microsoft/phi-2). Phi-2 is a base model, and we noticed that the LLM sometimes 
 generated code or completed the given user input instead of providing the 
 instructive response we were expecting for our queries. This led us to switch 
-to MistralAI's Mistral-7B-Instruct-v0.1, an instruction-fine-tuned version of 
-MistralAI's Mistral-7B-v0.1. Currently, this LLM model accurately follows the 
+to [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1), an instruction-fine-tuned version of 
+[mistralai/Mistral-7B-v0.1](https://huggingface.co/mistralai/Mistral-7B-v0.1). Currently, this LLM model accurately follows the 
 instructions provided in the PromptTemplate for all three Q&A chains we implemented 
-in our chatbot. However, Mistral-7B-Instruct-v0.1 is not tailored for the medical domain. 
+in our chatbot. However, [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1) is not tailored for the medical domain. 
 We believe **domain-specific fine-tuning** would significantly benefit our project. 
 Although it's evident that the LLM's performance declines in areas outside its fine-tuned domain, 
 Our primary focus is on the medical domain, where models like Med-PaLM 2—Google's PaLM 2 model, 
