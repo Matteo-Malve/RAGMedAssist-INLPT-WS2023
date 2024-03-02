@@ -1,13 +1,15 @@
 import streamlit as st
 from streamlit_chat import message
 import yaml
+import sys
+sys.path.append("../../")
 
 # Streamlit app
 st.title("RAGMedAssist")
 
 from chatbot.app.custom_chatbot import MedicalChatbot
 
-with open("cfg.yaml", "r") as file:
+with open("../app/cfg.yaml", "r") as file:
         cfg = yaml.safe_load(file)
 
 chatbot = MedicalChatbot(cfg)
