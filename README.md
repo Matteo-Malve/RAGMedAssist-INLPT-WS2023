@@ -26,7 +26,7 @@ First of all, move inside the requirements folder: `cd requirements`. Then:
 ➡️ For machines with support for Cuda: `pip install -r requirements-cuda.txt` (see [`requirements-cuda.txt`](./requirements/requirements-cuda.txt))
 
 ⚠️ We all ran and tested on a Miniconda environment for ARM machines, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules in your own environment. \
-On Colab we tested that the app ran without errors, but no in depth testing campaign was carried out.
+On Colab we tested that the app ran without errors.
 
 
 ### 2) Embedding and LLM Models
@@ -48,14 +48,16 @@ Just execute the first and only cell inside the relative section!
 A new tab in your default browser should authomatically open on the local server and you will be ready to go.
 If this doesn't happen, copy and paste the outputed url in your browser.
 
-➡️ If you run on Colab: a little less friendly option. \
-Start by running the first cell and installing all the required modules. Secondly, mount your google drive and move to the correct folder.
+➡️ If you run on Colab: a little less friendly option, but we tried to make the user experience as easy as possible! \
+Start by mounting your google drive and moveing to the correct folder.
+by running the first cell and installing all the required modules. Secondly, run the dedicated cell to install all the required modules.
 Then run the launch command provided in the last cell:
 
     !wget -q -O - ipv4.icanhazip.com
     !streamlit run app.py & npx localtunnel --port 8501
 Being Colab a closed environment, a localtunnel is required.
 You will have to click on the provided url.
-A gate webpage will block you before actually getting to the app. Copy and paste the IP address printed by the cell, paste it in the box and cofirm.
+A gate webpage will block you before actually getting to the app. Copy and paste the IP address printed by the cell, paste it in the password-box and cofirm.
+⚠️ DISCLAIMER: The setup on Colab is very slow, because it needs to download all the models and generate the embeddings and this is needed every time the app is launched. It might be rough, but we tested it and it works correctly.
 
 

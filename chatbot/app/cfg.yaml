@@ -25,9 +25,9 @@ ensemble:
 
 llm_model:
   name: "mistralai/Mistral-7B-Instruct-v0.1"
-  #local_path: ""
+  local_path: ""
   #  local_path: "/Users/yusuf/Library/Application Support/nomic.ai/GPT4All/gpt4all-falcon-newbpe-q4_0.gguf" (example)
-  local_path: "/Users/matteom/Library/Application Support/nomic.ai/GPT4All/mistral-7b-instruct-v0.1.Q4_0.gguf"
+  # local_path: "/Users/matteom/Library/Application Support/nomic.ai/GPT4All/mistral-7b-instruct-v0.1.Q4_0.gguf"
   #  Provide the local path only if you have downloaded the model using GPT4ALL on your device
   temperature: 0.001
   top_p: 0.95
