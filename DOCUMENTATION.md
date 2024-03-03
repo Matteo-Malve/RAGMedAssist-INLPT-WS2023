@@ -29,7 +29,7 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
     - 📈 4.3 [Evaluation](#evaluation)
         - a) [Evaluation of Information Retrieval](#retrieval-eval)
         - b) [Evaluation of Chatmodel](#chatmodel-eval)
-    - 🧐 4.4 [Analysis](#analysis)
+
 5. ⚡️ [Limitations & Future Work](#limitations-future-work) 🔮
 6. 💡[Conclusion](#conclusion)
 7. 💻 [References](#references)
@@ -482,17 +482,6 @@ A summary table was created to display the number of questions that received at 
 💡 The thresholds between 0.77 and 0.83 appear to be the most effective, particularly in distinguishing unrelated and complex queries from relevant medical questions. Additionally, the analysis of responses to edge questions indicates that the model is skilled at identifying irrelevant document retrievals, especially for queries in other languages.
 
 For detailed results and model-generated responses for all queries across all thresholds, refer to the [edge question analysis documentation](../evaluation/llm_evaluation/edge_cases/results/edge_questions_analysis.md).
-
-
-## <a name="analysis"></a>4.4 🧐 Analysis
-<!-- 
-- present qualitative analysis
-- does our system work as expected?
-- cases in which system consistently succeeds/fails? 
-- does baseline succeeds/fails in same cases?
-- use examples & metrics to underline our points instead of stating unproven points
--->
-<span style="color:red"> **MISSING or we can delete the section**</span>
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
