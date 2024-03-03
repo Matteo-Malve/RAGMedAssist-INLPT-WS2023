@@ -23,12 +23,10 @@ First of all, move inside the requirements folder: `cd requirements`. Then:
 
 ➡️ If you run on M1/M2 Macs: `pip install -r requirements-mps.txt` (see [`requirements-mps.txt`](./requirements/requirements-mps.txt))
 
-➡️ On Colab: `pip install -r requirements-colab.txt` (see [`requirements-colab.txt`](./requirements/requirements-colab.txt)). A line of code to invoke it is already provided in the Colab's section of the [app launcher](./chatbot/frontend/app_launcher.ipynb).
-
-➡️ For machines with support for Cuda: `pip install -r requirements-cuda.txt` (see [`requirements-cuda.txt`](./requirements/requirements-cuda.txt))
+➡️ On Colab or machines that support CUDA: `pip install -r requirements-cuda.txt` (see [`requirements-cuda.txt`](./requirements/requirements-cuda.txt)). For Colab's users, a line of code to invoke it has already been provided in the Colab's section of the [app launcher](./chatbot/frontend/app_launcher.ipynb).
 
 ⚠️ We all ran and tested on a Miniconda environment for ARM machines, since we all had M1/M2 MacBooks. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). It should be however sufficient to install all the requirement modules in your own environment. \
-On Colab we tested that the app ran without errors.
+On Colab we tested that the app and the prompt enigneering analyses ran without errors.
 
 
 ### 2) Embedding and LLM Models
