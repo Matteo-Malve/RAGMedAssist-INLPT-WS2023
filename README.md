@@ -9,7 +9,7 @@
 ### Advisor
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
-# 🔀 Cloning the git repository
+# 🔀 Cloning the Git Repository
 It's a prerequisite to have a working installation of [Git Large File Storage](https://git-lfs.com) (LFS). Embeddings and chunked text are for example syncronized via LFS. Follow the appropriate installation procedure for your machine. Afterwards cloning proceeds in the standard way.
 
 # 🛠️ Installation
@@ -37,7 +37,7 @@ Concernig the LLM _Mistral Instruct_, our code is flexible. You can either:
 - Do nothing and it will be automatically downloaded from [Huggingface's Hub](https://huggingface.co/mistralai/Mistral-7B-v0.1/discussions/104)
 - 🍎 Suggested for Mac users: download it manually with GPT4ALL and specify your local path in the [`cfg.yaml`](./chatbot/app/cfg.yaml) configuration file.
 
-# 🚀 Launch the chatbot app
+# 🚀 Launch the Chatbot App
 
 Open the jupyter notebook [app_launcher.ipynb](./chatbot/frontend/app_launcher.ipynb) inside the folder `./chatbot/frontend/`
 
@@ -62,5 +62,5 @@ A gate webpage will block you before actually getting to the app. Copy and paste
 
 This is how the app will look like!
 <p align="left">
-  <img src="chatbot/app/images/UI.png" width="500" />
+  <img src="organization_and_documentation/images/UI.png" width="500" />
 </p>
