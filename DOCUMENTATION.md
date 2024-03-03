@@ -22,8 +22,7 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 3. ⚙️ [Approach](#approach)
     - ✂️ 3.1 [Data Processing](#data-processing)
     - 👾 3.2 [Algorithms & Methods](#algorithms-methods)
-    - 3.3 [Baselines](#baselines)
-    - 3.4 [Fine-Tuning](#fine-tuning)
+    - 3.3 [Fine-Tuning](#fine-tuning)
 4. 🔬 [Experimental Setup & Results](#experimental-setup-results)
     - 💽 4.1 [Data](#data)
     - 📥 4.2 [Vector Database](#vector-database)
@@ -191,16 +190,11 @@ Runtimes are really fast on a M2 MacBook Pro, with one or two seconds to start u
 <span style="color:red"> **PICTURE OF A CHAT HERE**</span>
 
 
-## <a name="baselines"></a>3.3 Baselines
-
-<span style="color:red"> **MISSING or we REMOVE IT**</span>
-
-## <a name="fine-tuning"></a>3.4 Fine-Tuning
+## <a name="fine-tuning"></a>3.3 Fine-Tuning
 
 After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
 Upon further consultation with our advisor though, we decided to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
-
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
@@ -264,7 +258,7 @@ For each query, we also had the correct context, which was generated based on th
 
 ### <a name="retrieval-eval"></a>a) Evaluation of Information Retrieval
 
-For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this evaluation dataset. We use these instances for our experiments.
+For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this [evaluation dataset](data/evaluation_data/questions_answers.csv). We use these instances for our experiments.
 
 #### I. Quantitative Evaluation
 
@@ -543,13 +537,13 @@ Before using [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistral
 Currently, our chatbot is limited to the biomedical field, more specifically to topics related to intelligence. However, a promising path lies ahead of us, as our RAG system can easily be expanded to include additional data from other fields. Adding new documents from the latest research is also theoretically straightforward. While we are currently limited to English documents, there may also be an extension to other languages in the future.
 
 # <a name="conclusion"></a>6. 💡 Conclusion
-<!-- 
-- recap briefly main contributions
-- highlight achievements
-- reflect limitations
-- outline possible extensions of our system or improvements for the future
-- briefly give insights what was learned during this project
--->
+
+In this project, we have successfully developed a chatbot specifically designed for biomedical professionals, employing over 60,000 PubMed abstracts to facilitate access to current and accurate medical information. The integration of generative AI with RAG and a hybrid search algorithm enables not only precise keyword searches but also nuanced semantic searches, setting our chatbot apart from general AI conversation tools by providing concise, source-verified answers.
+
+Despite our achievements, the project faces limitations such as token constraints that affect conversation length and depth, and a current focus limited to the biomedical domain without extensive utilization of metadata or domain-specific fine-tuning.
+
+In the future, we would invest in strategies to avoid these limitations to increase the utility of the chatbot for healthcare professionals. This project not only highlighted the potential of AI in navigating complex information landscapes but also revealed the inherent challenges of delivering reliable and accurate information through a chatbot interface.
+
 
 <span style="color:red"> **MISSING or we can delete the section**</span>
 
