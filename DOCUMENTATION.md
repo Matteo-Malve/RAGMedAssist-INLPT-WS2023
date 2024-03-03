@@ -176,14 +176,15 @@ The response to a given user query is generated using the methods `generate_resp
 #### VI. App and User Interface
 
 For the front end aspect of our chatbot we chose to develop a very easy app with [streamlit](https://streamlit.io), relying especially on the streamlit-chat module.
-It's a very higl level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
+It's a very high level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
 The instruction to run the app are all detailed in the root folder's [README](./README.md).
 
-The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app everytime.
-Another reason for the app's simplicity is that the class' method for responding to queries already returnes answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
+The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app every time.
+Another reason for the app's simplicity is that the class' method for responding to queries already returns answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
 
 Runtimes are really fast on a M2 MacBook Pro, with one or two seconds to start up and just around five seconds to generate an answer. Times are much slower on Colab, where the models must be downloaded every time.
-<span style="color:red"> **Yusuf** is this still true or has it got slower woith recent additions?</span>
+
+<span style="color:red"> **Yusuf** is this still true or has it got slower with recent additions?</span>
 
 <span style="color:red"> **PICTURE OF A CHAT HERE**</span>
 
@@ -246,6 +247,7 @@ We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (
   <img src="evaluation/llm_evaluation/compare_retrievers/images/execution_time_per_query_plot.png" width="250"/>
   <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="250"/>
 </p>
+
 Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds. The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
@@ -468,7 +470,6 @@ This study evaluates our medical chatbot's ability to handle a variety of edge c
 
 A summary table was created to display the number of questions that received at least one document above the threshold, thereby avoiding the default message ("Sorry, but I don't know as my capabilities are focused on medical assistance"), across the various thresholds. This comparative analysis aims to identify the threshold that strikes an optimal balance between answering accurately and acknowledging when it shouldn't provide a response based on our documents.
 
-
 | Similarity Threshold | Unrelated Queries | Queries in Other Languages | One-Word Queries | Very Long Queries | Poorly Structured Queries | Medical Queries (Non-Edge) |
 |----------------------|-------------------|----------------------------|------------------|-------------------|---------------------------|----------------------------|
 | 0.74                 | 0 / 4             | 3 / 4                      | 4 / 4            | 3 / 4             | 2 / 4                     | 4 / 4                      |
@@ -557,12 +558,14 @@ In the future, we would invest in strategies to avoid these limitations to incre
 
 As agreed with our tutor, please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. \
 Tasks have been put in chronological order, if you access the "list view", it will look like this (here is a screenshot of less than half of it):
+
 <p align="left">
   <img src="./organization_and_documentation/images/asana.png" width="700" />
 </p>
-<!-- Once I know where to put it, I will push it to git -->
 
-Some important notes:
+
+ℹ️ Some important notes:
+
 - The access was granted to our supervisor already during the project
 - We subdivided jobs in very small tasks. Nobody took charge of the entirety of major feature, rather we built it up brick by brick together.
 - As a consequence, we all have a complete understanding of every aspect of the code. We worked as team.
