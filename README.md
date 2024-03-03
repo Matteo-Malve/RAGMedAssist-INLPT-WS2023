@@ -10,22 +10,25 @@
 Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 
 # 🔀 Cloning the Git Repository
-It's a prerequisite to have a working installation of [Git Large File Storage](https://git-lfs.com) (LFS). Embeddings and chunked text are for example syncronized via LFS. Follow the appropriate installation procedure for your machine. Afterwards cloning proceeds in the standard way. \
+It's a prerequisite to have a working installation of [Git Large File Storage](https://git-lfs.com) (LFS). Embeddings and chunked text are for example syncronized via LFS. Follow the appropriate installation procedure for your machine. Afterwards cloning proceeds in the standard way. 
+
 <span style="color:red"> **If you don't do this you will have cloned a repo with missing pieces and the code will not work.**</span>
 
 # <span style="color:yellow"> ⚠️ DISCLAIMER </span>
-Building a portable app was not the goal of the lecture, therefore we devoted all our efforts to NLP features. \
 
-We all had M1/M2 MacBooks, therefore we can **guarantee a smooth execution only on this setup**. \
-More in detail: we all ran and tested on a Miniconda environment for ARM machines. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). However it should be sufficient to install all the required modules in your environment via the procedure described in the following section. \
-Please follow the instructions carefully.  \
-Especially regarding GPT4ALL.
+Building a portable app was not the goal of the lecture, therefore we devoted all our efforts to NLP features. 
 
-To provide a more unviersal chance to run our chatbot, we also made sure that the app and a couple other features (like the prompt engineering analysis) ran smoothly on Colab. But it's important that the whole repo gets cloned in Colab, since every script has some dependencies. Moreover Colab is substantially slower in the setup.
+We all had M1/M2 MacBooks, therefore we can **guarantee a smooth execution only on this setup**. 
 
-The app does not work on remote servers.
+ℹ️ In more detail: We all ran and tested on a Miniconda environment for ARM machines. To reproduce the same exact environment you can build on top of this [configuration file](https://github.com/jeffheaton/app_deep_learning/blob/main/install/torch.yml). However it should be sufficient to install all the required modules in your environment via the procedure described in the following section.
 
-Despite all said, we expect a correct behaviour on windowns/linux machines, but we could not perform any test on this setup.
+☝🏽 Please follow the instructions carefully, especially regarding GPT4ALL.
+
+To provide a more universal chance to run our chatbot, we also made sure that the app and other features (like the prompt engineering analysis) run smoothly on Colab. But it's important that the whole repository gets cloned in Colab, since every script has some dependencies. Moreover Colab is substantially slower in the setup.
+
+⚡️ We were unable to conduct tests of the app on the remote Computational Linguistics university server, which one team member utilized for GPU access, due to limitations in setting up port forwarding from the remote to the local server.
+
+Despite all said, we expect a correct behavior on Windows/Linux machines, but we could not perform any test on this setup.
 
 # 🛠️ Installing missing modules
 
@@ -55,14 +58,12 @@ For Colab's users, a code cell has already been provided in the Colab's section 
   - You can theoretically use [GPT4ALL](https://gpt4all.io/index.html) as with Mac, but it was not tested.
 
 - General machine with CUDA:
-  - You can theoretically follow Colab's procedure, but it was not tested.
+  - Running the frontend app could not be tested, but executing our main code [`custom_chatbot.py`](chatbot/app/custom_chatbot.py) works fine!
   
 
 # 🚀 Launch the Chatbot App
 
-**\[RECOMMENDED\]** \
-Open the jupyter notebook [app_launcher.ipynb](./chatbot/frontend/app_launcher.ipynb) inside the folder `./chatbot/frontend/`. \
-It will look like this:
+**RECOMMENDED:** Open the jupyter notebook [app_launcher.ipynb](./chatbot/frontend/app_launcher.ipynb) inside the folder `./chatbot/frontend/`. It will look like this:
 
 <p align="left">
   <img src="./organization_and_documentation/images/app_launcher.png" width="700" />
@@ -81,20 +82,17 @@ It will look like this:
         !wget -q -O - ipv4.icanhazip.com
         !streamlit run app.py & npx localtunnel --port 8501
 
-    Being Colab a closed environment, a localtunnel is required.
+  - ℹ️ As Colab is a closed environment, a localtunnel is required.
   - Click on the provided url.
   - A gate webpage will block you before actually getting to the app. Copy and paste the IP address printed by the cell, paste it in the password-box and cofirm.
 
   ⚠️ REMINDER: The setup on Colab is very slow, because it needs to download the LLM every time the app is launched. It might be rough, but we tested it and it works correctly.
 
 - Windows, Ubuntu and general local machines with CUDA:
-  - Follow the same procedure for Mac. Not tested.
+  - Follow the same procedure for Mac (But we could not test it)
 
-**\[NOT RECOMMENDED\] Alternative approach** \
+➡️ This is how the app will look like!
 
-dsds
-
-This is how the app will look like!
 <p align="left">
   <img src="organization_and_documentation/images/UI.png" width="700" />
 </p>
