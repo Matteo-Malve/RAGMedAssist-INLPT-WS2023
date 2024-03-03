@@ -47,8 +47,6 @@ Tailored to meet the needs of doctors, researchers, and other medical field expe
 
 By integrating generative artificial intelligence (AI) with advanced Retrieval Augmented Generation (RAG) techniques, our chatbot exceeds the limitations of conventional keyword searches. It employs a sophisticated hybrid search algorithm that combines semantic retrieval — leveraging dense vector search for detecting relevance through cosine similarity — with precise keyword search to identify domain-specific terms. This dual approach ensures that our biomedical professional users are equipped with the most relevant, up-to-date, and accurate medical information available, facilitating informed decision-making and further research exploration.
 
-<span style="color:red"> **MISSING: outlook on results**</span>
-
 
 # <a name="related-work"></a>2. 📚 Related Work
 <!--
@@ -323,7 +321,6 @@ The following plots are again arranged in descending order, based on the perform
   <img src="evaluation/retrieval_evaluation/quantitative_evaluation/images/keyword_search_bm25_F1.png" width="300" /> 
 </p>
 
-<span style="color:red"> **Would it be to much work to merge all these graphs into one with lines in different colors and a legend? I realised only now, reading everything through that they are not super clear**</span>
 
 **MRR:** For MRR, the consideration of varying k is not applicable because the metric is singularly focused on how well a system ranks the first piece of relevant information - whether that relevant item appears at rank 1 or any other position. MRR captures this by measuring the average inverse rank of the first relevant document across all queries. Our results show that on average, the first relevant or correct answer tends to be very close to the top position in the search results, with `thenlper_gte-base` repeatedly displaying top performance, emphasizing its capability in not just identifying relevant documents but also in ranking the most relevant document as close to the top position as possible, which is important for retrieval systems. The baseline in contrast has a much lower score.
 
@@ -361,7 +358,7 @@ Detailed results can be found here: [`qualitative_evaluation_table.xlsx`](evalua
 
 We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx).
 
-Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. <span style="color:red"> **RESULTS ...**</span> 
+💡 Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases.
 
 In a next step, we investigated the order of the retrieved results and chose for each query the model that had the most effective ordering of the top three documents. Here, our attention was mainly on the firstly and secondly retrieved documents. We aggregate the scores for each model based on the frequency with which it was perceived as the best in terms of the order in which it presented its retrieval results. 
 
