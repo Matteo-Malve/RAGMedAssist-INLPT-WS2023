@@ -171,7 +171,8 @@ The response to a given user query is generated using the methods `generate_resp
 
 - **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research. Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
 
-- <span style="color:red"> **ADD MORE POINTS, Matteo: Maybe citing again without details the Ensemble retrieval and or the different chains?**</span>
+- **Ensemble retriever**: as described above in [sec. III](#iii-document-retrieval).
+- **Multiple chains**: as described above in [sec. IV](#iv-chatmodel-configuration--integration).
 
 #### VI. App and User Interface
 
