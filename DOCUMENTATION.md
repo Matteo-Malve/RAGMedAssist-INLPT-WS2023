@@ -22,15 +22,14 @@ Robin Khanna (R.Khanna@stud.uni-heidelberg.de)
 3. ⚙️ [Approach](#approach)
     - ✂️ 3.1 [Data Processing](#data-processing)
     - 👾 3.2 [Algorithms & Methods](#algorithms-methods)
-    - 3.3 [Baselines](#baselines)
-    - 3.4 [Fine-Tuning](#fine-tuning)
+    - 3.3 [Fine-Tuning](#fine-tuning)
 4. 🔬 [Experimental Setup & Results](#experimental-setup-results)
     - 💽 4.1 [Data](#data)
     - 📥 4.2 [Vector Database](#vector-database)
     - 📈 4.3 [Evaluation](#evaluation)
         - a) [Evaluation of Information Retrieval](#retrieval-eval)
         - b) [Evaluation of Chatmodel](#chatmodel-eval)
-    - 🧐 4.4 [Analysis](#analysis)
+
 5. ⚡️ [Limitations & Future Work](#limitations-future-work) 🔮
 6. 💡[Conclusion](#conclusion)
 7. 💻 [References](#references)
@@ -47,8 +46,6 @@ Our chatbot is specifically designed for biomedical professionals seeking to nav
 Tailored to meet the needs of doctors, researchers, and other medical field experts, our chatbot simplifies the complex domain of medical knowledge into manageable, accessible information. Users can pose questions in everyday language and receive concise, clear answers that are directly sourced from a comprehensive database of medical literature, including over 60,000 PubMed article abstracts.
 
 By integrating generative artificial intelligence (AI) with advanced Retrieval Augmented Generation (RAG) techniques, our chatbot exceeds the limitations of conventional keyword searches. It employs a sophisticated hybrid search algorithm that combines semantic retrieval — leveraging dense vector search for detecting relevance through cosine similarity — with precise keyword search to identify domain-specific terms. This dual approach ensures that our biomedical professional users are equipped with the most relevant, up-to-date, and accurate medical information available, facilitating informed decision-making and further research exploration.
-
-<span style="color:red"> **MISSING: outlook on results**</span>
 
 
 # <a name="related-work"></a>2. 📚 Related Work
@@ -179,28 +176,24 @@ The response to a given user query is generated using the methods `generate_resp
 #### VI. App and User Interface
 
 For the front end aspect of our chatbot we chose to develop a very easy app with [streamlit](https://streamlit.io), relying especially on the streamlit-chat module.
-It's a very higl level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
+It's a very high level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
 The instruction to run the app are all detailed in the root folder's [README](./README.md).
 
-The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app everytime.
-Another reason for the app's simplicity is that the class' method for responding to queries already returnes answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
+The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app every time.
+Another reason for the app's simplicity is that the class' method for responding to queries already returns answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
 
 Runtimes are really fast on a M2 MacBook Pro, with one or two seconds to start up and just around five seconds to generate an answer. Times are much slower on Colab, where the models must be downloaded every time.
-<span style="color:red"> **Yusuf** is this still true or has it got slower woith recent additions?</span>
+
+<span style="color:red"> **Yusuf** is this still true or has it got slower with recent additions?</span>
 
 <span style="color:red"> **PICTURE OF A CHAT HERE**</span>
 
 
-## <a name="baselines"></a>3.3 Baselines
-
-<span style="color:red"> **MISSING or we REMOVE IT**</span>
-
-## <a name="fine-tuning"></a>3.4 Fine-Tuning
+## <a name="fine-tuning"></a>3.3 Fine-Tuning
 
 After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
 Upon further consultation with our advisor though, we decided to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
-
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
@@ -254,6 +247,7 @@ We compared the two vector databases [FAISS](https://ai.meta.com/tools/faiss/) (
   <img src="evaluation/llm_evaluation/compare_retrievers/images/execution_time_per_query_plot.png" width="250"/>
   <img src="evaluation/llm_evaluation/compare_retrievers/images/success_percentage_plot.png" width="250"/>
 </p>
+
 Firstly, we compared the execution time of both retrievers. It turned out that FAISS retrieves the `topk` context for all 167 instances in only 4 seconds, while Pinecone takes over 40 seconds. The comparison occurred with a stable internet connection. Because FAISS is a local vector store, it is significantly faster than Pinecone.
 
 For each query, we also had the correct context, which was generated based on that context. Secondly, we compared the percentage of times the correct context was among the retrieved documents for different `topk` values. As expected, the result was almost identical for both vector stores since they use the same embeddings.
@@ -264,7 +258,7 @@ For each query, we also had the correct context, which was generated based on th
 
 ### <a name="retrieval-eval"></a>a) Evaluation of Information Retrieval
 
-For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this evaluation dataset. We use these instances for our experiments.
+For the quantitative and qualitative evaluation of our retrieval system, we made use of the [PubMedQA](https://pubmedqa.github.io). This dataset contains [1,000 expert-labeled questions](https://github.com/pubmedqa/pubmedqa/blob/master/data/ori_pqal.json) together with both long and short answers, such as "yes/no", as well as the context and PMID. Unfortunately, only 176 instances from our "Intelligence 2013-2023" dataset we use for context retrieval are contained in this [evaluation dataset](data/evaluation_data/questions_answers.csv). We use these instances for our experiments.
 
 #### I. Quantitative Evaluation
 
@@ -329,7 +323,6 @@ The following plots are again arranged in descending order, based on the perform
   <img src="evaluation/retrieval_evaluation/quantitative_evaluation/images/keyword_search_bm25_F1.png" width="300" /> 
 </p>
 
-<span style="color:red"> **Would it be to much work to merge all these graphs into one with lines in different colors and a legend? I realised only now, reading everything through that they are not super clear**</span>
 
 **MRR:** For MRR, the consideration of varying k is not applicable because the metric is singularly focused on how well a system ranks the first piece of relevant information - whether that relevant item appears at rank 1 or any other position. MRR captures this by measuring the average inverse rank of the first relevant document across all queries. Our results show that on average, the first relevant or correct answer tends to be very close to the top position in the search results, with `thenlper_gte-base` repeatedly displaying top performance, emphasizing its capability in not just identifying relevant documents but also in ranking the most relevant document as close to the top position as possible, which is important for retrieval systems. The baseline in contrast has a much lower score.
 
@@ -367,7 +360,7 @@ Detailed results can be found here: [`qualitative_evaluation_table.xlsx`](evalua
 
 We initially observed a significant overlap in the documents retrieved by the three models. Since our aim was to identify the best model among the three, we were interested in their distinctive capabilities and therefore considered only results that differed between them. Each team member independently provided subjective evaluations of the retrieved results, ignoring their order and blind to the assessments of the others. We adopted a scoring system where 1 signified "not relevant", 2 indicated "neutral", and 3 denoted "relevant". These individual scores were then collated and averaged. For insights into the rationale behind our scoring, please see the annotated comments in [`qualitative_evaluation_table.xlsx`](evaluation/retrieval_evaluation/qualitative_evaluation/results/qualitative_evaluation_table.xlsx).
 
-Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases. <span style="color:red"> **RESULTS ...**</span> 
+💡 Interestingly, despite `thenlper/gte-base` dominating in the quantitative assessment, here, `BAAI/bge-base-en-v1.5` and `jamesgpt1/sf_model_e5` also demonstrated superior performance in some cases.
 
 In a next step, we investigated the order of the retrieved results and chose for each query the model that had the most effective ordering of the top three documents. Here, our attention was mainly on the firstly and secondly retrieved documents. We aggregate the scores for each model based on the frequency with which it was perceived as the best in terms of the order in which it presented its retrieval results. 
 
@@ -477,7 +470,6 @@ This study evaluates our medical chatbot's ability to handle a variety of edge c
 
 A summary table was created to display the number of questions that received at least one document above the threshold, thereby avoiding the default message ("Sorry, but I don't know as my capabilities are focused on medical assistance"), across the various thresholds. This comparative analysis aims to identify the threshold that strikes an optimal balance between answering accurately and acknowledging when it shouldn't provide a response based on our documents.
 
-
 | Similarity Threshold | Unrelated Queries | Queries in Other Languages | One-Word Queries | Very Long Queries | Poorly Structured Queries | Medical Queries (Non-Edge) |
 |----------------------|-------------------|----------------------------|------------------|-------------------|---------------------------|----------------------------|
 | 0.74                 | 0 / 4             | 3 / 4                      | 4 / 4            | 3 / 4             | 2 / 4                     | 4 / 4                      |
@@ -491,17 +483,6 @@ A summary table was created to display the number of questions that received at 
 💡 The thresholds between 0.77 and 0.83 appear to be the most effective, particularly in distinguishing unrelated and complex queries from relevant medical questions. Additionally, the analysis of responses to edge questions indicates that the model is skilled at identifying irrelevant document retrievals, especially for queries in other languages.
 
 For detailed results and model-generated responses for all queries across all thresholds, refer to the [edge question analysis documentation](../evaluation/llm_evaluation/edge_cases/results/edge_questions_analysis.md).
-
-
-## <a name="analysis"></a>4.4 🧐 Analysis
-<!-- 
-- present qualitative analysis
-- does our system work as expected?
-- cases in which system consistently succeeds/fails? 
-- does baseline succeeds/fails in same cases?
-- use examples & metrics to underline our points instead of stating unproven points
--->
-<span style="color:red"> **MISSING or we can delete the section**</span>
 
 # <a name="limitations-results"></a>5. ⚡️ Limitations & Future Work 🔮
 
@@ -543,13 +524,13 @@ Before using [mistralai/Mistral-7B-Instruct-v0.1](https://huggingface.co/mistral
 Currently, our chatbot is limited to the biomedical field, more specifically to topics related to intelligence. However, a promising path lies ahead of us, as our RAG system can easily be expanded to include additional data from other fields. Adding new documents from the latest research is also theoretically straightforward. While we are currently limited to English documents, there may also be an extension to other languages in the future.
 
 # <a name="conclusion"></a>6. 💡 Conclusion
-<!-- 
-- recap briefly main contributions
-- highlight achievements
-- reflect limitations
-- outline possible extensions of our system or improvements for the future
-- briefly give insights what was learned during this project
--->
+
+In this project, we have successfully developed a chatbot specifically designed for biomedical professionals, employing over 60,000 PubMed abstracts to facilitate access to current and accurate medical information. The integration of generative AI with RAG and a hybrid search algorithm enables not only precise keyword searches but also nuanced semantic searches, setting our chatbot apart from general AI conversation tools by providing concise, source-verified answers.
+
+Despite our achievements, the project faces limitations such as token constraints that affect conversation length and depth, and a current focus limited to the biomedical domain without extensive utilization of metadata or domain-specific fine-tuning.
+
+In the future, we would invest in strategies to avoid these limitations to increase the utility of the chatbot for healthcare professionals. This project not only highlighted the potential of AI in navigating complex information landscapes but also revealed the inherent challenges of delivering reliable and accurate information through a chatbot interface.
+
 
 <span style="color:red"> **MISSING or we can delete the section**</span>
 
@@ -577,12 +558,14 @@ Currently, our chatbot is limited to the biomedical field, more specifically to 
 
 As agreed with our tutor, please refer to [Asana](https://app.asana.com/0/1206188541316840/1206194377445034), the task manager we used over the course of all the project. All the tasks are unpacked and are labeled with whom was in charge to complete them. \
 Tasks have been put in chronological order, if you access the "list view", it will look like this (here is a screenshot of less than half of it):
+
 <p align="left">
   <img src="./organization_and_documentation/images/asana.png" width="700" />
 </p>
-<!-- Once I know where to put it, I will push it to git -->
 
-Some important notes:
+
+ℹ️ Some important notes:
+
 - The access was granted to our supervisor already during the project
 - We subdivided jobs in very small tasks. Nobody took charge of the entirety of major feature, rather we built it up brick by brick together.
 - As a consequence, we all have a complete understanding of every aspect of the code. We worked as team.

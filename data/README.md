@@ -12,10 +12,8 @@
 
 - 🗂️ [`evaluation_data`](evaluation_data): This folder contains data used for evaluation.
 
-    - 🗂️ [`retrieval_eval_data`](evaluation_data/retrieval_eval_data): This folder contains data used to evaluate our retrieval system.
-
-        - 💻 [`download_questions_answers.ipynb`](evaluation_data/retrieval_eval_data/download_questions_answers.ipynb): This code downloads the QA evaluation set.
-        - 💽 [`questions_answers.csv`](evaluation_data/retrieval_eval_data/questions_answers.csv): QA pairs used as gold truths for retrieval evaluation.
+    - 💻 [`download_questions_answers.ipynb`](evaluation_data/download_questions_answers.ipynb): This code downloads the QA evaluation set.
+    - 💽 [`questions_answers.csv`](evaluation_data/questions_answers.csv): QA pairs used as gold truths for retrieval evaluation.
 
 
 - 🗂️ [`original_pubmed_data`](original_pubmed_data): this folder contains the original PubMed data.
