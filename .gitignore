@@ -5,3 +5,5 @@
 *.ipynb_checkpoints
 .env
 __pycache__/
+
+chatbot/app/__pycache__/
