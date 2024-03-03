@@ -227,11 +227,13 @@ class MedicalChatbot:
         llm = self.get_llm()
         retriever = self.load_custom_ensemble_retriever()
 
-        return ConversationalRetrievalChain.from_llm(llm=llm,
+        conversational_qa_chain = ConversationalRetrievalChain.from_llm(llm=llm,
                                                      verbose=True,
                                                      retriever=retriever,
                                                      return_source_documents=True,
                                                      )
+        conversational_qa_chain.response_if_no_docs_found = "Sorry, but I don't know as my capabilities are focused on medical assistance"
+        return conversational_qa_chain
     # ------------------------------------------------------------------------------------------------------------------
     # Multi-query specific functions
     # ------------------------------------------------------------------------------------------------------------------
@@ -339,9 +341,6 @@ class MedicalChatbot:
         return self._generate_response(response, return_raw=return_raw)
 
     def generate_response_with_conversational(self, user_query, return_raw=False):
-        # if self.check_no_docs_retrieved(user_query):
-        #     return self.no_docs_response(user_query, return_raw)
-
         max_history_length = self.cfg["conversational_chain"]["conversation_depth"]
         conversation_history = self.conversational_chat_history[-max_history_length:]
         response = self.conversational_qa_chain({"question": user_query, "chat_history": conversation_history})
