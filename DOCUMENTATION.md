@@ -164,13 +164,14 @@ The response to a given user query is generated using the methods `generate_resp
 
 - **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research. Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
 
-- **Intelligent Response to Unretrieved Queries**: Our chatbot enhances efficiency and relevance in medical assistance by issuing a default response ("Sorry, but I don't know as my capabilities are focused on medical assistance") when no documents are retrieved due to the threshold settings. This approach:
-  - Avoids hallucination by not engaging the language model without relevant documents.
-  - Increases response speed by eliminating unnecessary processing.
-  - Maintains focus on medical queries, ensuring the chatbot stays within its domain of expertise.
+- **Intelligent Response to Thematically Unrelated Queries**: Our chatbot enhances efficiency and relevance in medical assistance by issuing a default response ("Sorry, but I don't know as my capabilities are focused on medical assistance") when no documents are retrieved due to the threshold settings. This approach avoids hallucination by not engaging the language model without relevant documents. It further increases response speed by eliminating unnecessary processing and finally maintains focus on medical queries, ensuring the chatbot stays within its domain of expertise.
+
+  <p align="left">
+    <img src="organization_and_documentation/images/convo3.png" width="500" />
+  </p>
   
-- **Ensemble retriever**: as described above in [sec. III](#iii-document-retrieval).
-- **Multiple chains**: as described above in [sec. IV](#iv-chatmodel-configuration--integration).
+- **Ensemble Retriever**: as described above in [sec. III](#iii-document-retrieval).
+- **Multiple Chains**: as described above in [sec. IV](#iv-chatmodel-configuration--integration).
 
 #### VI. App and User Interface
 
@@ -185,6 +186,7 @@ On an M2 MacBook Pro, startup times are typically quick, ranging from one to two
 
 <p align="left">
   <img src="organization_and_documentation/images/convo1.png" width="600" />
+  <img src="organization_and_documentation/images/convo2.png" width="600" />
 </p>
 
 ## <a name="fine-tuning"></a>3.3 Fine-Tuning
