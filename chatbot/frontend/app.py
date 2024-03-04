@@ -7,12 +7,14 @@ sys.path.append("../../")
 # Streamlit app
 st.title("RAGMedAssist")
 
-from chatbot.app.custom_chatbot import MedicalChatbot
+# Initialize or load the chatbot instance
+if 'chatbot' not in st.session_state:
+    from chatbot.app.custom_chatbot import MedicalChatbot
 
-with open("../app/cfg.yaml", "r") as file:
+    with open("../app/cfg.yaml", "r") as file:
         cfg = yaml.safe_load(file)
-
-chatbot = MedicalChatbot(cfg)
+    print("I am working")
+    st.session_state.chatbot = MedicalChatbot(cfg)
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -29,7 +31,7 @@ if question := st.chat_input("Ask a medical question:"):
     st.chat_message("user").markdown(question)
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": question})
-    markdown_response=chatbot.generate_response_by_type(question,type="conversational")
+    markdown_response=st.session_state.chatbot.generate_response_by_type(question,type="conversational")
     with st.chat_message("assistant"):
         st.markdown(markdown_response, unsafe_allow_html=True)
         # Add assistant response to chat history
