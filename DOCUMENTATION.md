@@ -516,7 +516,7 @@ There are several token limits to consider. We efficiently handled the input tok
 
 - Multithreading via [lightspeedGPT](https://github.com/andrewgcodes/lightspeedGPT) could be used to segment longer documents or chat history and process them in parallel. Answers would be collected and then assembled to a single answer. This would of course entail consideration about how to properly combine the multiple generated answers.
 
-Since this limitation was not a priority for us, we limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. By ranking the four documents using an ensemble retriever, the top three were selected as the context for the given prompt. <span style="color:red"> **Do not forget to adapt this part if you make any changes in cfg.yml for topk or topk_rrf**</span> For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
+Since this limitation was not a priority for us, we limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. By ranking the four documents using an ensemble retriever, the top three were selected as the context for the given prompt. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
 
 #### II. Chain of Thought Prompting
 
