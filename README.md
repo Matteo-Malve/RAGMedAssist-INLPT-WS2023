@@ -52,7 +52,7 @@ For Colab's users, a code cell has already been provided in the Colab's section 
 
 - Colab 
   - Do nothing and it will be automatically downloaded from [Huggingface's Hub](https://huggingface.co/mistralai/Mistral-7B-v0.1/discussions/104)
-  - Ready to go, but when you launch the app it will takes some time to download the model 🐌
+  - Ready to go, but when you launch the app it will take some time to download the model 🐌
 
 - Windows and Ubuntu
   - You can theoretically use [GPT4ALL](https://gpt4all.io/index.html) as with Mac, but it was not tested.
