@@ -74,7 +74,7 @@ For Colab's users, a code cell has already been provided in the Colab's section 
   - A new tab in your default browser should authomatically open on the local server and you will be ready to go.
   - If this doesn't happen, copy and paste the outputed url in your browser. It should be `http://localhost:8501`. If you don't run on local as specified in DISCLAIMER, you will encounter issues in this step.
 
-- On Colab: a little less friendly option, but we tried to make the user experience as easy as possible! \
+- On Colab: a little less friendly option, but we tried to make the user experience as easy as possible! 
   - With the provided cells, mount your google drive and move to the correct folder
   - Run the dedicated cell to install all the required modules.
   - Run the launch command provided in the last cell:
