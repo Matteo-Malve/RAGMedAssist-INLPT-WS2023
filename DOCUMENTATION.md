@@ -183,9 +183,8 @@ The instruction to run the app are all detailed in the root folder's [README](./
 The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app every time.
 Another reason for the app's simplicity is that the class' method for responding to queries already returns answer and urls already formatted in markdown and html. The app itself doesn't do much but waiting for the user to send a question and keeping the chat history.
 
-Runtimes are really fast on a M2 MacBook Pro, with one or two seconds to start up and just around five seconds to generate an answer. Times are much slower on Colab, where the models must be downloaded every time.
+On an M2 MacBook Pro, startup times are typically quick, ranging from one to two seconds, but generating an answer takes around 30 seconds. On Colab, the llm-model must be downloaded each time, which significantly extends the startup time. However, the query processing time is faster than on a Mac.
 
-<span style="color:red"> **Yusuf** is this still true or has it got slower with recent additions?</span>
 
 <span style="color:red"> **PICTURE OF A CHAT HERE**</span>
 
