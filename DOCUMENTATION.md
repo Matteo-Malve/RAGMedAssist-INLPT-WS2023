@@ -464,6 +464,12 @@ Below is an example of the differing answer types:
 |----------|----------------------|---------------------|
 | *Is regular breakfast consumption associated with increased IQ in kindergarten children?* | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_RAG.png) | ![](evaluation/llm_evaluation/question_types/images/breakfast_answer_gpt.png) |
 
+💡 Our chatbot was able to answer at least one question of each type correctly. For the "list question" type, it gave the neat, compact answer below:
+
+<p align="left">
+  <img src="evaluation/llm_evaluation/question_types/images/list-question.png" width="600" />
+</p>
+
 #### IV. Handling Edge Cases with Different Similarity Thresholds
 
 This study evaluates our medical chatbot's ability to handle a variety of edge case questions across five categories: Unrelated Queries, Queries in Other Languages, One-Word Queries, Very Long Queries, Poorly Structured Queries, and Medical Questions (Non-Edge). We generated four questions for each category using ChatGPT and analyzed the chatbot's responses under six similarity score thresholds: 0.74, 0.77, 0.80, 0.83, 0.86, and 0.89. The chatbot was programmed to respond with a default message when no relevant documents were retrieved due to the threshold settings.
@@ -559,7 +565,6 @@ Tasks have been put in chronological order, if you access the "list view", it wi
 <p align="left">
   <img src="./organization_and_documentation/images/asana.png" width="700" />
 </p>
-
 
 ℹ️ Some important notes:
 
