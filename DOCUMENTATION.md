@@ -190,10 +190,23 @@ On an M2 MacBook Pro, startup times are typically quick, ranging from one to two
 </p>
 
 ## <a name="fine-tuning"></a>3.3 Fine-Tuning
-
+### a) Embedding Model
 After developing and evaluating the embedding models for our retrieval system, we initially opted against fine tuning. Our chosen embedding model, `thenlper_gte-base`, showed high performance, with metrics above 95% in preliminary evaluations. However, upon advisor recommendation, we explored fine tuning and investigated two different methods for unsupervised learning. First, we applied the Transformer-based Sequential Denoising Auto-Encoder (TSDAE) method that is centered around the idea to construct an original sentence from its corrupted one (see [`TSDAE.py`](finetuning/TSDAE/TSDAE.py)). During training, corrupted sentences are encoded into fixed-sized vectors and reconstructed by the decoder into the original sentence ([Wang et al., 2021](#TSDAE)). As a second method we explored contrastive learning in the context of fine tuning and created positive and negative training samples for this purpose (see [`create_contrastive_learning_data.py`](finetuning/contrastive_learning/create_contrastive_learning_data.py)). For the positive one we used the paraphrasing model [`tuner007/pegasus_paraphrase`](https://huggingface.co/tuner007/pegasus_paraphrase) which is fine tuned for paraphrasing tasks. The idea behind this approach is to teach the model to differentiate between paraphrased (positive) and unrelated (negative) sentence pairs. 
 
 Upon further consultation with our advisor though, we decided to keep this fine tuning data for future work, but did not carry out any further experiments, given also the danger of increasing hallucinations in the model's output after fine tuning.
+
+
+### b) Hypothetical Fine-Tuning Data for LLM
+
+To domain-specific fine-tune the language model `mistralai/Mistral-7B-Instruct-v0.1`, we have developed the notebook [hypothetical_finetuning_data_generator](data/hypothetical_finetuning_data/hypothetical_finetuning_data_generator.ipynb) that utilizes the [pubmed_qa dataset](https://huggingface.co/datasets/qiaojin/pubmed_qa), containing over 200,000 question-answer pairs. Our primary objective is to enhance the Retrieval-Augmented Generation (RAG) for our dataset. Therefore, we have filtered and retained only those question-answer pairs for which the questions have contextually relevant content in our vector store, identified by a similarity score of 0.78 or higher. We saved 10,000 questions that met our specified criteria. To avoid increasing the document size, we saved only the questions and their corresponding answers.
+
+For fine-tuning the model, we will employ the following function to format the data appropriately, enabling the LLM to learn more effectively:
+
+```py
+def format_medical_query(data):
+  instruction = "Provide a concise and informative answer to the following medical query:"
+  return f"""<s>[INST] {instruction}[/INST] \nMedical query: {data['question']}  \nAnswer: {data['answer']} </s>"""   
+```
 
 # <a name="experimental-setup-results"></a>4. 🔬 Experimental Setup & Results
 
