@@ -175,8 +175,8 @@ The response to a given user query is generated using the methods `generate_resp
 
 #### VI. App and User Interface
 
-For the front end aspect of our chatbot we chose to develop a very easy app with [streamlit](https://streamlit.io), relying especially on the streamlit-chat module.
-It's a very high level library for python that requires minimal coding. Also on aestetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
+For the front end aspect of our chatbot we chose to develop a very easy app with [Streamlit](https://streamlit.io), relying especially on the Streamlit-chat module.
+It's a very high level library for python that requires minimal coding. Also on aesthetics we didn't devote excessive time as we gave priority the features and the evaluation of our chatmodel.
 The instruction to run the app are all detailed in the root folder's [README](./README.md).
 
 The script of the app is extremely short, since we import the ChatModel class from custom_chatbot.py and we mount the interface on top. This is a clever move as it allows to make changes and to restructure the code multiple times, without having to drastically change the app every time.
