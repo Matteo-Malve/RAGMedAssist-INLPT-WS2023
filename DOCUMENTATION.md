@@ -171,6 +171,13 @@ The response to a given user query is generated using the methods `generate_resp
 
 - **Clickable Links**: Our platform distinguishes itself by providing clickable links to the source documents from which answers are generated, presenting a notable advantage over other sophisticated chat models, such as ChatGPT. This feature not only facilitates easy verification of the information provided but also serves as a gateway for users seeking to conduct more in-depth research. Unlike applications like ChatGPT, which do not disclose their sources, our approach ensures users can readily assess the reliability of the information and understand its origin. This transparency in source attribution enhances trustworthiness, allowing users to be confident in the accuracy and provenance of the information provided.
 
+- Certainly! Here's a concise version:
+
+- **Intelligent Response to Unretrieved Queries**: Our chatbot enhances efficiency and relevance in medical assistance by issuing a default response ("Sorry, but I don't know as my capabilities are focused on medical assistance") when no documents are retrieved due to the threshold settings. This approach:
+  - Avoids hallucination by not engaging the language model without relevant documents.
+  - Increases response speed by eliminating unnecessary processing.
+  - Maintains focus on medical queries, ensuring the chatbot stays within its domain of expertise.
+  
 - **Ensemble retriever**: as described above in [sec. III](#iii-document-retrieval).
 - **Multiple chains**: as described above in [sec. IV](#iv-chatmodel-configuration--integration).
 
@@ -498,7 +505,7 @@ There are several token limits to consider. We efficiently handled the input tok
 
 - Multithreading via [lightspeedGPT](https://github.com/andrewgcodes/lightspeedGPT) could be used to segment longer documents or chat history and process them in parallel. Answers would be collected and then assembled to a single answer. This would of course entail consideration about how to properly combine the multiple generated answers.
 
-Since this limitation was not a priority for us, we limited ourselves for the time being to reducing the context provided to two <span style="color:red"> **Weren't we using three?**</span> documents each, which are retrieved by the keyword search and the vector search. For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
+Since this limitation was not a priority for us, we limited ourselves for the time being to reducing the context provided to two documents each, which are retrieved by the keyword search and the vector search. By ranking the four documents using an ensemble retriever, the top three were selected as the context for the given prompt. <span style="color:red"> **Do not forget to adapt this part if you make any changes in cfg.yml for topk or topk_rrf**</span> For future work, however, we find the aforementioned solutions interesting and can imagine that they will lead to a more competitive chatbot that can be used in real-world scenarios.
 
 #### II. Chain of Thought Prompting
 
